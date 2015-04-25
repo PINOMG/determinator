@@ -39,13 +39,13 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    // A onClick-function, sends user to ListActivity
+    // An onClick-function, sends user to ListActivity
     public void goToListActivity(View view) {
         Intent intent = new Intent(this, ListActivity.class);
         startActivity(intent);
     }
 
-    // A onClick-function, sends user to CreateQuestionActivity
+    // An onClick-function, sends user to CreateQuestionActivity
     public void goToCreateQuestionActivity(View view) {
         Intent intent = new Intent(this, CreateQuestionActivity.class);
         startActivity(intent);
