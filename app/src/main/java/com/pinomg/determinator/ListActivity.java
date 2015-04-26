@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ListActivity extends Activity {
 
-    public ArrayList<Question> questionList = new ArrayList<Question>();
+    public ArrayList<Question> questionList = new ArrayList<Question>(); // Creates a list to store questions
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
