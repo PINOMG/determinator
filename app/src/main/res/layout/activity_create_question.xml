@@ -16,19 +16,22 @@
         android:hint="Question"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/questionField" />
+        android:id="@+id/questionField"
+        android:inputType="textCapSentences" />
 
     <EditText
         android:hint="Answer 1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/answer1" />
+        android:id="@+id/answer1"
+        android:inputType="textCapSentences" />
 
     <EditText
         android:hint="Answer 2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/answer2" />
+        android:id="@+id/answer2"
+        android:inputType="textCapSentences" />
 
     <Button
         android:layout_width="wrap_content"
