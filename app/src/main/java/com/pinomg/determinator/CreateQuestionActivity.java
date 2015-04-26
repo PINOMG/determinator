@@ -1,26 +1,24 @@
 package com.pinomg.determinator;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 
-public class MainActivity extends Activity {
+public class CreateQuestionActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_create_question);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_create_question, menu);
         return true;
     }
 
@@ -37,17 +35,5 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    // An onClick-function, sends user to ListActivity
-    public void goToListActivity(View view) {
-        Intent intent = new Intent(this, ListActivity.class);
-        startActivity(intent);
-    }
-
-    // An onClick-function, sends user to CreateQuestionActivity
-    public void goToCreateQuestionActivity(View view) {
-        Intent intent = new Intent(this, CreateQuestionActivity.class);
-        startActivity(intent);
     }
 }
