@@ -54,11 +54,9 @@ public class ListActivity extends Activity {
 
     private void createExampleList() {
         // Creates example questions and adds them to questionList
-        Question exampleQuestion1 = new Question();
-        exampleQuestion1.question = "Kårlunch eller Sushi?";
+        Question exampleQuestion1 = new Question("Kårlunch eller Sushi?", null, null);
 
-        Question exampleQuestion2 = new Question();
-        exampleQuestion2.question = "En runda till eller gå hem?";
+        Question exampleQuestion2 = new Question("En runda till eller gå hem?", null, null);
 
         questionList.add(exampleQuestion1);
         questionList.add(exampleQuestion2);
