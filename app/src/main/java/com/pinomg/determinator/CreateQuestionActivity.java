@@ -1,6 +1,8 @@
 package com.pinomg.determinator;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,16 +28,45 @@ public class CreateQuestionActivity extends Activity {
         createButton = (Button) findViewById(R.id.createButton);
     }
 
-    public void sendQuestion(View v) {
+    public void sendQuestion(View view) {
         Question question = new Question(questionField.getText().toString(), answer1.getText().toString(), answer2.getText().toString());
 
         // Check that the user has given all required input
-        if( questionField.getText().toString().length() == 0)
+        Boolean valid = true;
+        if( questionField.getText().toString().length() == 0) {
             questionField.setError("You must define a question!");
-        if (answer1.getText().toString().length() == 0)
+            valid = false;
+        }
+        if (answer1.getText().toString().length() == 0) {
             answer1.setError("You must give an answer!");
-        if( answer2.getText().toString().length() == 0)
+            valid = false;
+        }
+        if( answer2.getText().toString().length() == 0) {
             answer2.setError("You must give an answer!");
+            valid = false;
+        }
+
+        // If question valid, then inserts it into db
+        if(valid) {
+            DbHelper dbh = new DbHelper(view.getContext());
+            SQLiteDatabase db = dbh.getWritableDatabase();
+
+            // Create insert entries
+            ContentValues values = new ContentValues();
+            values.put(DbContract.PollEntry.COLUMN_NAME_QUESTION, question.question);
+            values.put(DbContract.PollEntry.COLUMN_NAME_ALTERNATIVE_ONE, question.answerOne);
+            values.put(DbContract.PollEntry.COLUMN_NAME_ALTERNATIVE_TWO, question.answerTwo);
+
+
+            // Insert the new row, returning the primary key value of the new row
+            long newRowId;
+            newRowId = db.insert(
+                    DbContract.PollEntry.TABLE_NAME,
+                    null,
+                    values);
+        }
+
+
     }
 
     @Override

@@ -26,6 +26,13 @@ public final class DbContract {
         public static final String COLUMN_NAME_ALTERNATIVE_ONE = "alternative_one";
         public static final String COLUMN_NAME_ALTERNATIVE_TWO = "alternative_two";
 
+        public static final String[] ALL_COLUMNS = {
+                COLUMN_NAME_POLL_ID,
+                COLUMN_NAME_QUESTION,
+                COLUMN_NAME_ALTERNATIVE_ONE,
+                COLUMN_NAME_ALTERNATIVE_TWO
+        };
+
 
         public static final String CREATE_TABLE =
                 "CREATE TABLE " + PollEntry.TABLE_NAME + " (" +

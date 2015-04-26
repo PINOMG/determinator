@@ -19,8 +19,9 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(DbContract.PollEntry.CREATE_TABLE);
     }
 
-    @Override
+    // Simply delete the old db and then creates a new one
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DbContract.PollEntry.DELETE_TABLE);
+        onCreate(db);
     }
 }
