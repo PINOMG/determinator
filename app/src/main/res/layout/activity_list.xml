@@ -6,7 +6,16 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.pinomg.determinator.ListActivity">
 
-    <TextView android:text="ListActivity" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView android:text="@string/subtitle_activity_list" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/questionView"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:choiceMode="none" />
 
 </RelativeLayout>

@@ -4,16 +4,30 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
+
+
+import java.util.ArrayList;
 
 
 public class ListActivity extends Activity {
+
+    public ArrayList<Question> questionList = new ArrayList<Question>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-    }
 
+        final ListView questionView = (ListView) findViewById(R.id.questionView);
+
+        createExampleList();
+
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
+        questionView.setAdapter(adapter);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,5 +49,19 @@ public class ListActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+
     }
+
+    private void createExampleList() {
+        // Creates example questions and adds them to questionList
+        Question exampleQuestion1 = new Question();
+        exampleQuestion1.question = "Kårlunch eller Sushi?";
+
+        Question exampleQuestion2 = new Question();
+        exampleQuestion2.question = "En runda till eller gå hem?";
+
+        questionList.add(exampleQuestion1);
+        questionList.add(exampleQuestion2);
+    }
+
 }
