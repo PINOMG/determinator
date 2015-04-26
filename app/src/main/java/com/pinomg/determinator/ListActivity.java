@@ -4,18 +4,29 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
+
 
 import java.util.ArrayList;
 
 
 public class ListActivity extends Activity {
 
-    public ArrayList<Question> questionList;
+    public ArrayList<Question> questionList = new ArrayList<Question>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        final ListView questionView = (ListView) findViewById(R.id.questionView);
+
+        createExampleList();
+
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
+        questionView.setAdapter(adapter);
+
     }
 
     @Override
