@@ -26,13 +26,16 @@ public class CreateQuestionActivity extends Activity {
         createButton = (Button) findViewById(R.id.createButton);
     }
 
-    private void sendQuestion(View v) {
-        Question question = new Question();
-        question.question = questionField.getText().toString();
-        question.answerOne = answer1.getText().toString();
-        question.answerTwo = answer2.getText().toString();
+    public void sendQuestion(View v) {
+        Question question = new Question(questionField.getText().toString(), answer1.getText().toString(), answer2.getText().toString());
 
-
+        // Check that the user has given all required input
+        if( questionField.getText().toString().length() == 0)
+            questionField.setError("You must define a question!");
+        if (answer1.getText().toString().length() == 0)
+            answer1.setError("You must give an answer!");
+        if( answer2.getText().toString().length() == 0)
+            answer2.setError("You must give an answer!");
     }
 
     @Override
