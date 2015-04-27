@@ -64,6 +64,9 @@ public class CreateQuestionActivity extends Activity {
                     DbContract.PollEntry.TABLE_NAME,
                     null,
                     values);
+
+            finish();
+            
         }
 
 
