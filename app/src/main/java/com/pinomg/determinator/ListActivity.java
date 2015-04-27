@@ -1,11 +1,13 @@
 package com.pinomg.determinator;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 
@@ -84,6 +86,11 @@ public class ListActivity extends Activity {
         }
         cursor.close();
 
+    }
+
+    public void goToCreateQuestionActivity(View view) {
+        Intent intent = new Intent(this, CreateQuestionActivity.class);
+        startActivity(intent);
     }
 
 }

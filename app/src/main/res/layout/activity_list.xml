@@ -18,4 +18,15 @@
         android:layout_alignParentStart="true"
         android:choiceMode="none" />
 
+    <ImageButton
+        android:id="@+id/fab"
+        style="@style/FloatingActionButton"
+        android:src="@drawable/plus"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="48dp"
+        android:contentDescription="@null"
+        android:elevation="8dp"
+        android:onClick="goToCreateQuestionActivity" />
+
 </RelativeLayout>
