@@ -1,6 +1,8 @@
 package com.pinomg.determinator;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,6 +62,28 @@ public class ListActivity extends Activity {
 
         questionList.add(exampleQuestion1);
         questionList.add(exampleQuestion2);
+
+        // Fetches all questions from db,
+        DbHelper dbh      = new DbHelper(getBaseContext());
+        SQLiteDatabase db = dbh.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                DbContract.PollEntry.TABLE_NAME,
+                DbContract.PollEntry.ALL_COLUMNS,
+                null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()) {
+            Question q = new Question(
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3));
+
+            questionList.add(q);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
     }
 
 }
