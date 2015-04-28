@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class ListActivity extends Activity {
 
     public ArrayList<Question> questionList = new ArrayList<Question>(); // Creates a list to store questions
+    private ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class ListActivity extends Activity {
 
         createExampleList();
 
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
         questionView.setAdapter(adapter);
 
     }
@@ -39,6 +40,7 @@ public class ListActivity extends Activity {
 
         questionList.clear();
         createExampleList();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
