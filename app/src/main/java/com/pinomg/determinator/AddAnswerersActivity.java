@@ -6,21 +6,36 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+public class AddAnswerersActivity extends Activity {
 
 
-public class MainActivity extends Activity {
-
+    public ArrayList<Friend> friendList = new ArrayList<Friend>(); //Creates a list to store friends.
+    private ArrayAdapter adapter;
+ 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_add_answerers);
+
+        final ListView friendView = (ListView) findViewById(R.id.friendView);
+
+        createExampleFriendList();
+
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, friendList);
+        friendView.setAdapter(adapter);
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_add_answerers, menu);
         return true;
     }
 
@@ -39,15 +54,17 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    // An onClick-function, sends user to ListActivity
     public void goToListActivity(View view) {
-        Intent intent = new Intent(this, ListActivity.class);
-        startActivity(intent);
+        finish();
     }
 
-    // An onClick-function, sends user to CreateQuestionActivity
-    public void goToCreateQuestionActivity(View view) {
-        Intent intent = new Intent(this, CreateQuestionActivity.class);
-        startActivity(intent);
+    public void createExampleFriendList() {
+        Friend friend1 = new Friend("Rasmus", 123);
+        Friend friend2 = new Friend("Karin", 456);
+        Friend friend3 = new Friend("Bubba", 789);
+
+        friendList.add(friend1);
+        friendList.add(friend2);
+        friendList.add(friend3);
     }
 }
