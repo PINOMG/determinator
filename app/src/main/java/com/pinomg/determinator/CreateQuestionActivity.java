@@ -69,6 +69,7 @@ public class CreateQuestionActivity extends Activity {
             //Instead of finish(), if question is valid then go to the add answerer activity
             Intent intent = new Intent(this, AddAnswerersActivity.class);
             startActivity(intent);
+            finish();
 
         }
 
