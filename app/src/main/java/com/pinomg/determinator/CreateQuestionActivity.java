@@ -2,6 +2,7 @@ package com.pinomg.determinator;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
@@ -65,7 +66,9 @@ public class CreateQuestionActivity extends Activity {
                     null,
                     values);
 
-            finish();
+            //Instead of finish(), if question is valid then go to the add answerer activity
+            Intent intent = new Intent(this, AddAnswerersActivity.class);
+            startActivity(intent);
 
         }
 
