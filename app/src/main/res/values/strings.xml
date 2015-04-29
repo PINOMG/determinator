@@ -6,4 +6,7 @@
     <string name="title_activity_list">Your Questions</string>
     <string name="subtitle_activity_list">This is a list of all your questions</string>
     <string name="title_activity_create_question">CreateQuestionActivity</string>
+    <string name="title_activity_add_answerers">Add Answerers</string>
+    <string name="subtitle_activity_add_answerers">This is a list of all your friends</string>
+
 </resources>
