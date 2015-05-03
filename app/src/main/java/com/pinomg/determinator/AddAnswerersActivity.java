@@ -19,7 +19,8 @@ public class AddAnswerersActivity extends Activity {
 
 
     public ArrayList<Friend> friendList = new ArrayList<Friend>(); //Creates a list to store friends.
-    private ArrayAdapter adapter;
+    private ArrayAdapter friendsAdapter;
+    private ArrayAdapter checkedFriendsAdapter;
     private ArrayList<Friend> checkedFriends = new ArrayList<Friend>();
     private SparseBooleanArray checked;
 
@@ -29,12 +30,16 @@ public class AddAnswerersActivity extends Activity {
         setContentView(R.layout.activity_add_answerers);
 
         final ListView friendView = (ListView) findViewById(R.id.friendView);
+        final ListView checkedFriendView = (ListView) findViewById(R.id.checkedFriendView);
         friendView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         createExampleFriendList();
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, friendList);
-        friendView.setAdapter(adapter);
+        friendsAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, friendList);
+        friendView.setAdapter(friendsAdapter);
+
+        checkedFriendsAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, checkedFriends);
+        checkedFriendView.setAdapter(checkedFriendsAdapter);
 
         checked = friendView.getCheckedItemPositions();
 
@@ -43,16 +48,13 @@ public class AddAnswerersActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(checked.get(i)){ //Add to checkedFriends
                     checkedFriends.add(friendList.get(i));
+
                 } else { // Remove from checkedFriends
                     checkedFriends.remove(friendList.get(i));
                 }
+                checkedFriendsAdapter.notifyDataSetChanged();
             }
         });
-
-
-
-
-
 
     }
 
