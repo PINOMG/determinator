@@ -3,19 +3,25 @@ package com.pinomg.determinator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class AddAnswerersActivity extends Activity {
 
 
     public ArrayList<Friend> friendList = new ArrayList<Friend>(); //Creates a list to store friends.
     private ArrayAdapter adapter;
+    private ArrayList<Friend> checkedFriends = new ArrayList<Friend>();
+    private SparseBooleanArray checked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +30,27 @@ public class AddAnswerersActivity extends Activity {
 
         final ListView friendView = (ListView) findViewById(R.id.friendView);
         friendView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
         createExampleFriendList();
 
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, friendList);
         friendView.setAdapter(adapter);
+
+        checked = friendView.getCheckedItemPositions();
+
+        friendView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(checked.get(i)){ //Add to checkedFriends
+                    checkedFriends.add(friendList.get(i));
+                } else { // Remove from checkedFriends
+                    checkedFriends.remove(friendList.get(i));
+                }
+            }
+        });
+
+
+
 
 
 
@@ -57,7 +80,11 @@ public class AddAnswerersActivity extends Activity {
     }
 
     public void goToListActivity(View view) {
-        finish();
+
+        for(Iterator<Friend> i = checkedFriends.iterator(); i.hasNext(); ) {
+            Friend f = i.next();
+            Log.v("", f.toString());
+        }
     }
 
     public void createExampleFriendList() {
