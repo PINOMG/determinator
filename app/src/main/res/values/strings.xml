@@ -8,5 +8,6 @@
     <string name="title_activity_create_question">CreateQuestionActivity</string>
     <string name="title_activity_add_answerers">Add Answerers</string>
     <string name="subtitle_activity_add_answerers">This is a list of all your friends</string>
+    <string name="log_out">Logout</string>
 
 </resources>

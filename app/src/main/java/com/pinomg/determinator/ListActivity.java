@@ -32,7 +32,7 @@ public class ListActivity extends Activity {
 
         /**
          * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
+         * This will redirect user to LoginActivity if he is not
          * logged in
          * */
         session.checkLogin();
@@ -68,14 +68,13 @@ public class ListActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.log_out:
+                session.logoutUser();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
-
     }
 
     private void createExampleList() {
