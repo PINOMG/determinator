@@ -13,7 +13,7 @@
         </activity>
         <activity
             android:name=".ListActivity"
-            android:label="@string/title_activity_list" >
+            android:label="Your Questions" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,8 +21,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateQuestionActivity"
-            android:label="@string/title_activity_create_question" >
+            android:name=".CreatePollActivity"
+            android:label="New Poll" >
         </activity>
         <activity
             android:name=".AddAnswerersActivity"
