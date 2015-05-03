@@ -20,10 +20,22 @@ public class ListActivity extends Activity {
     public ArrayList<Question> questionList = new ArrayList<Question>(); // Creates a list to store questions
     private ArrayAdapter adapter;
 
+    // SessionManagement class
+    SessionManagement session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        session = new SessionManagement(getApplicationContext());
+
+        /**
+         * Call this function whenever you want to check user login
+         * This will redirect user to LoginActivity is he is not
+         * logged in
+         * */
+        session.checkLogin();
 
         final ListView questionView = (ListView) findViewById(R.id.questionView);
 

@@ -54,10 +54,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private View mProgressView;
     private View mLoginFormView;
 
+    // SessionManagement Class
+    SessionManagement session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // SessionManagement
+        session = new SessionManagement(getApplicationContext());
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -288,6 +294,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
 
             if (success) {
+                session.createLoginSession(mEmail);
                 finish();
                 Intent myIntent = new Intent(LoginActivity.this, ListActivity.class);
                 LoginActivity.this.startActivity(myIntent);
