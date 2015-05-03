@@ -16,18 +16,20 @@ public class AddAnswerersActivity extends Activity {
 
     public ArrayList<Friend> friendList = new ArrayList<Friend>(); //Creates a list to store friends.
     private ArrayAdapter adapter;
- 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_answerers);
 
         final ListView friendView = (ListView) findViewById(R.id.friendView);
-
+        friendView.setChoiceMode(friendView.CHOICE_MODE_MULTIPLE);
         createExampleFriendList();
 
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, friendList);
         friendView.setAdapter(adapter);
+
+
 
     }
 
