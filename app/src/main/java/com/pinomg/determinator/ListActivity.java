@@ -13,12 +13,19 @@ import android.widget.ListView;
 import android.widget.ArrayAdapter;
 
 
+import com.pinomg.determinator.database.DataApi;
+import com.pinomg.determinator.database.DatabaseHelper;
+import com.pinomg.determinator.database.PollsTable;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ListActivity extends Activity {
 
-    public ArrayList<Poll> questionList = new ArrayList<Poll>(); // Creates a list to store questions
+    private DataApi api;
+
+    public List<Poll> questionList; // Creates a list to store questions
     private ArrayAdapter adapter;
 
     @Override
@@ -26,20 +33,22 @@ public class ListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        final ListView questionView = (ListView) findViewById(R.id.questionView);
+        this.api = new DataApi(getBaseContext());
 
-        questionView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final ListView questionView = (ListView) findViewById(R.id.questionView);
+        questionView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Poll poll = (Poll) parent.getAdapter().getItem(position);
                 Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
                 intent.putExtra("POLL", poll);
                 startActivity(intent);
+                overridePendingTransition(0,0);
+                return false;
             }
         });
 
-        createExampleList();
-
+        questionList = api.getAllPolls();
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
         questionView.setAdapter(adapter);
 
@@ -50,7 +59,11 @@ public class ListActivity extends Activity {
         super.onResume();
 
         questionList.clear();
-        createExampleList();
+        List<Poll> allPolls = api.getAllPolls();
+        for(Poll p : allPolls) {
+            questionList.add(p);
+        }
+
         adapter.notifyDataSetChanged();
     }
 
@@ -78,28 +91,6 @@ public class ListActivity extends Activity {
     }
 
     private void createExampleList() {
-
-        // Fetches all questions from db,
-        DbHelper dbh      = new DbHelper(getBaseContext());
-        SQLiteDatabase db = dbh.getReadableDatabase();
-
-        Cursor cursor = db.query(
-                DbContract.PollEntry.TABLE_NAME,
-                DbContract.PollEntry.ALL_COLUMNS,
-                null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while(!cursor.isAfterLast()) {
-            Poll p = new Poll(
-                    cursor.getLong(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3));
-
-            questionList.add(p);
-            cursor.moveToNext();
-        }
-        cursor.close();
 
     }
 

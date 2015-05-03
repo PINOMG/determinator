@@ -6,7 +6,7 @@ import java.io.Serializable;
  * The question class. Holds all information about a question.
  */
 public class Poll implements Serializable {
-    public Long id;
+    public int id;
     public String question;
     public String alternativeOne;
     public String alternativeTwo;
@@ -17,7 +17,7 @@ public class Poll implements Serializable {
         this.alternativeTwo = a2;
     }
 
-    public Poll (Long id, String question, String a1, String a2) {
+    public Poll (int id, String question, String a1, String a2) {
         this.id = id;
         this.question = question;
         this.alternativeOne = a1;

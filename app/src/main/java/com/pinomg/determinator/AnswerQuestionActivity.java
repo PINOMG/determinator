@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class AnswerQuestionActivity extends Activity {
             questionText.setText(poll.question);
             btnAltOne.setText(poll.alternativeOne);
             btnAltTwo.setText(poll.alternativeTwo);
+
         } else {
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
         }
