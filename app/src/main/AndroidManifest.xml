@@ -26,7 +26,8 @@
         </activity>
         <activity
             android:name=".CreateQuestionActivity"
-            android:label="@string/title_activity_create_question" >
+            android:label="@string/title_activity_create_question"
+            android:windowSoftInputMode="stateVisible|adjustResize" >
         </activity>
         <activity
             android:name=".AddAnswerersActivity"
