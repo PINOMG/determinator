@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class ListActivity extends Activity {
 
-    public ArrayList<Question> questionList = new ArrayList<Question>(); // Creates a list to store questions
+    public ArrayList<Poll> questionList = new ArrayList<Poll>(); // Creates a list to store questions
     private ArrayAdapter adapter;
 
     @Override
@@ -68,12 +68,12 @@ public class ListActivity extends Activity {
 
     private void createExampleList() {
         // Creates example questions and adds them to questionList
-        Question exampleQuestion1 = new Question("Kårlunch eller Sushi?", null, null);
+        Poll examplePoll1 = new Poll("Kårlunch eller Sushi?", null, null);
 
-        Question exampleQuestion2 = new Question("En runda till eller gå hem?", null, null);
+        Poll examplePoll2 = new Poll("En runda till eller gå hem?", null, null);
 
-        questionList.add(exampleQuestion1);
-        questionList.add(exampleQuestion2);
+        questionList.add(examplePoll1);
+        questionList.add(examplePoll2);
 
         // Fetches all questions from db,
         DbHelper dbh      = new DbHelper(getBaseContext());
@@ -86,12 +86,12 @@ public class ListActivity extends Activity {
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
-            Question q = new Question(
+            Poll p = new Poll(
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3));
 
-            questionList.add(q);
+            questionList.add(p);
             cursor.moveToNext();
         }
         cursor.close();
@@ -99,7 +99,7 @@ public class ListActivity extends Activity {
     }
 
     public void goToCreateQuestionActivity(View view) {
-        Intent intent = new Intent(this, CreateQuestionActivity.class);
+        Intent intent = new Intent(this, CreatePollActivity.class);
         startActivity(intent);
     }
 

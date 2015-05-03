@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
 
     // An onClick-function, sends user to CreateQuestionActivity
     public void goToCreateQuestionActivity(View view) {
-        Intent intent = new Intent(this, CreateQuestionActivity.class);
+        Intent intent = new Intent(this, CreatePollActivity.class);
         startActivity(intent);
     }
 }
