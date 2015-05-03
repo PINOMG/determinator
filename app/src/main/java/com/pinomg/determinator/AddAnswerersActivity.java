@@ -1,7 +1,6 @@
 package com.pinomg.determinator;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -11,18 +10,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class AddAnswerersActivity extends Activity {
 
-
     public ArrayList<Friend> friendList = new ArrayList<Friend>(); //Creates a list to store friends.
     private ArrayAdapter friendsAdapter;
-    private ArrayAdapter checkedFriendsAdapter;
     private ArrayList<Friend> checkedFriends = new ArrayList<Friend>();
     private SparseBooleanArray checked;
+    public TextView receiversText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,6 @@ public class AddAnswerersActivity extends Activity {
         setContentView(R.layout.activity_add_answerers);
 
         final ListView friendView = (ListView) findViewById(R.id.friendView);
-        final ListView checkedFriendView = (ListView) findViewById(R.id.checkedFriendView);
         friendView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         createExampleFriendList();
@@ -38,21 +36,28 @@ public class AddAnswerersActivity extends Activity {
         friendsAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, friendList);
         friendView.setAdapter(friendsAdapter);
 
-        checkedFriendsAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, checkedFriends);
-        checkedFriendView.setAdapter(checkedFriendsAdapter);
+        receiversText = (TextView) findViewById(R.id.receivers);
 
         checked = friendView.getCheckedItemPositions();
 
         friendView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(checked.get(i)){ //Add to checkedFriends
+                if (checked.get(i)) { //Add to checkedFriends
                     checkedFriends.add(friendList.get(i));
 
                 } else { // Remove from checkedFriends
                     checkedFriends.remove(friendList.get(i));
                 }
-                checkedFriendsAdapter.notifyDataSetChanged();
+
+                String receivers = "";
+
+                for(Iterator<Friend> j = checkedFriends.iterator(); j.hasNext(); ) {
+                    Friend f = j.next();
+                    receivers += f.toString() + " ";
+                }
+
+                receiversText.setText(receivers);
             }
         });
 
