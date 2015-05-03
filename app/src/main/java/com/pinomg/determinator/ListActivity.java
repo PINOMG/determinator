@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 
@@ -26,6 +27,16 @@ public class ListActivity extends Activity {
         setContentView(R.layout.activity_list);
 
         final ListView questionView = (ListView) findViewById(R.id.questionView);
+
+        questionView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Poll poll = (Poll) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
+                intent.putExtra("POLL", poll);
+                startActivity(intent);
+            }
+        });
 
         createExampleList();
 
@@ -67,13 +78,6 @@ public class ListActivity extends Activity {
     }
 
     private void createExampleList() {
-        // Creates example questions and adds them to questionList
-        Poll examplePoll1 = new Poll("Kårlunch eller Sushi?", null, null);
-
-        Poll examplePoll2 = new Poll("En runda till eller gå hem?", null, null);
-
-        questionList.add(examplePoll1);
-        questionList.add(examplePoll2);
 
         // Fetches all questions from db,
         DbHelper dbh      = new DbHelper(getBaseContext());
@@ -87,6 +91,7 @@ public class ListActivity extends Activity {
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
             Poll p = new Poll(
+                    cursor.getLong(0),
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3));

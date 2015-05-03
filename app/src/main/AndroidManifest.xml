@@ -28,6 +28,10 @@
             android:name=".AddAnswerersActivity"
             android:label="@string/title_activity_add_answerers" >
         </activity>
+        <activity
+            android:name=".AnswerQuestionActivity"
+            android:label="@string/title_activity_answer_question" >
+        </activity>
     </application>
 
 </manifest>
