@@ -28,10 +28,22 @@ public class ListActivity extends Activity {
     public List<Poll> questionList; // Creates a list to store questions
     private ArrayAdapter adapter;
 
+    // SessionManagement class
+    SessionManagement session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        session = new SessionManagement(getApplicationContext());
+
+        /**
+         * Call this function whenever you want to check user login
+         * This will redirect user to LoginActivity if he is not
+         * logged in
+         * */
+        session.checkLogin();
 
         this.api = new DataApi(getBaseContext());
 
@@ -80,14 +92,13 @@ public class ListActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.log_out:
+                session.logoutUser();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
-
     }
 
     private void createExampleList() {
