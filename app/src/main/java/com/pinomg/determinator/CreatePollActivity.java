@@ -11,6 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.pinomg.determinator.database.DataApi;
+import com.pinomg.determinator.database.DatabaseHelper;
+import com.pinomg.determinator.database.PollsTable;
+
 
 public class CreatePollActivity extends Activity {
 
@@ -49,22 +53,9 @@ public class CreatePollActivity extends Activity {
 
         // If question valid, then inserts it into db
         if(valid) {
-            DbHelper dbh = new DbHelper(view.getContext());
-            SQLiteDatabase db = dbh.getWritableDatabase();
 
-            // Create insert entries
-            ContentValues values = new ContentValues();
-            values.put(DbContract.PollEntry.COLUMN_NAME_QUESTION, poll.question);
-            values.put(DbContract.PollEntry.COLUMN_NAME_ALTERNATIVE_ONE, poll.alternativeOne);
-            values.put(DbContract.PollEntry.COLUMN_NAME_ALTERNATIVE_TWO, poll.alternativeTwo);
-
-
-            // Insert the new row, returning the primary key value of the new row
-            long newRowId;
-            newRowId = db.insert(
-                    DbContract.PollEntry.TABLE_NAME,
-                    null,
-                    values);
+            DataApi api = new DataApi(getBaseContext());
+            api.addPoll(poll);
 
             //Instead of finish(), if question is valid then go to the add answerer activity
             Intent intent = new Intent(this, AddAnswerersActivity.class);

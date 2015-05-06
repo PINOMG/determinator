@@ -8,5 +8,6 @@
     <string name="title_activity_create_poll">New Poll</string>
     <string name="title_activity_add_answerers">Add Answerers</string>
     <string name="subtitle_activity_add_answerers">Add answerers from your list of friends</string>
+    <string name="title_activity_answer_question">AnswerQuestionActivity</string>
 
 </resources>
