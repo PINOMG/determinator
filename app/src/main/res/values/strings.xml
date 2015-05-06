@@ -5,9 +5,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_list">Your Questions</string>
     <string name="subtitle_activity_list">This is a list of all your questions</string>
-    <string name="title_activity_create_question">CreateQuestionActivity</string>
+    <string name="title_activity_create_poll">New Poll</string>
     <string name="title_activity_add_answerers">Add Answerers</string>
-    <string name="subtitle_activity_add_answerers">This is a list of all your friends</string>
     <string name="log_out">Logout</string>
+    <string name="subtitle_activity_add_answerers">Add answerers from your list of friends</string>
+    <string name="title_activity_answer_question">AnswerQuestionActivity</string>
 
 </resources>

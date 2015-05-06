@@ -11,26 +11,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.pinomg.determinator.database.DataApi;
+import com.pinomg.determinator.database.DatabaseHelper;
+import com.pinomg.determinator.database.PollsTable;
 
-public class CreateQuestionActivity extends Activity {
 
-    private EditText questionField, answer1, answer2;
+public class CreatePollActivity extends Activity {
+
+    private EditText questionField, alternativeOne, alternativeTwo;
     private Button createButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_question);
+        setContentView(R.layout.activity_create_poll);
 
         // Connecting layout with logic
         questionField = (EditText) findViewById(R.id.questionField);
-        answer1 = (EditText) findViewById(R.id.answer1);
-        answer2 = (EditText) findViewById(R.id.answer2);
+        alternativeOne = (EditText) findViewById(R.id.alternativeOne);
+        alternativeTwo = (EditText) findViewById(R.id.alternativeTwo);
         createButton = (Button) findViewById(R.id.createButton);
     }
 
-    public void sendQuestion(View view) {
-        Question question = new Question(questionField.getText().toString(), answer1.getText().toString(), answer2.getText().toString());
+    public void sendPoll(View view) {
+        Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString());
 
         // Check that the user has given all required input
         Boolean valid = true;
@@ -38,33 +42,20 @@ public class CreateQuestionActivity extends Activity {
             questionField.setError("You must define a question!");
             valid = false;
         }
-        if (answer1.getText().toString().length() == 0) {
-            answer1.setError("You must give an answer!");
+        if (alternativeOne.getText().toString().length() == 0) {
+            alternativeOne.setError("You must give an answer!");
             valid = false;
         }
-        if( answer2.getText().toString().length() == 0) {
-            answer2.setError("You must give an answer!");
+        if( alternativeTwo.getText().toString().length() == 0) {
+            alternativeTwo.setError("You must give an answer!");
             valid = false;
         }
 
         // If question valid, then inserts it into db
         if(valid) {
-            DbHelper dbh = new DbHelper(view.getContext());
-            SQLiteDatabase db = dbh.getWritableDatabase();
 
-            // Create insert entries
-            ContentValues values = new ContentValues();
-            values.put(DbContract.PollEntry.COLUMN_NAME_QUESTION, question.question);
-            values.put(DbContract.PollEntry.COLUMN_NAME_ALTERNATIVE_ONE, question.answerOne);
-            values.put(DbContract.PollEntry.COLUMN_NAME_ALTERNATIVE_TWO, question.answerTwo);
-
-
-            // Insert the new row, returning the primary key value of the new row
-            long newRowId;
-            newRowId = db.insert(
-                    DbContract.PollEntry.TABLE_NAME,
-                    null,
-                    values);
+            DataApi api = new DataApi(getBaseContext());
+            api.addPoll(poll);
 
             //Instead of finish(), if question is valid then go to the add answerer activity
             Intent intent = new Intent(this, AddAnswerersActivity.class);
@@ -79,7 +70,7 @@ public class CreateQuestionActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_question, menu);
+        getMenuInflater().inflate(R.menu.menu_create_poll, menu);
         return true;
     }
 
