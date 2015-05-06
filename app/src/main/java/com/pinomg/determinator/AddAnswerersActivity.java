@@ -88,10 +88,7 @@ public class AddAnswerersActivity extends Activity {
 
     public void goToListActivity(View view) {
 
-        for(Iterator<Friend> i = checkedFriends.iterator(); i.hasNext(); ) {
-            Friend f = i.next();
-            Log.v("", f.toString());
-        }
+        finish();
     }
 
     public void createExampleFriendList() {
