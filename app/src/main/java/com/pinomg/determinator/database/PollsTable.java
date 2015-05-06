@@ -17,7 +17,7 @@ public class PollsTable {
             COLUMN_POLL_ID + " INTEGER PRIMARY KEY, " +
             COLUMN_QUESTION + " TEXT, " +
             COLUMN_ALTERNATIVE_ONE + " TEXT, " +
-            COLUMN_ALTERNATIVE_TWO + " TEXT, " +
+            COLUMN_ALTERNATIVE_TWO + " TEXT" +
             " )";
 
     public static final String DELETE_POLLS_TABLE = "DROP TABLE IF EXISTS " + TABLE_POLLS;
