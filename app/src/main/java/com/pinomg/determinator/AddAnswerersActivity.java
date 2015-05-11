@@ -36,7 +36,9 @@ public class AddAnswerersActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             poll = (Poll) extras.getSerializable("POLL");
-            checkedFriends = poll.friends;
+            if( poll.friends != null) {
+                checkedFriends = poll.friends;
+            }
         } else {
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
         }
@@ -52,6 +54,12 @@ public class AddAnswerersActivity extends Activity {
         receiversText = (TextView) findViewById(R.id.receivers);
 
         checked = friendView.getCheckedItemPositions();
+
+        //Populate checked (SparseBooleanArray) from checkedFriends here...
+        Boolean a = checked.get(1);
+        a = true;
+
+        //Populate string from checkedFriends here...
 
         friendView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
