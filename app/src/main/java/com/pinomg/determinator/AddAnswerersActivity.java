@@ -1,6 +1,7 @@
 package com.pinomg.determinator;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -11,6 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.pinomg.determinator.database.DataApi;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,11 +26,19 @@ public class AddAnswerersActivity extends Activity {
     private ArrayList<Friend> checkedFriends = new ArrayList<Friend>();
     private SparseBooleanArray checked;
     public TextView receiversText;
+    private Poll poll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_answerers);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            poll = (Poll) extras.getSerializable("POLL");
+        } else {
+            Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
+        }
 
         final ListView friendView = (ListView) findViewById(R.id.friendView);
         friendView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -63,6 +75,14 @@ public class AddAnswerersActivity extends Activity {
 
     }
 
+    public void sendPoll(View view) {
+        if(checkedFriends.get(0) != null) {
+            poll.addFriendlist(checkedFriends);
+            DataApi api = new DataApi(getBaseContext());
+            api.addPoll(poll);
+        }
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,11 +104,6 @@ public class AddAnswerersActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void goToListActivity(View view) {
-
-        finish();
     }
 
     public void createExampleFriendList() {

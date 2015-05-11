@@ -33,12 +33,12 @@ public class CreatePollActivity extends Activity {
         createButton = (Button) findViewById(R.id.createButton);
     }
 
-    public void sendPoll(View view) {
-        Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString());
+    public void goToAddAnswerersActivity() {
+        Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString(), null);
 
         // Check that the user has given all required input
         Boolean valid = true;
-        if( questionField.getText().toString().length() == 0) {
+        if (questionField.getText().toString().length() == 0) {
             questionField.setError("You must define a question!");
             valid = false;
         }
@@ -46,25 +46,17 @@ public class CreatePollActivity extends Activity {
             alternativeOne.setError("You must give an answer!");
             valid = false;
         }
-        if( alternativeTwo.getText().toString().length() == 0) {
+        if (alternativeTwo.getText().toString().length() == 0) {
             alternativeTwo.setError("You must give an answer!");
             valid = false;
         }
 
-        // If question valid, then inserts it into db
-        if(valid) {
-
-            DataApi api = new DataApi(getBaseContext());
-            api.addPoll(poll);
-
-            //Instead of finish(), if question is valid then go to the add answerer activity
+        if (valid) {
             Intent intent = new Intent(this, AddAnswerersActivity.class);
+            intent.putExtra("POLL", poll);
             startActivity(intent);
             finish();
-
         }
-
-
     }
 
     @Override
