@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.pinomg.determinator.api.ApiHandler;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
