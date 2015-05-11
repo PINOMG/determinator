@@ -26,7 +26,7 @@ public class ListActivity extends Activity {
     private DataApi api;
 
     public List<Poll> questionList; // Creates a list to store questions
-    private ArrayAdapter adapter;
+    private CustomAdapter adapter;
 
     // SessionManagement class
     SessionManagement session;
@@ -51,7 +51,10 @@ public class ListActivity extends Activity {
         questionView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Integer type = parent.getAdapter().getItemViewType(position);
                 Poll poll = (Poll) parent.getAdapter().getItem(position);
+
                 Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
                 intent.putExtra("POLL", poll);
                 startActivity(intent);
@@ -61,7 +64,7 @@ public class ListActivity extends Activity {
         });
 
         questionList = api.getAllPolls();
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
+        adapter = new CustomAdapter(this, questionList);
         questionView.setAdapter(adapter);
 
     }

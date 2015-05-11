@@ -6,6 +6,20 @@ import java.io.Serializable;
  * The question class. Holds all information about a question.
  */
 public class Poll implements Serializable {
+
+
+    public static int STATUS_PENDING  = 0; // Not viewed
+    public static int STATUS_ANSWERED = 1; // Viewed and answered, no result yet
+    public static int STATUS_FINISHED = 2; // Result is available
+    public static int STATUS_ARCHIVED = 3; // Result viewed
+
+    private static String[] TEXT_STATUS = {
+            "Pending",
+            "Answerd",
+            "Finished",
+            "Archived"
+         };
+
     public int id;
     public String question;
     public String alternativeOne;
@@ -22,6 +36,11 @@ public class Poll implements Serializable {
         this.question = question;
         this.alternativeOne = a1;
         this.alternativeTwo = a2;
+    }
+
+    // TODO: Implement!
+    public Integer getStatus() {
+        return STATUS_PENDING;
     }
 
     //This is required by the adapter for output in a list.
@@ -49,6 +68,11 @@ public class Poll implements Serializable {
     public int hashCode() {
         // TODO: Not ideal implementation..
         return (question + alternativeOne + alternativeTwo).hashCode();
+    }
+
+
+    public static String getStatusText(int status) {
+        return TEXT_STATUS[status];
     }
 }
 
