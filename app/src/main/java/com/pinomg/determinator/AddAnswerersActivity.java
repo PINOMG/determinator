@@ -76,7 +76,7 @@ public class AddAnswerersActivity extends Activity {
     }
 
     public void sendPoll(View view) {
-        if(checkedFriends.get(0) != null) {
+        if(!checkedFriends.isEmpty()) {
             poll.addFriendlist(checkedFriends);
             DataApi api = new DataApi(getBaseContext());
             api.addPoll(poll);

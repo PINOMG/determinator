@@ -33,25 +33,25 @@ public class CreatePollActivity extends Activity {
         createButton = (Button) findViewById(R.id.createButton);
     }
 
-    public void goToAddAnswerersActivity() {
+    public void goToAddAnswerersActivity(View view) {
         Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString(), null);
 
         // Check that the user has given all required input
         Boolean valid = true;
-        if (questionField.getText().toString().length() == 0) {
+        if(questionField.getText().toString().length() == 0) {
             questionField.setError("You must define a question!");
             valid = false;
         }
-        if (alternativeOne.getText().toString().length() == 0) {
+        if(alternativeOne.getText().toString().length() == 0) {
             alternativeOne.setError("You must give an answer!");
             valid = false;
         }
-        if (alternativeTwo.getText().toString().length() == 0) {
+        if(alternativeTwo.getText().toString().length() == 0) {
             alternativeTwo.setError("You must give an answer!");
             valid = false;
         }
 
-        if (valid) {
+        if(valid) {
             Intent intent = new Intent(this, AddAnswerersActivity.class);
             intent.putExtra("POLL", poll);
             startActivity(intent);
@@ -74,7 +74,7 @@ public class CreatePollActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_settings) {
             return true;
         }
 
