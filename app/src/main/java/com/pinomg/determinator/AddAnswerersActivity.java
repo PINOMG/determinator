@@ -76,11 +76,22 @@ public class AddAnswerersActivity extends Activity {
     }
 
     public void sendPoll(View view) {
-        if(!checkedFriends.isEmpty()) {
-            poll.addFriendlist(checkedFriends);
-            DataApi api = new DataApi(getBaseContext());
-            api.addPoll(poll);
-        }
+            if (!checkedFriends.isEmpty()) {
+                poll.addFriendlist(checkedFriends);
+                DataApi api = new DataApi(getBaseContext());
+                api.addPoll(poll);
+                setResult(RESULT_OK, null);
+                finish();
+            } else {
+                Toast.makeText(getBaseContext(), "Haven't you got any friends, or?", Toast.LENGTH_LONG).show();
+            }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("POLL", poll);
+        setResult(RESULT_CANCELED, intent);
         finish();
     }
 

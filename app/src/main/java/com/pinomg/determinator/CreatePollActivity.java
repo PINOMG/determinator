@@ -15,11 +15,14 @@ import com.pinomg.determinator.database.DataApi;
 import com.pinomg.determinator.database.DatabaseHelper;
 import com.pinomg.determinator.database.PollsTable;
 
+import java.util.ArrayList;
+
 
 public class CreatePollActivity extends Activity {
 
     private EditText questionField, alternativeOne, alternativeTwo;
     private Button createButton;
+    private ArrayList<Friend> friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +36,10 @@ public class CreatePollActivity extends Activity {
         createButton = (Button) findViewById(R.id.createButton);
     }
 
+
+
     public void goToAddAnswerersActivity(View view) {
-        Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString(), null);
+        Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString(), friends);
 
         // Check that the user has given all required input
         Boolean valid = true;
@@ -54,8 +59,17 @@ public class CreatePollActivity extends Activity {
         if(valid) {
             Intent intent = new Intent(this, AddAnswerersActivity.class);
             intent.putExtra("POLL", poll);
-            startActivity(intent);
+            startActivityForResult(intent, 1);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK)
             finish();
+        else {
+            Bundle extras = getIntent().getExtras();
+            friends = ((Poll) extras.getSerializable("POLL")).friends;
         }
     }
 
