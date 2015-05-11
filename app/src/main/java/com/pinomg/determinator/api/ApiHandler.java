@@ -58,9 +58,9 @@ public class ApiHandler {
         return apiCall(urls);
     }
 
-    public ArrayList<Object> apiListCall(String[] urls){
+    public ArrayList<?> apiListCall(String[] urls){
         //Response array
-        ArrayList<Object> listItems = new ArrayList<Object>();
+        ArrayList<?> listItems = null;
 
         //Do the call
         JSONObject response;
@@ -71,10 +71,7 @@ public class ApiHandler {
                 JSONObject data = response.getJSONObject("data");
                 JSONArray json_list = data.getJSONArray("items");
 
-                for( int i = 0; i < json_list.length(); i++ ){
-                    String friend = json_list.getString(i);
-                    listItems.add(new Friend(friend, 123));
-                }
+                listItems = doFriends(json_list);
             }
 
         } catch (InterruptedException e) {
@@ -85,10 +82,20 @@ public class ApiHandler {
             e.printStackTrace();
         }
 
-        return friends;
+        return listItems;
     }
 
-    public boolean apiCall(String[] urls){
+    public ArrayList<Friend> doFriends(JSONArray json_list) throws JSONException {
+        ArrayList<Friend> listItems = new ArrayList<Friend>();
+
+        for (int i = 0; i < json_list.length(); i++) {
+            String friend = json_list.getString(i);
+            listItems.add(new Friend(friend, 123)); //Remove id from here. It should not exist!
+        }
+
+    }
+
+    public boolean apiCall(String[] urls){ //Used for all simple calls. Those who doesn't expect a response
         JSONObject response;
         String message = "";
 
