@@ -36,6 +36,7 @@ public class AddAnswerersActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             poll = (Poll) extras.getSerializable("POLL");
+            checkedFriends = poll.friends;
         } else {
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
         }
@@ -72,7 +73,6 @@ public class AddAnswerersActivity extends Activity {
                 receiversText.setText(receivers);
             }
         });
-
     }
 
     public void sendPoll(View view) {
@@ -90,7 +90,7 @@ public class AddAnswerersActivity extends Activity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra("POLL", poll);
+        intent.putExtra("POLLEN", poll);
         setResult(RESULT_CANCELED, intent);
         finish();
     }

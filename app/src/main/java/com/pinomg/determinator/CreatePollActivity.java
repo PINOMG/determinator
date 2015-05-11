@@ -68,8 +68,8 @@ public class CreatePollActivity extends Activity {
         if(resultCode == RESULT_OK)
             finish();
         else {
-            Bundle extras = getIntent().getExtras();
-            friends = ((Poll) extras.getSerializable("POLL")).friends;
+            Bundle extras = data.getExtras();
+            friends = ((Poll) extras.getSerializable("POLLEN")).friends;
         }
     }
 
