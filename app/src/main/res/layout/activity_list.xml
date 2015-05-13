@@ -29,11 +29,4 @@
         android:elevation="8dp"
         android:onClick="goToCreateQuestionActivity" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/apiContent"
-        android:layout_below="@id/questionView"
-        android:text="@string/content_value" />
-
 </RelativeLayout>

@@ -29,7 +29,8 @@ public class ApiHandler {
     public ApiHandler(Context context){
         this.context = context;
     }
-
+    /*
+    comment out for client meeting
     public ArrayList<Friend> getFriends(String user) {
         //Initiating and building urls.
         Log.e("Initiating", "Get friends");
@@ -37,6 +38,7 @@ public class ApiHandler {
 
 
     }
+    */
 
     public boolean login(String username, String password){
         //Initiating and building urls.
@@ -58,6 +60,8 @@ public class ApiHandler {
         return apiCall(urls);
     }
 
+    /*
+    comment out for client meeting
     public ArrayList<?> apiListCall(String[] urls){
         //Response array
         ArrayList<?> listItems = null;
@@ -85,6 +89,10 @@ public class ApiHandler {
         return listItems;
     }
 
+    */
+
+    /*
+    comment out for client meeting
     public ArrayList<Friend> doFriends(JSONArray json_list) throws JSONException {
         ArrayList<Friend> listItems = new ArrayList<Friend>();
 
@@ -94,6 +102,8 @@ public class ApiHandler {
         }
 
     }
+
+    */
 
     public boolean apiCall(String[] urls){ //Used for all simple calls. Those who doesn't expect a response
         JSONObject response;
