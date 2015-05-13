@@ -2,9 +2,8 @@ package com.pinomg.determinator;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,17 +12,20 @@ import android.widget.ListView;
 import android.widget.ArrayAdapter;
 
 
+import com.pinomg.determinator.api.ApiConnector;
+import com.pinomg.determinator.api.ApiHandler;
 import com.pinomg.determinator.database.DataApi;
-import com.pinomg.determinator.database.DatabaseHelper;
-import com.pinomg.determinator.database.PollsTable;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class ListActivity extends Activity {
 
     private DataApi api;
+    private ApiHandler apiHandler;
 
     public List<Poll> questionList; // Creates a list to store questions
     private ArrayAdapter adapter;
@@ -64,6 +66,8 @@ public class ListActivity extends Activity {
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
         questionView.setAdapter(adapter);
 
+        this.apiHandler = new ApiHandler(this.getBaseContext());
+
     }
 
     @Override
@@ -95,6 +99,13 @@ public class ListActivity extends Activity {
         switch (id) {
             case R.id.log_out:
                 session.logoutUser();
+                return true;
+            case R.id.refresh:
+
+                Boolean bool = apiHandler.login("Martin", "123");
+
+                Log.d("Result:", bool.toString());
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

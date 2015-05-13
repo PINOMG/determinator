@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.pinomg.determinator.database.DataApi;
 
+import com.pinomg.determinator.api.ApiHandler;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
