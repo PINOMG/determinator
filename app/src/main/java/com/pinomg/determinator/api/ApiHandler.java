@@ -126,6 +126,7 @@ public class ApiHandler {
         }
 
         return listItems;
+
     }
 
     private List<Poll> doPolls(JSONArray json_list) throws JSONException {
@@ -140,7 +141,6 @@ public class ApiHandler {
 
         return listItems;
     }
-
 
     public boolean apiCall(String[] urls) throws ApiErrorException { //Used for all simple calls. Those who doesn't expect a response
         JSONObject response;
