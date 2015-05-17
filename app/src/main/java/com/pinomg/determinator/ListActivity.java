@@ -82,12 +82,6 @@ public class ListActivity extends Activity {
         List<Poll> allPolls = apiHandler.getPolls("Martin");
         for(Poll p : allPolls) {
             questionList.add(p);
-
-            try {
-                apiHandler.postAnswer(p.id, "Martin", 1);
-            } catch (ApiErrorException e) {
-                e.printStackTrace();
-            }
         }
 
 
