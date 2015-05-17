@@ -26,6 +26,7 @@ public class ApiHandler {
     private static final String ENDPOINT_LOGIN = "login/";
     private static final String ENDPOINT_USER = "user/";
     private static final String ENDPOINT_POLL = "poll/";
+    private static final String ENDPOINT_ANSWER = "answer/";
 
     private Context context;
 
@@ -55,6 +56,15 @@ public class ApiHandler {
         Log.e("Initiating", "Login");
 
         String urls[] = {"POST", BASE_URL + ENDPOINT_LOGIN, "username=" + username + "&password=" + password};
+
+        return apiCall(urls);
+    }
+
+    public boolean postAnswer(int poll_id, String username, int answer) throws ApiErrorException {
+        //Init
+        Log.e("Initiating", "postAnswer");
+
+        String urls[] = {"POST", BASE_URL + ENDPOINT_ANSWER + poll_id, "username=" + username + "&answer=" + answer};
 
         return apiCall(urls);
     }

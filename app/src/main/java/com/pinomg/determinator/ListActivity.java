@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 
 
 import com.pinomg.determinator.api.ApiConnector;
+import com.pinomg.determinator.api.ApiErrorException;
 import com.pinomg.determinator.api.ApiHandler;
 import com.pinomg.determinator.database.DataApi;
 
@@ -81,7 +82,15 @@ public class ListActivity extends Activity {
         List<Poll> allPolls = apiHandler.getPolls("Martin");
         for(Poll p : allPolls) {
             questionList.add(p);
+
+            try {
+                apiHandler.postAnswer(p.id, "Martin", 1);
+            } catch (ApiErrorException e) {
+                e.printStackTrace();
+            }
         }
+
+
 
         adapter.notifyDataSetChanged();
     }
