@@ -139,7 +139,7 @@ public class ListActivity extends Activity {
         if(requestCode == CREATE_POLL_REQUEST) {
             if(resultCode == RESULT_OK) {
                 // Try to send poll to server
-                Poll poll = (Poll) data.getSerializableExtra("POLL");
+                Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
                 Toast.makeText(getBaseContext(), poll.toString(), Toast.LENGTH_LONG).show();
             }
         }

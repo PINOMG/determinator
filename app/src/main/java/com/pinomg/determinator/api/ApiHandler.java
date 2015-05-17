@@ -122,7 +122,7 @@ public class ApiHandler {
 
         for (int i = 0; i < json_list.length(); i++) {
             String friend = json_list.getString(i);
-            listItems.add(new Friend(friend, 123)); //Remove id from here. It should not exist!
+            listItems.add(new Friend(friend)); //Remove id from here. It should not exist!
         }
 
         return listItems;
