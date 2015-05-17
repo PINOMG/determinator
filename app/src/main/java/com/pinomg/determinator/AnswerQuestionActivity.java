@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pinomg.determinator.api.ApiErrorException;
+import com.pinomg.determinator.api.ApiHandler;
+
 
 public class AnswerQuestionActivity extends Activity {
 
@@ -39,8 +42,24 @@ public class AnswerQuestionActivity extends Activity {
     }
 
     // TODO: Handle answer
-    public void answerQuestion(View view) {
+    public void answerQuestion(int answer) {
+        ApiHandler apiHandler = new ApiHandler(getBaseContext());
+
+        try {
+            apiHandler.postAnswer(poll.id, "Martin", answer);
+        } catch (ApiErrorException e) {
+            e.printStackTrace();
+        }
+
         finish();
+    }
+
+    public void answerOne(View view){
+        answerQuestion(1);
+    }
+
+    public void answerTwo(View view){
+        answerQuestion(2);
     }
 
     @Override
