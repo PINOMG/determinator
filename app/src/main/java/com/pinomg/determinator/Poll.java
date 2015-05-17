@@ -54,7 +54,7 @@ public class Poll implements Serializable {
 
         Log.d("Poll:", "Created poll " + id);
 
-        return new Poll(id, question, alternative_one, alternative_two);
+        return new Poll(id, question, alternative_one, alternative_two, null);
 
     }
 
