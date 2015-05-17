@@ -69,7 +69,7 @@ public class CreatePollActivity extends Activity {
             finish();
         else {
             Bundle extras = data.getExtras();
-            friends = ((Poll) extras.getSerializable("POLLEN")).friends;
+            friends = (ArrayList<Friend>) extras.getSerializable("POLLEN");
         }
     }
 
