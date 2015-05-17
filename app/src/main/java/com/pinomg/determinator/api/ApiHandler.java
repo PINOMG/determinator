@@ -20,8 +20,8 @@ import java.util.concurrent.ExecutionException;
  * Created by patrik on 2015-05-11.
  */
 public class ApiHandler {
+    
     private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
-
     private static final String ENDPOINT_FRIEND = "friend/";
     private static final String ENDPOINT_LOGIN = "login/";
     private static final String ENDPOINT_USER = "user/";
@@ -126,7 +126,6 @@ public class ApiHandler {
         }
 
         return listItems;
-
     }
 
     private List<Poll> doPolls(JSONArray json_list) throws JSONException {
@@ -135,7 +134,6 @@ public class ApiHandler {
         for ( int i = 0; i < json_list.length(); i++ ){
             JSONObject poll_json = json_list.getJSONObject(i);
             Poll poll = Poll.serialize(poll_json);
-
             listItems.add(poll);
         }
 

@@ -53,7 +53,6 @@ public class Poll implements Serializable {
         int id = json.getInt("id");
 
         Log.d("Poll:", "Created poll " + id);
-
         return new Poll(id, question, alternative_one, alternative_two, null);
 
     }
