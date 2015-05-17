@@ -13,7 +13,9 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="200dp"
-        android:id="@+id/question"/>
+        android:id="@+id/question"
+        android:textSize="30sp"
+        android:textAlignment="center"/>
 
     <TextView
         android:text="It has been determined:"
@@ -23,6 +25,8 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="200dp"
-        android:id="@+id/answer"/>
+        android:id="@+id/answer"
+        android:textSize="30sp"
+        android:textAlignment="center"/>
 
 </LinearLayout>

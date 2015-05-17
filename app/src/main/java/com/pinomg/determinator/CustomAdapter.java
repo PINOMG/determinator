@@ -83,7 +83,7 @@ public class CustomAdapter extends BaseAdapter {
         int i = 0;
         List<Poll> list = items.get(order[i]);
 
-        while((list == null && getCount() > 0) || position > list.size() + 1) {
+        while((list == null && getCount() > 0) || position >= list.size() + 1) {
 
             if(list != null)
                 position -= list.size() + 1;

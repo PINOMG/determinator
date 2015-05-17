@@ -1,5 +1,6 @@
 package com.pinomg.determinator;
 
+import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 
-public class ResultActivity extends ActionBarActivity {
+public class ResultActivity extends Activity{
 
     private TextView questionText, answerText;
     private Poll poll;
@@ -18,7 +19,7 @@ public class ResultActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-       //Connecting layout with logic
+        //Connecting layout with logic
         questionText = (TextView) findViewById(R.id.question);
         answerText = (TextView) findViewById(R.id.answer);
 
@@ -30,13 +31,10 @@ public class ResultActivity extends ActionBarActivity {
         }
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_result, menu);
-
         return true;
     }
 
@@ -51,7 +49,6 @@ public class ResultActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

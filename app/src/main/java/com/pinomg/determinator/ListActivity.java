@@ -51,15 +51,21 @@ public class ListActivity extends Activity {
         questionView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Integer type = parent.getAdapter().getItemViewType(position);
                 Poll poll = (Poll) parent.getAdapter().getItem(position);
 
-                Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
-                intent.putExtra("POLL", poll);
-                startActivity(intent);
-                overridePendingTransition(0,0);
-                return false;
+                if(poll.getStatus() == poll.STATUS_FINISHED) {
+                    Intent intent = new Intent(getBaseContext(), ResultActivity.class);
+                    intent.putExtra("POLL", poll);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    return false;
+                } else {
+                    Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
+                    intent.putExtra("POLL", poll);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    return false;
+                }
             }
         });
 

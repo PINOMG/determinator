@@ -15,7 +15,7 @@ public class Poll implements Serializable {
 
     private static String[] TEXT_STATUS = {
             "Pending",
-            "Answerd",
+            "Answered",
             "Finished",
             "Archived"
          };
@@ -40,7 +40,11 @@ public class Poll implements Serializable {
 
     // TODO: Implement!
     public Integer getStatus() {
-        return STATUS_PENDING;
+        if (this.question.equals("MJAE")) {
+            return STATUS_PENDING;
+        } else {
+            return STATUS_FINISHED;
+        }
     }
 
     //This is required by the adapter for output in a list.
