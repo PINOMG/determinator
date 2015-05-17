@@ -18,6 +18,8 @@ import com.pinomg.determinator.database.DataApi;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -48,6 +50,7 @@ public class ListActivity extends Activity {
         session.checkLogin();
 
         this.api = new DataApi(getBaseContext());
+        this.apiHandler = new ApiHandler(getBaseContext());
 
         final ListView questionView = (ListView) findViewById(R.id.questionView);
         questionView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -62,11 +65,11 @@ public class ListActivity extends Activity {
             }
         });
 
-        questionList = api.getAllPolls();
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
-        questionView.setAdapter(adapter);
+        questionList = new LinkedList<>();
 
-        this.apiHandler = new ApiHandler(this.getBaseContext());
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
+
+        questionView.setAdapter(adapter);
 
     }
 
@@ -75,7 +78,7 @@ public class ListActivity extends Activity {
         super.onResume();
 
         questionList.clear();
-        List<Poll> allPolls = api.getAllPolls();
+        List<Poll> allPolls = apiHandler.getPolls("Martin");
         for(Poll p : allPolls) {
             questionList.add(p);
         }
@@ -101,10 +104,13 @@ public class ListActivity extends Activity {
                 session.logoutUser();
                 return true;
             case R.id.refresh:
+                Log.d("Ey", "Init");
 
-                Boolean bool = apiHandler.login("Martin", "123");
+                List<Poll> friends = apiHandler.getPolls("Martin");
 
-                Log.d("Result:", bool.toString());
+                for( Poll f : friends ){
+                    Log.d("Friend", f.toString());
+                }
 
                 return true;
             default:

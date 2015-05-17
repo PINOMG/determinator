@@ -1,5 +1,10 @@
 package com.pinomg.determinator;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -35,6 +40,22 @@ public class Poll implements Serializable {
     //This is required by the adapter for output in a list.
     public String toString(){
         return this.question;
+    }
+
+
+    //How to "un"-serialize an object from json-code
+    public static Poll serialize (JSONObject json) throws JSONException {
+
+        String alternative_one = json.getString("alternative_one");
+        String alternative_two = json.getString("alternative_two");
+
+        String question = json.getString("question");
+        int id = json.getInt("id");
+
+        Log.d("Poll:", "Created poll " + id);
+
+        return new Poll(id, question, alternative_one, alternative_two);
+
     }
 
     @Override
