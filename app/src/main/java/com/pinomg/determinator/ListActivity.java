@@ -93,6 +93,7 @@ public class ListActivity extends Activity {
         super.onResume();
 
         questionList.clear();
+
         if(session.isLoggedIn()) {
 
             String username = session.getLoggedInUsername();
@@ -152,8 +153,8 @@ public class ListActivity extends Activity {
                     apiHandler.createPoll(poll, session);
                 } catch (ApiErrorException e) {
                     Log.d(e.getMessage(), null);
+                    Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(getBaseContext(), poll.toString(), Toast.LENGTH_LONG).show();
             }
         }
     }
