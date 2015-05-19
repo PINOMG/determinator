@@ -3,7 +3,7 @@ package com.pinomg.determinator.api;
 import android.content.Context;
 import android.util.Log;
 
-import com.pinomg.determinator.Friend;
+import com.pinomg.determinator.User;
 import com.pinomg.determinator.Poll;
 import com.pinomg.determinator.SessionManagement;
 
@@ -11,11 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -23,12 +21,12 @@ import java.util.concurrent.ExecutionException;
  */
 public class ApiHandler {
     
-    private static final String BASE_URL = "http://192.168.0.11/pinomg/";
-    private static final String ENDPOINT_FRIEND = "friend/";
-    private static final String ENDPOINT_LOGIN = "login/";
-    private static final String ENDPOINT_USER = "user/";
-    private static final String ENDPOINT_POLL = "poll/";
-    private static final String ENDPOINT_ANSWER = "answer/";
+    private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
+    private static final String ENDPOINT_FRIEND = BASE_URL + "friend/";
+    private static final String ENDPOINT_LOGIN  = BASE_URL + "login/";
+    private static final String ENDPOINT_USER   = BASE_URL + "user/";
+    private static final String ENDPOINT_POLL   = BASE_URL + "poll/";
+    private static final String ENDPOINT_ANSWER = BASE_URL + "answer/";
 
     private Context context;
 
@@ -37,19 +35,19 @@ public class ApiHandler {
         this.context = context;
     }
 
-    public List<Friend> getFriends(String user) {
+    public List<User> getFriends(String user) {
         //Initiating and building urls.
         Log.e("Initiating", "Get friends");
 
-        String urls[] = {"GET", BASE_URL + ENDPOINT_FRIEND + user};
+        String urls[] = {"GET", ENDPOINT_FRIEND + user};
 
-        return (LinkedList<Friend>) apiListCall(urls, "friends");
+        return (LinkedList<User>) apiListCall(urls, "friends");
     }
 
     public List<Poll> getPolls(String user){
         Log.e("Initiating", "Get friends");
 
-        String urls[] = {"GET", BASE_URL + ENDPOINT_POLL + user};
+        String urls[] = {"GET", ENDPOINT_POLL + user};
 
         return (LinkedList<Poll>) apiListCall(urls, "polls");
     }
@@ -58,7 +56,7 @@ public class ApiHandler {
         //Initiating and building urls.
         Log.e("Initiating", "Login " + username + password);
 
-        String urls[] = {"POST", BASE_URL + ENDPOINT_LOGIN, "username=" + username + "&password=" + password};
+        String urls[] = {"POST", ENDPOINT_LOGIN, "username=" + username + "&password=" + password};
 
         return apiCall(urls);
     }
@@ -67,7 +65,7 @@ public class ApiHandler {
         //Init
         Log.e("Initiating", "postAnswer");
 
-        String urls[] = {"POST", BASE_URL + ENDPOINT_ANSWER + poll_id, "username=" + username + "&answer=" + answer};
+        String urls[] = {"POST", ENDPOINT_ANSWER + poll_id, "username=" + username + "&answer=" + answer};
 
         return apiCall(urls);
     }
@@ -76,7 +74,7 @@ public class ApiHandler {
         //Initiating and building urls.
         Log.e("Initiating", "Creating user");
 
-        String urls[] = {"POST", BASE_URL + ENDPOINT_USER, "username=" + username + "&password=" + password};
+        String urls[] = {"POST", ENDPOINT_USER, "username=" + username + "&password=" + password};
 
         return apiCall(urls);
     }
@@ -85,8 +83,8 @@ public class ApiHandler {
         Log.e("Initiating", "Creating poll");
 
         String receivers = "[" + '"' + session.getLoggedInUsername() + '"' + "," ;
-        for (Iterator<Friend> i = poll.friends.iterator(); i.hasNext(); ) {
-            Friend f = i.next();
+        for (Iterator<User> i = poll.getAnswerers().iterator(); i.hasNext(); ) {
+            User f = i.next();
             receivers += '"' + f.toString() + '"';
             if (i.hasNext())
                 receivers += ',';
@@ -94,15 +92,15 @@ public class ApiHandler {
                 receivers += ']';
         }
 
-        String data =   "question=" + poll.question +
-                        "&alternative_one=" + poll.alternativeOne +
-                        "&alternative_two=" + poll.alternativeTwo +
+        String data =   "question=" + poll.getQuestion() +
+                        "&alternative_one=" + poll.getAlternativeOne() +
+                        "&alternative_two=" + poll.getAlternativeTwo() +
                         "&receivers=" + receivers +
                         "&username=" + session.getLoggedInUsername();
 
         Log.e("Post data", data);
 
-        String urls[] = {"POST", BASE_URL + ENDPOINT_POLL, data};
+        String urls[] = {"POST", ENDPOINT_POLL, data};
         return apiCall(urls);
 
     }
@@ -147,12 +145,12 @@ public class ApiHandler {
         return listItems;
     }
 
-    private List<Friend> doFriends(JSONArray json_list) throws JSONException {
-        List<Friend> listItems = new LinkedList<>();
+    private List<User> doFriends(JSONArray json_list) throws JSONException {
+        List<User> listItems = new LinkedList<>();
 
         for (int i = 0; i < json_list.length(); i++) {
             String friend = json_list.getString(i);
-            listItems.add(new Friend(friend)); //Remove id from here. It should not exist!
+            listItems.add(new User(friend)); //Remove id from here. It should not exist!
         }
 
         return listItems;
@@ -163,7 +161,7 @@ public class ApiHandler {
 
         for ( int i = 0; i < json_list.length(); i++ ){
             JSONObject poll_json = json_list.getJSONObject(i);
-            Poll poll = Poll.serialize(poll_json);
+            Poll poll = jsonToPoll(poll_json);
             listItems.add(poll);
         }
 
@@ -200,5 +198,27 @@ public class ApiHandler {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+
+    //How to "un"-serialize an object from json-code
+    private static Poll jsonToPoll(JSONObject json) throws JSONException {
+
+        String alternative_one = json.getString("alternative_one");
+        String alternative_two = json.getString("alternative_two");
+
+        String question = json.getString("question");
+        int id = json.getInt("id");
+        int result = json.getInt("result");
+        int answer = json.getInt("answer");
+
+        Poll p = new Poll(id, question, alternative_one, alternative_two);
+        p.setAnswer(answer);
+        p.setResult(result);
+
+        Log.d("Poll:", "Created poll " + id);
+        return p;
+
     }
 }

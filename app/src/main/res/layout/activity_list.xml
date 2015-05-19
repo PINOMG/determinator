@@ -24,7 +24,7 @@
         android:src="@drawable/plus"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="12dp"
         android:contentDescription="@null"
         android:elevation="8dp"
         android:onClick="goToCreateQuestionActivity" />
