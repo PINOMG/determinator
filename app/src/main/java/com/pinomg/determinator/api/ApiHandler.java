@@ -110,7 +110,7 @@ public class ApiHandler {
 
     public List<?> apiListCall(String[] urls, String item){
         //Response array
-        List<?> listItems = null;
+        List<?> listItems = new LinkedList<>();
 
         //Do the call
         JSONObject response;

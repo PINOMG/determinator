@@ -93,13 +93,18 @@ public class ListActivity extends Activity {
         super.onResume();
 
         questionList.clear();
+        if(session.isLoggedIn()) {
 
-        List<Poll> allPolls = apiHandler.getPolls(session.getLoggedInUsername());
-        for(Poll p : allPolls) {
-            questionList.add(p);
+            String username = session.getLoggedInUsername();
+            Log.d("username", username);
+
+            List<Poll> allPolls = apiHandler.getPolls(username);
+            for (Poll p : allPolls) {
+                questionList.add(p);
+            }
+
+            adapter.notifyDataSetChanged();
         }
-
-        adapter.notifyDataSetChanged();
     }
 
     @Override
