@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * The question class. Holds all information about a question.
@@ -15,18 +16,25 @@ public class Poll implements Serializable {
     public String question;
     public String alternativeOne;
     public String alternativeTwo;
+    public ArrayList<Friend> friends;
 
-    public Poll (String question, String a1, String a2) {
+    public Poll (String question, String a1, String a2, ArrayList<Friend> friends) {
+        this.friends = friends;
         this.question = question;
         this.alternativeOne = a1;
         this.alternativeTwo = a2;
     }
 
-    public Poll (int id, String question, String a1, String a2) {
+    public Poll (int id, String question, String a1, String a2, ArrayList<Friend> friends) {
+        this.friends = friends;
         this.id = id;
         this.question = question;
         this.alternativeOne = a1;
         this.alternativeTwo = a2;
+    }
+
+    public void addFriendlist(ArrayList<Friend> list) {
+        this.friends = list;
     }
 
     //This is required by the adapter for output in a list.
@@ -45,8 +53,7 @@ public class Poll implements Serializable {
         int id = json.getInt("id");
 
         Log.d("Poll:", "Created poll " + id);
-
-        return new Poll(id, question, alternative_one, alternative_two);
+        return new Poll(id, question, alternative_one, alternative_two, null);
 
     }
 

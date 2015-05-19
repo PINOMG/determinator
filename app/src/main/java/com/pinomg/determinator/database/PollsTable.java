@@ -12,6 +12,7 @@ public class PollsTable {
     public static final String COLUMN_ALTERNATIVE_ONE = "alternative_one";
     public static final String COLUMN_ALTERNATIVE_TWO = "alternative_two";
 
+
     public static final String CREATE_POLLS_TABLE =
             "CREATE TABLE " + TABLE_POLLS + " (" +
             COLUMN_POLL_ID + " INTEGER PRIMARY KEY, " +

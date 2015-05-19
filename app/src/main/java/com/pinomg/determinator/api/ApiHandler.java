@@ -20,8 +20,8 @@ import java.util.concurrent.ExecutionException;
  * Created by patrik on 2015-05-11.
  */
 public class ApiHandler {
-    private static final String BASE_URL = "http://192.168.0.11/pinomg/";
-
+    
+    private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
     private static final String ENDPOINT_FRIEND = "friend/";
     private static final String ENDPOINT_LOGIN = "login/";
     private static final String ENDPOINT_USER = "user/";
@@ -122,7 +122,7 @@ public class ApiHandler {
 
         for (int i = 0; i < json_list.length(); i++) {
             String friend = json_list.getString(i);
-            listItems.add(new Friend(friend, 123)); //Remove id from here. It should not exist!
+            listItems.add(new Friend(friend)); //Remove id from here. It should not exist!
         }
 
         return listItems;
@@ -134,13 +134,11 @@ public class ApiHandler {
         for ( int i = 0; i < json_list.length(); i++ ){
             JSONObject poll_json = json_list.getJSONObject(i);
             Poll poll = Poll.serialize(poll_json);
-
             listItems.add(poll);
         }
 
         return listItems;
     }
-
 
     public boolean apiCall(String[] urls) throws ApiErrorException { //Used for all simple calls. Those who doesn't expect a response
         JSONObject response;

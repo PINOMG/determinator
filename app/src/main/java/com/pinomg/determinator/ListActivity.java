@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 
 import com.pinomg.determinator.api.ApiConnector;
@@ -26,6 +27,8 @@ import java.util.concurrent.ExecutionException;
 
 
 public class ListActivity extends Activity {
+
+    private int CREATE_POLL_REQUEST = 0;
 
     private DataApi api;
     private ApiHandler apiHandler;
@@ -127,7 +130,18 @@ public class ListActivity extends Activity {
 
     public void goToCreateQuestionActivity(View view) {
         Intent intent = new Intent(this, CreatePollActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, CREATE_POLL_REQUEST);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == CREATE_POLL_REQUEST) {
+            if(resultCode == RESULT_OK) {
+                // Try to send poll to server
+                Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
+                Toast.makeText(getBaseContext(), poll.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }
