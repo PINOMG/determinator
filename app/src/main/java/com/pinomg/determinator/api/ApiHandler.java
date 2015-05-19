@@ -5,12 +5,14 @@ import android.util.Log;
 
 import com.pinomg.determinator.Friend;
 import com.pinomg.determinator.Poll;
+import com.pinomg.determinator.SessionManagement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
@@ -29,6 +31,7 @@ public class ApiHandler {
     private static final String ENDPOINT_ANSWER = "answer/";
 
     private Context context;
+
 
     public ApiHandler(Context context){
         this.context = context;
@@ -77,6 +80,33 @@ public class ApiHandler {
 
         return apiCall(urls);
     }
+
+    public boolean createPoll(Poll poll, SessionManagement session) throws ApiErrorException {
+        Log.e("Initiating", "Creating poll");
+
+        String receivers = "[" + '"' + session.getLoggedInUsername() + '"' + "," ;
+        for (Iterator<Friend> i = poll.friends.iterator(); i.hasNext(); ) {
+            Friend f = i.next();
+            receivers += '"' + f.toString() + '"';
+            if (i.hasNext())
+                receivers += ',';
+            else
+                receivers += ']';
+        }
+
+        String data =   "question=" + poll.question +
+                        "&alternative_one=" + poll.alternativeOne +
+                        "&alternative_two=" + poll.alternativeTwo +
+                        "&receivers=" + receivers +
+                        "&username=" + session.getLoggedInUsername();
+
+        Log.e("Post data", data);
+
+        String urls[] = {"POST", BASE_URL + ENDPOINT_POLL, data};
+        return apiCall(urls);
+
+    }
+
 
     public List<?> apiListCall(String[] urls, String item){
         //Response array

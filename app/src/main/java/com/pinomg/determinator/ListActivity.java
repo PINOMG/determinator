@@ -87,8 +87,6 @@ public class ListActivity extends Activity {
             questionList.add(p);
         }
 
-
-
         adapter.notifyDataSetChanged();
     }
 
@@ -140,6 +138,11 @@ public class ListActivity extends Activity {
             if(resultCode == RESULT_OK) {
                 // Try to send poll to server
                 Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
+                try {
+                    apiHandler.createPoll(poll, session);
+                } catch (ApiErrorException e) {
+                    Log.d(e.getMessage(), null);
+                }
                 Toast.makeText(getBaseContext(), poll.toString(), Toast.LENGTH_LONG).show();
             }
         }
