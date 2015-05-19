@@ -22,36 +22,38 @@ import android.widget.TextView;
  */
 public class CustomAdapter extends BaseAdapter {
 
-    private static final int TYPE_POLL = 0;
-    private static final int TYPE_HEADER = 1;
+    public static final int TYPE_POLL = 0;
+    public static final int TYPE_HEADER = 1;
 
     private Map<Integer,List<Poll>> items;
+    private List<Poll> polls;
     private LayoutInflater mInflater;
 
     public CustomAdapter(Context context, List<Poll> polls) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        items = new HashMap<>();
 
-        populateList(polls);
+        items = new HashMap<>();
+        this.polls = polls;
+        populateList();
     }
 
-    private void populateList(List<Poll> polls){
-        if( polls != null ) {
-            items.clear();
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        populateList();
+    }
 
-            for (Poll poll : polls) {
-                Integer status = poll.getStatus();
+    private void populateList() {
+        items.clear();
+        for(Poll poll : polls) {
+            Integer status = poll.getStatus();
 
-                if (!items.containsKey(status)) {
-                    List<Poll> pollList = new ArrayList<>();
-                    items.put(status, pollList);
-                }
-
-                items.get(status).add(poll);
-
-                Log.d("Adapter", "Adding poll " + poll);
+            if(!items.containsKey(status)) {
+                List<Poll> pollList = new ArrayList<Poll>();
+                items.put(status, pollList);
             }
+            items.get(status).add(poll);
         }
     }
 
@@ -114,6 +116,16 @@ public class CustomAdapter extends BaseAdapter {
         return position;
     }
 
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return (getItemViewType(position) == TYPE_POLL);
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
 
 
@@ -134,11 +146,6 @@ public class CustomAdapter extends BaseAdapter {
         }
 
         return convertView;
-    }
-
-    public void updateList(List<Poll> polls){
-        populateList(polls);
-        notifyDataSetChanged();
     }
 
 

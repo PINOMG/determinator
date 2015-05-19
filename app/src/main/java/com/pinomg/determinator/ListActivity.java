@@ -60,28 +60,31 @@ public class ListActivity extends Activity {
         questionView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Poll poll = (Poll) parent.getAdapter().getItem(position);
+                if(parent.getAdapter().getItemViewType(position) == CustomAdapter.TYPE_POLL) {
+                    Poll poll = (Poll) parent.getAdapter().getItem(position);
 
-                if(poll.getStatus() == poll.STATUS_FINISHED) {
-                    Intent intent = new Intent(getBaseContext(), ResultActivity.class);
-                    intent.putExtra("POLL", poll);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
+                    if (poll.getStatus() == poll.STATUS_FINISHED) {
+                        Intent intent = new Intent(getBaseContext(), ResultActivity.class);
+                        intent.putExtra("POLL", poll);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        return false;
+                    } else if (poll.getStatus() == poll.STATUS_PENDING) {
+                        Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
+                        intent.putExtra("POLL", poll);
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        return false;
+                    }
                     return false;
                 } else {
-                    Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
-                    intent.putExtra("POLL", poll);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
                     return false;
                 }
             }
         });
 
         questionList = new LinkedList<>();
-
         adapter = new CustomAdapter(this, questionList);
-
         questionView.setAdapter(adapter);
     }
 
@@ -91,12 +94,12 @@ public class ListActivity extends Activity {
 
         questionList.clear();
 
-        List<Poll> allPolls = apiHandler.getPolls("Martin");
+        List<Poll> allPolls = apiHandler.getPolls(session.getLoggedInUsername());
         for(Poll p : allPolls) {
             questionList.add(p);
         }
 
-        adapter.updateList(questionList);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -117,13 +120,6 @@ public class ListActivity extends Activity {
                 session.logoutUser();
                 return true;
             case R.id.refresh:
-                Log.d("Ey", "Init");
-
-                try {
-                    boolean trigg = apiHandler.login("Martin","123");
-                } catch (ApiErrorException e) {
-                    e.printStackTrace();
-                }
 
                 return true;
             default:
@@ -147,6 +143,11 @@ public class ListActivity extends Activity {
             if(resultCode == RESULT_OK) {
                 // Try to send poll to server
                 Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
+                try {
+                    apiHandler.createPoll(poll, session);
+                } catch (ApiErrorException e) {
+                    Log.d(e.getMessage(), null);
+                }
                 Toast.makeText(getBaseContext(), poll.toString(), Toast.LENGTH_LONG).show();
             }
         }

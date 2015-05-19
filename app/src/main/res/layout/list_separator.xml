@@ -12,6 +12,8 @@
         android:text="Separator"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:focusableInTouchMode="false"
+        android:focusable="false"/>
 
 </LinearLayout>

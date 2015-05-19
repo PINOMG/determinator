@@ -31,7 +31,8 @@ public class Poll implements Serializable {
     public String alternativeOne;
     public String alternativeTwo;
     public ArrayList<Friend> friends;
-    public int result;
+    public int result; //Poll result
+    public int answer; //Users answer
 
     public Poll (String question, String a1, String a2, ArrayList<Friend> friends) {
         this.friends = friends;
@@ -56,11 +57,12 @@ public class Poll implements Serializable {
 
     // TODO: Implement!
     public Integer getStatus() {
-        if (this.result > 0) {
-            return STATUS_FINISHED;
-        } else {
+        if (this.result == 0 && this.answer == 0) {
             return STATUS_PENDING;
-        }
+        } else if (this.result == 0 && this.answer > 0) {
+            return STATUS_ANSWERED;
+        } else
+            return STATUS_FINISHED;
     }
 
     //This is required by the adapter for output in a list.
@@ -78,9 +80,11 @@ public class Poll implements Serializable {
         String question = json.getString("question");
         int id = json.getInt("id");
         int result = json.getInt("result");
+        int answer = json.getInt("answer");
 
         Poll p = new Poll(id, question, alternative_one, alternative_two, null);
         p.result = result;
+        p.answer = answer;
 
         Log.d("Poll:", "Created poll " + id);
         return p;
