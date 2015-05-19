@@ -34,7 +34,7 @@ public class ListActivity extends Activity {
     private ApiHandler apiHandler;
 
     public List<Poll> questionList; // Creates a list to store questions
-    private ArrayAdapter adapter;
+    private CustomAdapter adapter;
 
     // SessionManagement class
     SessionManagement session;
@@ -61,20 +61,28 @@ public class ListActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Poll poll = (Poll) parent.getAdapter().getItem(position);
-                Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
-                intent.putExtra("POLL", poll);
-                startActivity(intent);
-                overridePendingTransition(0,0);
-                return false;
+
+                if(poll.getStatus() == poll.STATUS_FINISHED) {
+                    Intent intent = new Intent(getBaseContext(), ResultActivity.class);
+                    intent.putExtra("POLL", poll);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    return false;
+                } else {
+                    Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
+                    intent.putExtra("POLL", poll);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    return false;
+                }
             }
         });
 
-        questionList = new LinkedList<>();
+        questionList = apiHandler.getPolls("Martin");
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionList);
+        adapter = new CustomAdapter(this, questionList);
 
         questionView.setAdapter(adapter);
-
     }
 
     @Override
@@ -86,8 +94,6 @@ public class ListActivity extends Activity {
         for(Poll p : allPolls) {
             questionList.add(p);
         }
-
-
 
         adapter.notifyDataSetChanged();
     }
