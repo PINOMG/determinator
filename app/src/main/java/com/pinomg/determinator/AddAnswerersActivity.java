@@ -150,12 +150,11 @@ public class AddAnswerersActivity extends Activity {
     }
 
     public void createExampleFriendList() {
-        Friend friend1 = new Friend("Rasmus");
-        Friend friend2 = new Friend("Karin");
-        Friend friend3 = new Friend("Bubba");
-
-        friendList.add(friend1);
-        friendList.add(friend2);
-        friendList.add(friend3);
+        friendList.add(new Friend("Martin"));
+        friendList.add(new Friend("Patrik"));
+        friendList.add(new Friend("Ebba"));
+        friendList.add(new Friend("Björn"));
+        friendList.add(new Friend("Olle"));
+        friendList.add(new Friend("Philip"));
     }
 }
