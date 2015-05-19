@@ -77,7 +77,6 @@ public class ListActivity extends Activity {
         questionList = api.getAllPolls();
         adapter = new CustomAdapter(this, questionList);
         questionView.setAdapter(adapter);
-
     }
 
     @Override
