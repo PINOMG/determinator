@@ -26,7 +26,7 @@ public class LoginActivity extends Activity{
      */
 
     // UI references.
-    private EditText mEmailView;
+    private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -45,7 +45,7 @@ public class LoginActivity extends Activity{
         session = new SessionManagement(getApplicationContext());
 
         // Set up the login form.
-        mEmailView = (EditText) findViewById(R.id.email);
+        mUsernameView = (EditText) findViewById(R.id.email);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -79,11 +79,11 @@ public class LoginActivity extends Activity{
      */
     public void attemptLogin() {
         // Reset errors.
-        mEmailView.setError(null);
+        mUsernameView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -98,9 +98,9 @@ public class LoginActivity extends Activity{
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        if (TextUtils.isEmpty(username)) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
             cancel = true;
         }
 
@@ -117,14 +117,14 @@ public class LoginActivity extends Activity{
             apiHandler = new ApiHandler(getBaseContext());
             boolean success = false;
             try {
-                success = apiHandler.login(email, password);
+                success = apiHandler.login(username, password);
             } catch (ApiErrorException e) {
                 e.printStackTrace();
             }
             showProgress(false);
 
             if (success) {
-                session.createLoginSession(email);
+                session.createLoginSession(username);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
