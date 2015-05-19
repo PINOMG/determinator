@@ -99,7 +99,7 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
         InputStream is = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
-        int len = 500;
+        int len = 5000;
 
         try {
             URL url = new URL(params[1]);
