@@ -53,7 +53,7 @@ public class ApiHandler {
 
     public boolean login(String username, String password) throws ApiErrorException {
         //Initiating and building urls.
-        Log.e("Initiating", "Login");
+        Log.e("Initiating", "Login " + username + password);
 
         String urls[] = {"POST", BASE_URL + ENDPOINT_LOGIN, "username=" + username + "&password=" + password};
 
@@ -147,7 +147,9 @@ public class ApiHandler {
         String message = "";
 
         try {
+            Log.d("apicall", "before resp");
             response = new ApiConnector(context).execute(urls).get();
+            Log.d("apicall", "after resp");
 
             if (response != null) {
                 if (response.has("error")){ // If there is an error.

@@ -109,10 +109,10 @@ public class ListActivity extends Activity {
             case R.id.refresh:
                 Log.d("Ey", "Init");
 
-                List<Poll> friends = apiHandler.getPolls("Martin");
-
-                for( Poll f : friends ){
-                    Log.d("Friend", f.toString());
+                try {
+                    boolean trigg = apiHandler.login("Martin","123");
+                } catch (ApiErrorException e) {
+                    e.printStackTrace();
                 }
 
                 return true;
