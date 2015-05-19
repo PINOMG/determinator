@@ -15,11 +15,14 @@ import com.pinomg.determinator.database.DataApi;
 import com.pinomg.determinator.database.DatabaseHelper;
 import com.pinomg.determinator.database.PollsTable;
 
+import java.util.ArrayList;
+
 
 public class CreatePollActivity extends Activity {
 
     private EditText questionField, alternativeOne, alternativeTwo;
     private Button createButton;
+    private ArrayList<Friend> friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,38 +36,42 @@ public class CreatePollActivity extends Activity {
         createButton = (Button) findViewById(R.id.createButton);
     }
 
-    public void sendPoll(View view) {
-        Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString());
+
+
+    public void goToAddAnswerersActivity(View view) {
+        Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString(), friends);
 
         // Check that the user has given all required input
         Boolean valid = true;
-        if( questionField.getText().toString().length() == 0) {
+        if(questionField.getText().toString().length() == 0) {
             questionField.setError("You must define a question!");
             valid = false;
         }
-        if (alternativeOne.getText().toString().length() == 0) {
+        if(alternativeOne.getText().toString().length() == 0) {
             alternativeOne.setError("You must give an answer!");
             valid = false;
         }
-        if( alternativeTwo.getText().toString().length() == 0) {
+        if(alternativeTwo.getText().toString().length() == 0) {
             alternativeTwo.setError("You must give an answer!");
             valid = false;
         }
 
-        // If question valid, then inserts it into db
         if(valid) {
-
-            DataApi api = new DataApi(getBaseContext());
-            api.addPoll(poll);
-
-            //Instead of finish(), if question is valid then go to the add answerer activity
             Intent intent = new Intent(this, AddAnswerersActivity.class);
-            startActivity(intent);
-            finish();
-
+            intent.putExtra("POLL", poll);
+            startActivityForResult(intent, 1);
         }
+    }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            setResult(RESULT_OK, data);
+            finish();
+        } else {
+            Bundle extras = data.getExtras();
+            friends = (ArrayList<Friend>) extras.getSerializable("POLLEN");
+        }
     }
 
     @Override
@@ -82,7 +89,7 @@ public class CreatePollActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_settings) {
             return true;
         }
 

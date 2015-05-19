@@ -2,28 +2,36 @@ package com.pinomg.determinator;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 
+import com.pinomg.determinator.api.ApiConnector;
+import com.pinomg.determinator.api.ApiErrorException;
+import com.pinomg.determinator.api.ApiHandler;
 import com.pinomg.determinator.database.DataApi;
-import com.pinomg.determinator.database.DatabaseHelper;
-import com.pinomg.determinator.database.PollsTable;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class ListActivity extends Activity {
 
+    private int CREATE_POLL_REQUEST = 0;
+
     private DataApi api;
+    private ApiHandler apiHandler;
 
     public List<Poll> questionList; // Creates a list to store questions
     private CustomAdapter adapter;
@@ -46,6 +54,7 @@ public class ListActivity extends Activity {
         session.checkLogin();
 
         this.api = new DataApi(getBaseContext());
+        this.apiHandler = new ApiHandler(getBaseContext());
 
         final ListView questionView = (ListView) findViewById(R.id.questionView);
         questionView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -74,8 +83,9 @@ public class ListActivity extends Activity {
             }
         });
 
-        questionList = api.getAllPolls();
+        questionList = new LinkedList<>();
         adapter = new CustomAdapter(this, questionList);
+
         questionView.setAdapter(adapter);
 
     }
@@ -85,10 +95,12 @@ public class ListActivity extends Activity {
         super.onResume();
 
         questionList.clear();
-        List<Poll> allPolls = api.getAllPolls();
+        List<Poll> allPolls = apiHandler.getPolls("Martin");
         for(Poll p : allPolls) {
             questionList.add(p);
         }
+
+
 
         adapter.notifyDataSetChanged();
     }
@@ -110,6 +122,16 @@ public class ListActivity extends Activity {
             case R.id.log_out:
                 session.logoutUser();
                 return true;
+            case R.id.refresh:
+                Log.d("Ey", "Init");
+
+                try {
+                    boolean trigg = apiHandler.login("Martin","123");
+                } catch (ApiErrorException e) {
+                    e.printStackTrace();
+                }
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -121,7 +143,18 @@ public class ListActivity extends Activity {
 
     public void goToCreateQuestionActivity(View view) {
         Intent intent = new Intent(this, CreatePollActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, CREATE_POLL_REQUEST);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == CREATE_POLL_REQUEST) {
+            if(resultCode == RESULT_OK) {
+                // Try to send poll to server
+                Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
+                Toast.makeText(getBaseContext(), poll.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }

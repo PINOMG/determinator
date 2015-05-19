@@ -35,6 +35,6 @@
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:onClick="goToListActivity"/>
+        android:onClick="sendPoll"/>
 
 </RelativeLayout>
