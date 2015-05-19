@@ -103,6 +103,16 @@ public class CustomAdapter extends BaseAdapter {
         return position;
     }
 
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return (getItemViewType(position) == TYPE_POLL);
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
 
 
