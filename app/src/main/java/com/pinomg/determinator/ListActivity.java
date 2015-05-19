@@ -94,7 +94,7 @@ public class ListActivity extends Activity {
         super.onResume();
 
         questionList.clear();
-        List<Poll> allPolls = apiHandler.getPolls("Martin");
+        List<Poll> allPolls = apiHandler.getPolls(session.getLoggedInUsername());
         for(Poll p : allPolls) {
             questionList.add(p);
         }
@@ -154,8 +154,8 @@ public class ListActivity extends Activity {
                     apiHandler.createPoll(poll, session);
                 } catch (ApiErrorException e) {
                     Log.d(e.getMessage(), null);
+                    Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(getBaseContext(), poll.toString(), Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -67,7 +67,7 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return items.size();
+        return Math.max(1,items.size());
     }
 
     @Override
