@@ -21,8 +21,8 @@ import android.widget.TextView;
  */
 public class CustomAdapter extends BaseAdapter {
 
-    private static final int TYPE_POLL = 0;
-    private static final int TYPE_HEADER = 1;
+    public static final int TYPE_POLL = 0;
+    public static final int TYPE_HEADER = 1;
 
     private Map<Integer,List<Poll>> items;
     private LayoutInflater mInflater;
