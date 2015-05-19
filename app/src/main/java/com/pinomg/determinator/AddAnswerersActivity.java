@@ -112,9 +112,9 @@ public class AddAnswerersActivity extends Activity {
     public void sendPoll(View view) {
         if (!checkedFriends.isEmpty()) {
             poll.addFriendlist(checkedFriends);
-            DataApi api = new DataApi(getBaseContext());
-            api.addPoll(poll);
-            setResult(RESULT_OK, null);
+            Intent intent = new Intent();
+            intent.putExtra("CREATED_POLL", poll);
+            setResult(RESULT_OK, intent);
             finish();
         } else {
             Toast.makeText(getBaseContext(), "Haven't you got any friends, or?", Toast.LENGTH_LONG).show();

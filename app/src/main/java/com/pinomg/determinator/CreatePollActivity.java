@@ -65,9 +65,10 @@ public class CreatePollActivity extends Activity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK)
+        if(resultCode == RESULT_OK) {
+            setResult(RESULT_OK, data);
             finish();
-        else {
+        } else {
             Bundle extras = data.getExtras();
             friends = (ArrayList<Friend>) extras.getSerializable("POLLEN");
         }

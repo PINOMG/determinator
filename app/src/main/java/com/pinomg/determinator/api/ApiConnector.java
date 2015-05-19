@@ -27,7 +27,7 @@ import java.util.List;
  * Created by patrik on 2015-05-11.
  */
 
-public class ApiConnector extends AsyncTask<String, Integer, JSONObject> {
+public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
     private Context context;
     private List<Exception> errors = new ArrayList<Exception>();
 
@@ -47,7 +47,9 @@ public class ApiConnector extends AsyncTask<String, Integer, JSONObject> {
     @Override
     protected JSONObject doInBackground(String... params) {
         try {
+            Log.d("Network", "init");
             networkStatus();
+            Log.d("Network", "fin");
 
             return request(params);
         } catch (IOException e) {
@@ -102,14 +104,16 @@ public class ApiConnector extends AsyncTask<String, Integer, JSONObject> {
         try {
             URL url = new URL(params[1]);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(5000 /* milliseconds */);
+            conn.setConnectTimeout(5500 /* milliseconds */);
             conn.setRequestMethod(params[0]);
             conn.setDoInput(true);
             conn.setRequestProperty("charset", "utf-8");
 
             if(params[0].equals( "POST" ))
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            Log.e("BEfore q","as2d");
 
             if(params.length > 2){ //There is arguments
                 String urlParameters  = params[2];
@@ -122,6 +126,7 @@ public class ApiConnector extends AsyncTask<String, Integer, JSONObject> {
                 }
             }
 
+            Log.e("BEfore q","asd");
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
