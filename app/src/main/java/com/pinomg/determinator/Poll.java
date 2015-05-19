@@ -42,9 +42,12 @@ public class Poll implements Serializable {
     public Integer getStatus() {
         if (this.question.equals("MJAE")) {
             return STATUS_PENDING;
-        } else {
+        } else if(this.question.equals("MJO")) {
+            return STATUS_ARCHIVED;
+        } else if(this.question.equals("LOL")) {
+            return STATUS_ANSWERED;
+        } else
             return STATUS_FINISHED;
-        }
     }
 
     //This is required by the adapter for output in a list.

@@ -59,13 +59,14 @@ public class ListActivity extends Activity {
                     startActivity(intent);
                     overridePendingTransition(0, 0);
                     return false;
-                } else {
+                } else if(poll.getStatus() == poll.STATUS_PENDING) {
                     Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
                     intent.putExtra("POLL", poll);
                     startActivity(intent);
                     overridePendingTransition(0, 0);
                     return false;
                 }
+                return false;
             }
         });
 
