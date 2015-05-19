@@ -25,13 +25,25 @@ public class CustomAdapter extends BaseAdapter {
     public static final int TYPE_HEADER = 1;
 
     private Map<Integer,List<Poll>> items;
+    private List<Poll> polls;
     private LayoutInflater mInflater;
 
     public CustomAdapter(Context context, List<Poll> polls) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         items = new HashMap<Integer, List<Poll>>();
+        this.polls = polls;
+        populateList();
+    }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        populateList();
+    }
+
+    private void populateList() {
+        items.clear();
         for(Poll poll : polls) {
             Integer status = poll.getStatus();
 
@@ -39,7 +51,6 @@ public class CustomAdapter extends BaseAdapter {
                 List<Poll> pollList = new ArrayList<Poll>();
                 items.put(status, pollList);
             }
-
             items.get(status).add(poll);
         }
     }

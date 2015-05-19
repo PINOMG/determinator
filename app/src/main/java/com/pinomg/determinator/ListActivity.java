@@ -87,7 +87,6 @@ public class ListActivity extends Activity {
         adapter = new CustomAdapter(this, questionList);
 
         questionView.setAdapter(adapter);
-
     }
 
     @Override
