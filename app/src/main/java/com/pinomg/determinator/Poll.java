@@ -65,6 +65,16 @@ public class Poll implements Serializable {
             return STATUS_FINISHED;
     }
 
+    public String getResult() {
+        if(result == 1) {
+            return alternativeOne;
+        } else if(result == 2) {
+            return alternativeTwo;
+        } else {
+            return null;
+        }
+    }
+
     //This is required by the adapter for output in a list.
     public String toString(){
         return this.question;
