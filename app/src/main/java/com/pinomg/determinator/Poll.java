@@ -31,12 +31,14 @@ public class Poll implements Serializable {
     public String alternativeOne;
     public String alternativeTwo;
     public ArrayList<Friend> friends;
+    public int result;
 
     public Poll (String question, String a1, String a2, ArrayList<Friend> friends) {
         this.friends = friends;
         this.question = question;
         this.alternativeOne = a1;
         this.alternativeTwo = a2;
+        this.result = 0;
     }
 
     public Poll (int id, String question, String a1, String a2, ArrayList<Friend> friends) {
@@ -45,6 +47,7 @@ public class Poll implements Serializable {
         this.question = question;
         this.alternativeOne = a1;
         this.alternativeTwo = a2;
+        this.result = 0;
     }
 
     public void addFriendlist(ArrayList<Friend> list) {
@@ -53,10 +56,10 @@ public class Poll implements Serializable {
 
     // TODO: Implement!
     public Integer getStatus() {
-        if (this.question.equals("MJAE")) {
-            return STATUS_PENDING;
-        } else {
+        if (this.result > 0) {
             return STATUS_FINISHED;
+        } else {
+            return STATUS_PENDING;
         }
     }
 
@@ -74,9 +77,13 @@ public class Poll implements Serializable {
 
         String question = json.getString("question");
         int id = json.getInt("id");
+        int result = json.getInt("result");
+
+        Poll p = new Poll(id, question, alternative_one, alternative_two, null);
+        p.result = result;
 
         Log.d("Poll:", "Created poll " + id);
-        return new Poll(id, question, alternative_one, alternative_two, null);
+        return p;
 
     }
 

@@ -1,5 +1,6 @@
 package com.pinomg.determinator;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 
@@ -32,15 +33,25 @@ public class CustomAdapter extends BaseAdapter {
 
         items = new HashMap<>();
 
-        for(Poll poll : polls) {
-            Integer status = poll.getStatus();
+        populateList(polls);
+    }
 
-            if(!items.containsKey(status)) {
-                List<Poll> pollList = new ArrayList<>();
-                items.put(status, pollList);
+    private void populateList(List<Poll> polls){
+        if( polls != null ) {
+            items.clear();
+
+            for (Poll poll : polls) {
+                Integer status = poll.getStatus();
+
+                if (!items.containsKey(status)) {
+                    List<Poll> pollList = new ArrayList<>();
+                    items.put(status, pollList);
+                }
+
+                items.get(status).add(poll);
+
+                Log.d("Adapter", "Adding poll " + poll);
             }
-
-            items.get(status).add(poll);
         }
     }
 
@@ -56,7 +67,7 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return items.size();
+        return items.size() > 0 ? items.size() : 1;
     }
 
     @Override
@@ -123,6 +134,11 @@ public class CustomAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public void updateList(List<Poll> polls){
+        populateList(polls);
+        notifyDataSetChanged();
     }
 
 

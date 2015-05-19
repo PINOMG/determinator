@@ -78,7 +78,7 @@ public class ListActivity extends Activity {
             }
         });
 
-        questionList = apiHandler.getPolls("Martin");
+        questionList = new LinkedList<>();
 
         adapter = new CustomAdapter(this, questionList);
 
@@ -90,12 +90,13 @@ public class ListActivity extends Activity {
         super.onResume();
 
         questionList.clear();
+
         List<Poll> allPolls = apiHandler.getPolls("Martin");
         for(Poll p : allPolls) {
             questionList.add(p);
         }
 
-        adapter.notifyDataSetChanged();
+        adapter.updateList(questionList);
     }
 
     @Override
