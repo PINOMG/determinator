@@ -85,7 +85,6 @@ public class ListActivity extends Activity {
 
         questionList = new LinkedList<>();
         adapter = new CustomAdapter(this, questionList);
-
         questionView.setAdapter(adapter);
     }
 
@@ -94,12 +93,19 @@ public class ListActivity extends Activity {
         super.onResume();
 
         questionList.clear();
-        List<Poll> allPolls = apiHandler.getPolls(session.getLoggedInUsername());
-        for(Poll p : allPolls) {
-            questionList.add(p);
-        }
 
-        adapter.notifyDataSetChanged();
+        if(session.isLoggedIn()) {
+
+            String username = session.getLoggedInUsername();
+            Log.d("username", username);
+
+            List<Poll> allPolls = apiHandler.getPolls(username);
+            for (Poll p : allPolls) {
+                questionList.add(p);
+            }
+
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -120,13 +126,6 @@ public class ListActivity extends Activity {
                 session.logoutUser();
                 return true;
             case R.id.refresh:
-                Log.d("Ey", "Init");
-
-                try {
-                    boolean trigg = apiHandler.login("Martin","123");
-                } catch (ApiErrorException e) {
-                    e.printStackTrace();
-                }
 
                 return true;
             default:

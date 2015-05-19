@@ -1,5 +1,6 @@
 package com.pinomg.determinator;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 
@@ -31,7 +32,8 @@ public class CustomAdapter extends BaseAdapter {
     public CustomAdapter(Context context, List<Poll> polls) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        items = new HashMap<Integer, List<Poll>>();
+
+        items = new HashMap<>();
         this.polls = polls;
         populateList();
     }

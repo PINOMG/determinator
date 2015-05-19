@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class ApiHandler {
     
-    private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
+    private static final String BASE_URL = "http://192.168.0.11/pinomg/";
     private static final String ENDPOINT_FRIEND = "friend/";
     private static final String ENDPOINT_LOGIN = "login/";
     private static final String ENDPOINT_USER = "user/";
@@ -110,7 +110,7 @@ public class ApiHandler {
 
     public List<?> apiListCall(String[] urls, String item){
         //Response array
-        List<?> listItems = null;
+        List<?> listItems = new LinkedList<>();
 
         //Do the call
         JSONObject response;

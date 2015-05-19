@@ -31,12 +31,15 @@ public class Poll implements Serializable {
     public String alternativeOne;
     public String alternativeTwo;
     public ArrayList<Friend> friends;
+    public int result; //Poll result
+    public int answer; //Users answer
 
     public Poll (String question, String a1, String a2, ArrayList<Friend> friends) {
         this.friends = friends;
         this.question = question;
         this.alternativeOne = a1;
         this.alternativeTwo = a2;
+        this.result = 0;
     }
 
     public Poll (int id, String question, String a1, String a2, ArrayList<Friend> friends) {
@@ -45,22 +48,21 @@ public class Poll implements Serializable {
         this.question = question;
         this.alternativeOne = a1;
         this.alternativeTwo = a2;
-    }
-
-    // TODO: Implement!
-    public Integer getStatus() {
-        if (this.question.equals("MJAE")) {
-            return STATUS_PENDING;
-        } else if (this.question.equals("MJO")) {
-            return STATUS_ARCHIVED;
-        } else if (this.question.equals("LOL")) {
-            return STATUS_ANSWERED;
-        } else
-            return STATUS_FINISHED;
+        this.result = 0;
     }
 
     public void addFriendlist(ArrayList<Friend> list) {
         this.friends = list;
+    }
+
+    // TODO: Implement!
+    public Integer getStatus() {
+        if (this.result == 0 && this.answer == 0) {
+            return STATUS_PENDING;
+        } else if (this.result == 0 && this.answer > 0) {
+            return STATUS_ANSWERED;
+        } else
+            return STATUS_FINISHED;
     }
 
     //This is required by the adapter for output in a list.
@@ -77,9 +79,15 @@ public class Poll implements Serializable {
 
         String question = json.getString("question");
         int id = json.getInt("id");
+        int result = json.getInt("result");
+        int answer = json.getInt("answer");
+
+        Poll p = new Poll(id, question, alternative_one, alternative_two, null);
+        p.result = result;
+        p.answer = answer;
 
         Log.d("Poll:", "Created poll " + id);
-        return new Poll(id, question, alternative_one, alternative_two, null);
+        return p;
 
     }
 
