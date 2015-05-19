@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class ApiHandler {
     
-    private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
+    private static final String BASE_URL = "http://localhost/pinomg/";
     private static final String ENDPOINT_FRIEND = "friend/";
     private static final String ENDPOINT_LOGIN = "login/";
     private static final String ENDPOINT_USER = "user/";
