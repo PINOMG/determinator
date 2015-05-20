@@ -32,9 +32,9 @@ public class AnswerQuestionActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             poll = (Poll) extras.getSerializable("POLL");
-            questionText.setText(poll.question);
-            btnAltOne.setText(poll.alternativeOne);
-            btnAltTwo.setText(poll.alternativeTwo);
+            questionText.setText(poll.getQuestion());
+            btnAltOne.setText(poll.getAlternativeOne());
+            btnAltTwo.setText(poll.getAlternativeTwo());
 
         } else {
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
@@ -46,7 +46,7 @@ public class AnswerQuestionActivity extends Activity {
         ApiHandler apiHandler = new ApiHandler(getBaseContext());
 
         try {
-            apiHandler.postAnswer(poll.id, "Martin", answer);
+            apiHandler.postAnswer(poll.getId(), "Martin", answer);
         } catch (ApiErrorException e) {
             e.printStackTrace();
         }

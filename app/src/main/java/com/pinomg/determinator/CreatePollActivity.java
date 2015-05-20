@@ -1,19 +1,13 @@
 package com.pinomg.determinator;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.pinomg.determinator.database.DataApi;
-import com.pinomg.determinator.database.DatabaseHelper;
-import com.pinomg.determinator.database.PollsTable;
 
 import java.util.ArrayList;
 
@@ -22,7 +16,7 @@ public class CreatePollActivity extends Activity {
 
     private EditText questionField, alternativeOne, alternativeTwo;
     private Button createButton;
-    private ArrayList<Friend> friends;
+    private Poll poll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +33,16 @@ public class CreatePollActivity extends Activity {
 
 
     public void goToAddAnswerersActivity(View view) {
-        Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString(), friends);
+
+        if(poll == null) {
+            // Creates new poll
+            Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString());
+        } else {
+            // Changes poll if we come back from addAnswerers
+            poll.setQuestion(questionField.getText().toString());
+            poll.setAlternativeOne(alternativeOne.getText().toString());
+            poll.setAlternativeTwo(alternativeTwo.getText().toString());
+        }
 
         // Check that the user has given all required input
         Boolean valid = true;
@@ -70,7 +73,7 @@ public class CreatePollActivity extends Activity {
             finish();
         } else {
             Bundle extras = data.getExtras();
-            friends = (ArrayList<Friend>) extras.getSerializable("POLLEN");
+            poll = (Poll) extras.getSerializable("POLL");
         }
     }
 

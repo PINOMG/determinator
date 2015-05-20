@@ -14,19 +14,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pinomg.determinator.database.DataApi;
-
-import com.pinomg.determinator.api.ApiHandler;
-
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Objects;
+import java.util.List;
 
 public class AddAnswerersActivity extends Activity {
 
-    public ArrayList<Friend> friendList = new ArrayList<Friend>(); //Creates a list to store friends.
+    public ArrayList<User> friendList = new ArrayList<User>(); //Creates a list to store friends.
     private ArrayAdapter friendsAdapter;
-    private ArrayList<Friend> checkedFriends = new ArrayList<Friend>();
+    private List<User> checkedFriends = new ArrayList<User>();
     private SparseBooleanArray checked;
     public TextView receiversText;
     private Poll poll;
@@ -52,8 +48,9 @@ public class AddAnswerersActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             poll = (Poll) extras.getSerializable("POLL");
-            if(poll.friends != null) {
-                checkedFriends = poll.friends;
+            if(poll != null) {
+
+                checkedFriends = poll.getAnswerers();
             }
         } else{
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
@@ -80,8 +77,8 @@ public class AddAnswerersActivity extends Activity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        poll.friends = checkedFriends;
-        intent.putExtra("POLLEN", checkedFriends);
+        poll.setAnswerers(checkedFriends);
+        intent.putExtra("POLL", poll);
         setResult(RESULT_CANCELED, intent);
         finish();
     }
@@ -111,7 +108,7 @@ public class AddAnswerersActivity extends Activity {
     //Attach friends to the poll and upload it to the database.
     public void sendPoll(View view) {
         if (!checkedFriends.isEmpty()) {
-            poll.addFriendlist(checkedFriends);
+            poll.setAnswerers(checkedFriends);
             Intent intent = new Intent();
             intent.putExtra("CREATED_POLL", poll);
             setResult(RESULT_OK, intent);
@@ -124,8 +121,8 @@ public class AddAnswerersActivity extends Activity {
     //Populate string showed in the TextView receivers from checkedFriends here
     public void showCheckedFriends () {
         String receivers = "";
-        for(Iterator<Friend> j = checkedFriends.iterator(); j.hasNext(); ) {
-            Friend f = j.next();
+        for(Iterator<User> j = checkedFriends.iterator(); j.hasNext(); ) {
+            User f = j.next();
             receivers += f.toString() + " ";
         }
         receiversText.setText(receivers);
@@ -135,11 +132,11 @@ public class AddAnswerersActivity extends Activity {
     //poll with the corresponding friends in the ListView
     //and check the boxes for the identified matches.
     public void checkFriends() {
-        for(Iterator<Friend> i = checkedFriends.iterator(); i.hasNext();) {
+        for(Iterator<User> i = checkedFriends.iterator(); i.hasNext();) {
             int index = 0;
-            Friend friend1 = i.next();
-            for(Iterator<Friend> j = friendList.iterator(); j.hasNext();) {
-                Friend friend2 = j.next();
+            User friend1 = i.next();
+            for(Iterator<User> j = friendList.iterator(); j.hasNext();) {
+                User friend2 = j.next();
                 if(friend1.equals(friend2)) {
                     Log.e("Equals", "Equals!");
                     friendView.setItemChecked(index, true);
@@ -150,11 +147,11 @@ public class AddAnswerersActivity extends Activity {
     }
 
     public void createExampleFriendList() {
-        friendList.add(new Friend("Martin"));
-        friendList.add(new Friend("Patrik"));
-        friendList.add(new Friend("Ebba"));
-        friendList.add(new Friend("Björn"));
-        friendList.add(new Friend("Olle"));
-        friendList.add(new Friend("Philip"));
+        friendList.add(new User("Martin"));
+        friendList.add(new User("Patrik"));
+        friendList.add(new User("Ebba"));
+        friendList.add(new User("Björn"));
+        friendList.add(new User("Olle"));
+        friendList.add(new User("Philip"));
     }
 }
