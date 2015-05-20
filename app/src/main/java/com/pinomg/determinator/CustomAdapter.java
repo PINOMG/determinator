@@ -1,16 +1,12 @@
 package com.pinomg.determinator;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import android.content.Context;
 import android.view.View;
@@ -20,21 +16,26 @@ import android.widget.TextView;
 /**
  * Created by ebbamannheimer on 2015-05-11.
  */
+
+/*
+ * An adapter used in listactivity. Lists Polls under separate headers,
+ * depending on their statuses.
+ */
 public class CustomAdapter extends BaseAdapter {
 
     public static final int TYPE_POLL = 0;
     public static final int TYPE_HEADER = 1;
 
-    private Map<Integer,List<Poll>> items;
-    private List<Poll> polls;
+    private Map<Integer,List<Poll>> items; // The sorted list
+    private List<Poll> polls; // The list of all polls, unsorted
     private LayoutInflater mInflater;
 
     public CustomAdapter(Context context, List<Poll> polls) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
         items = new HashMap<>();
         this.polls = polls;
+
         populateList();
     }
 
@@ -50,7 +51,7 @@ public class CustomAdapter extends BaseAdapter {
             Integer status = poll.getStatus();
 
             if(!items.containsKey(status)) {
-                List<Poll> pollList = new ArrayList<Poll>();
+                List<Poll> pollList = new ArrayList<>();
                 items.put(status, pollList);
             }
             items.get(status).add(poll);
@@ -127,7 +128,6 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-
 
         TextView textView;
         switch (getItemViewType(position)) {

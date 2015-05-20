@@ -20,8 +20,7 @@ import java.util.concurrent.ExecutionException;
  * Created by patrik on 2015-05-11.
  */
 public class ApiHandler {
-    
-    private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
+    private static final String BASE_URL = "http://192.168.0.11/pinomg/";
     private static final String ENDPOINT_FRIEND = BASE_URL + "friend/";
     private static final String ENDPOINT_LOGIN  = BASE_URL + "login/";
     private static final String ENDPOINT_USER   = BASE_URL + "user/";
@@ -30,10 +29,10 @@ public class ApiHandler {
 
     private Context context;
 
-
     public ApiHandler(Context context){
         this.context = context;
     }
+
 
     public List<User> getFriends(String user) {
         //Initiating and building urls.
@@ -44,6 +43,7 @@ public class ApiHandler {
         return (LinkedList<User>) apiListCall(urls, "friends");
     }
 
+    // Returns the polls asked to the user
     public List<Poll> getPolls(String user){
         Log.e("Initiating", "Get friends");
 
@@ -52,6 +52,7 @@ public class ApiHandler {
         return (LinkedList<Poll>) apiListCall(urls, "polls");
     }
 
+    // Attempt a login.
     public boolean login(String username, String password) throws ApiErrorException {
         //Initiating and building urls.
         Log.e("Initiating", "Login " + username + password);
@@ -61,6 +62,7 @@ public class ApiHandler {
         return apiCall(urls);
     }
 
+    // Send the answer of poll.
     public boolean postAnswer(int poll_id, String username, int answer) throws ApiErrorException {
         //Init
         Log.e("Initiating", "postAnswer");
@@ -70,6 +72,7 @@ public class ApiHandler {
         return apiCall(urls);
     }
 
+    // Create a new user
     public boolean createUser(String username, String password) throws ApiErrorException {
         //Initiating and building urls.
         Log.e("Initiating", "Creating user");
@@ -79,10 +82,15 @@ public class ApiHandler {
         return apiCall(urls);
     }
 
+    //Create a new poll
     public boolean createPoll(Poll poll, SessionManagement session) throws ApiErrorException {
         Log.e("Initiating", "Creating poll");
 
-        String receivers = "[" + '"' + session.getLoggedInUsername() + '"' + "," ;
+        // This should be implemented when friend function is working properly, not when username's are hard coded.
+        // String receivers = "[" + '"' + session.getLoggedInUsername() + '"' + "," ;
+
+        String receivers = "[";
+
         for (Iterator<User> i = poll.getAnswerers().iterator(); i.hasNext(); ) {
             User f = i.next();
             receivers += '"' + f.toString() + '"';
@@ -105,7 +113,7 @@ public class ApiHandler {
 
     }
 
-
+    // Used when returning a list from the server
     public List<?> apiListCall(String[] urls, String item){
         //Response array
         List<?> listItems = new LinkedList<>();
@@ -145,6 +153,7 @@ public class ApiHandler {
         return listItems;
     }
 
+
     private List<User> doFriends(JSONArray json_list) throws JSONException {
         List<User> listItems = new LinkedList<>();
 
@@ -156,6 +165,7 @@ public class ApiHandler {
         return listItems;
     }
 
+    // Building a List of Polls from JSONArray
     private List<Poll> doPolls(JSONArray json_list) throws JSONException {
         List<Poll> listItems = new LinkedList<>();
 
@@ -168,6 +178,7 @@ public class ApiHandler {
         return listItems;
     }
 
+    //Simple apiCall. Not expecting a list response from server, just an error or success.
     public boolean apiCall(String[] urls) throws ApiErrorException { //Used for all simple calls. Those who doesn't expect a response
         JSONObject response;
         String message = "";
@@ -200,8 +211,6 @@ public class ApiHandler {
         }
     }
 
-
-
     //How to "un"-serialize an object from json-code
     private static Poll jsonToPoll(JSONObject json) throws JSONException {
 
@@ -213,9 +222,7 @@ public class ApiHandler {
         int result = json.getInt("result");
         int answer = json.getInt("answer");
 
-        Poll p = new Poll(id, question, alternative_one, alternative_two);
-        p.setAnswer(answer);
-        p.setResult(result);
+        Poll p = new Poll(id, question, alternative_one, alternative_two, result, answer);
 
         Log.d("Poll:", "Created poll " + id);
         return p;

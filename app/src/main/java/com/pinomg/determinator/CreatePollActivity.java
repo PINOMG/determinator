@@ -6,16 +6,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-
-import java.util.ArrayList;
 
 
 public class CreatePollActivity extends Activity {
 
     private EditText questionField, alternativeOne, alternativeTwo;
-    private Button createButton;
     private Poll poll;
 
     @Override
@@ -27,7 +23,6 @@ public class CreatePollActivity extends Activity {
         questionField = (EditText) findViewById(R.id.questionField);
         alternativeOne = (EditText) findViewById(R.id.alternativeOne);
         alternativeTwo = (EditText) findViewById(R.id.alternativeTwo);
-        createButton = (Button) findViewById(R.id.createButton);
     }
 
 
@@ -36,7 +31,7 @@ public class CreatePollActivity extends Activity {
 
         if(poll == null) {
             // Creates new poll
-            Poll poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString());
+            poll = new Poll(questionField.getText().toString(), alternativeOne.getText().toString(), alternativeTwo.getText().toString());
         } else {
             // Changes poll if we come back from addAnswerers
             poll.setQuestion(questionField.getText().toString());
@@ -68,7 +63,7 @@ public class CreatePollActivity extends Activity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if(resultCode == RESULT_OK) { // If AddAnswerersActivity was finished, finished this and send result to ListActivity
             setResult(RESULT_OK, data);
             finish();
         } else {

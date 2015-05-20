@@ -46,7 +46,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".AnswerQuestionActivity"
+            android:name=".AnswerPollActivity"
             android:label="@string/title_activity_answer_question" >
         </activity>
         <activity

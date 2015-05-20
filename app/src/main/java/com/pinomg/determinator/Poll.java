@@ -1,18 +1,14 @@
 package com.pinomg.determinator;
 
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
 
 /**
  * Poll class,
  *
- * A Poll is a collection of a question, two answer alternatives, some anwserers
+ * A Poll is a collection of a question, two answer alternatives, some answerers
  * and maybe a result. A Poll can have four different statuses:
  *  1. PENDING - Incoming poll which the user haven't viewed
  *  2. ANSWERED - Poll viewed and answered by the user, but no result yet
@@ -38,7 +34,7 @@ public class Poll implements Serializable {
     private String question;
     private String alternativeOne;
     private String alternativeTwo;
-    private ArrayList<User> answerers; // TODO: Maybe implement with set instead of ArrayList?
+    private LinkedList<User> answerers; // TODO: Maybe implement with set instead of LinkedList?
     private int result = 0; //Poll result
     private int answer; //Users answer
 
@@ -54,28 +50,24 @@ public class Poll implements Serializable {
         this.alternativeTwo = alternativeTwo;
     }
 
-    public Poll(Integer id, String question, String alternativeOne, String alternativeTwo) {
+    public Poll (int id, String question, String a1, String a2, int result, int answer) {
         this.id = id;
         this.question = question;
-        this.alternativeOne = alternativeOne;
-        this.alternativeTwo = alternativeTwo;
+        this.alternativeOne = a1;
+        this.alternativeTwo = a2;
+        this.result = result;
+        this.answer = answer;
     }
 
-    public Poll(String question, String alternativeOne, String alternativeTwo, List<User> answerers) {
-        this.question = question;
-        this.alternativeOne = alternativeOne;
-        this.alternativeTwo = alternativeTwo;
-        setAnswerers(answerers);
-    }
-
-    public Poll(Integer id, String question, String alternativeOne, String alternativeTwo, List<User> answerers) {
+    public Poll (int id, String question, String a1, String a2, LinkedList<User> answerers, int result, int answer) {
+        this.answerers = answerers;
         this.id = id;
         this.question = question;
-        this.alternativeOne = alternativeOne;
-        this.alternativeTwo = alternativeTwo;
-        setAnswerers(answerers);
+        this.alternativeOne = a1;
+        this.alternativeTwo = a2;
+        this.result = result;
+        this.answer = answer;
     }
-
     /**
      * Returns polls server id
      * @return id
@@ -189,11 +181,11 @@ public class Poll implements Serializable {
      * Sets list of answerers
      * @param answerers
      */
-    public void setAnswerers(List<User> answerers) {
+    public void setAnswerers(LinkedList<User> answerers) {
         if(answerers == null) {
             throw new IllegalArgumentException("Answerers can't be set to null pointer!");
         } else {
-            this.answerers = new ArrayList<>(answerers);
+            this.answerers = answerers;
         }
     }
 
@@ -201,7 +193,10 @@ public class Poll implements Serializable {
      * @return List of answerers
      */
     public List<User> getAnswerers() {
-        return new ArrayList<>(answerers);
+        if ( this.answerers != null )
+            return new LinkedList<>(answerers);
+        else
+            return new LinkedList<>();
     }
 
     // TODO: Implement!
@@ -214,23 +209,10 @@ public class Poll implements Serializable {
             return STATUS_FINISHED;
     }
 
-    public String getResult() {
-        if(result == 1) {
-            return alternativeOne;
-        } else if(result == 2) {
-            return alternativeTwo;
-        } else {
-            return null;
-        }
-    }
-
     //This is required by the adapter for output in a list.
     public String toString(){
         return this.question;
     }
-
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -250,8 +232,7 @@ public class Poll implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO: Not ideal implementation..
-        return (question + alternativeOne + alternativeTwo).hashCode();
+        return (Integer.toString(id)).hashCode();
     }
 
 

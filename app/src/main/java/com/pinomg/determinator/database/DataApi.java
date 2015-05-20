@@ -81,7 +81,9 @@ public class DataApi {
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3),
-                    null);
+                    null,
+                    0,
+                    0);
 
             polls.add(p);
             cursor.moveToNext();
