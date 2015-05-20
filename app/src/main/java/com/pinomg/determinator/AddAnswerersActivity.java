@@ -21,9 +21,10 @@ import java.util.LinkedList;
 
 public class AddAnswerersActivity extends Activity {
 
-    private LinkedList<Friend> friendList = new LinkedList<>(); //Creates a list to store friends.
+    private LinkedList<User> friendList = new LinkedList<>(); //Creates a list to store friends.
     private ArrayAdapter friendsAdapter;
-    private LinkedList<Friend> checkedFriends = new LinkedList<>();
+    private LinkedList<User> checkedFriends = new LinkedList<>();
+
     private SparseBooleanArray checked;
     private TextView receiversText;
     private Poll poll;
@@ -53,11 +54,17 @@ public class AddAnswerersActivity extends Activity {
         //Get the poll from the previous activity
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            poll = (Poll) extras.getSerializable("POLL");
+            Log.d("serializing", "s");
+            this.poll = (Poll) extras.getSerializable("POLL");
+            Log.d("serializing", "sd");
 
-            // If we checked friends, got back to the q-activity and then forward again, this will contain the users checked from the first time. Add them to checkedFriends
-            if(poll.friends != null) {
-                checkedFriends = poll.friends;
+            if(this.poll != null) {
+                Log.d("Poll", "!=null");
+
+                if( poll.getAnswerers() != null)
+                    checkedFriends = (LinkedList<User>)poll.getAnswerers();
+                else
+                    checkedFriends = new LinkedList<>();
             }
         } else {
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
@@ -90,8 +97,8 @@ public class AddAnswerersActivity extends Activity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        poll.friends = checkedFriends;
-        intent.putExtra("POLLEN", checkedFriends);
+        this.poll.setAnswerers(checkedFriends);
+        intent.putExtra("POLL", poll);
         setResult(RESULT_CANCELED, intent);
         finish();
     }
@@ -121,7 +128,7 @@ public class AddAnswerersActivity extends Activity {
     //Attach friends to the poll and send it to the Q activity, which will send it via the API handler.
     public void sendPoll(View view) {
         if (!checkedFriends.isEmpty()) {
-            poll.friends = checkedFriends;
+            this.poll.setAnswerers(checkedFriends);
             Intent intent = new Intent();
             intent.putExtra("CREATED_POLL", poll);
             setResult(RESULT_OK, intent);
@@ -134,8 +141,8 @@ public class AddAnswerersActivity extends Activity {
     //Populate string showed in the TextView receivers from checkedFriends here
     public void showCheckedFriends () {
         String receivers = "";
-        for(Iterator<Friend> j = checkedFriends.iterator(); j.hasNext(); ) {
-            Friend f = j.next();
+        for(Iterator<User> j = checkedFriends.iterator(); j.hasNext(); ) {
+            User f = j.next();
             receivers += f.toString() + " ";
         }
         receiversText.setText(receivers);
@@ -145,11 +152,11 @@ public class AddAnswerersActivity extends Activity {
     //poll with the corresponding friends in the ListView
     //and check the boxes for the identified matches.
     public void checkFriends() {
-        for(Iterator<Friend> i = checkedFriends.iterator(); i.hasNext();) {
+        for(Iterator<User> i = checkedFriends.iterator(); i.hasNext();) {
             int index = 0;
-            Friend friend1 = i.next();
-            for(Iterator<Friend> j = friendList.iterator(); j.hasNext();) {
-                Friend friend2 = j.next();
+            User friend1 = i.next();
+            for(Iterator<User> j = friendList.iterator(); j.hasNext();) {
+                User friend2 = j.next();
                 if(friend1.equals(friend2)) {
                     Log.e("Equals", "Equals!");
                     friendView.setItemChecked(index, true);
@@ -166,11 +173,12 @@ public class AddAnswerersActivity extends Activity {
         friendList = (LinkedList<Friend>)apiHandler.getFriends(session.getLoggedInUsername());*/
 
         // Load dummy users until the friend function works properly.
-        friendList.add(new Friend("Martin"));
-        friendList.add(new Friend("Patrik"));
-        friendList.add(new Friend("Ebba"));
-        friendList.add(new Friend("Björn"));
-        friendList.add(new Friend("Olle"));
-        friendList.add(new Friend("Philip"));
+        friendList.add(new User("Martin"));
+        friendList.add(new User("Patrik"));
+        friendList.add(new User("Ebba"));
+        friendList.add(new User("Björn"));
+        friendList.add(new User("Olle"));
+        friendList.add(new User("Philip"));
+
     }
 }

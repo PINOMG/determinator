@@ -31,9 +31,9 @@ public class DataApi {
         SQLiteDatabase db = dbh.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(PollsTable.COLUMN_QUESTION, poll.question);
-        values.put(PollsTable.COLUMN_ALTERNATIVE_ONE, poll.alternativeOne);
-        values.put(PollsTable.COLUMN_ALTERNATIVE_TWO, poll.alternativeTwo);
+        values.put(PollsTable.COLUMN_QUESTION, poll.getQuestion());
+        values.put(PollsTable.COLUMN_ALTERNATIVE_ONE, poll.getAlternativeOne());
+        values.put(PollsTable.COLUMN_ALTERNATIVE_TWO, poll.getAlternativeTwo());
 
         return db.insert(PollsTable.TABLE_POLLS, null, values);
     }
@@ -45,9 +45,9 @@ public class DataApi {
      */
     public int updatePoll(Poll poll) {
         ContentValues values = new ContentValues();
-        values.put(PollsTable.COLUMN_QUESTION, poll.question);
-        values.put(PollsTable.COLUMN_ALTERNATIVE_ONE, poll.alternativeOne);
-        values.put(PollsTable.COLUMN_ALTERNATIVE_TWO, poll.alternativeTwo);
+        values.put(PollsTable.COLUMN_QUESTION, poll.getQuestion());
+        values.put(PollsTable.COLUMN_ALTERNATIVE_ONE, poll.getAlternativeOne());
+        values.put(PollsTable.COLUMN_ALTERNATIVE_TWO, poll.getAlternativeTwo());
 
         String where = PollsTable.COLUMN_POLL_ID + "=" + poll.getId();
         SQLiteDatabase db = dbh.getWritableDatabase();

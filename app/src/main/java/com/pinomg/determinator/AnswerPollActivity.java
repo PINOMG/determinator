@@ -35,9 +35,9 @@ public class AnswerPollActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             poll = (Poll) extras.getSerializable("POLL");
-            questionText.setText(poll.question);
-            btnAltOne.setText(poll.alternativeOne);
-            btnAltTwo.setText(poll.alternativeTwo);
+            questionText.setText(poll.getQuestion());
+            btnAltOne.setText(poll.getAlternativeOne());
+            btnAltTwo.setText(poll.getAlternativeTwo());
 
         } else {
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
