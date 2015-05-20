@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
  * Created by patrik on 2015-05-11.
  */
 public class ApiHandler {
-    private static final String BASE_URL = "http://192.168.0.11/pinomg/";
+    private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
     private static final String ENDPOINT_FRIEND = BASE_URL + "friend/";
     private static final String ENDPOINT_LOGIN  = BASE_URL + "login/";
     private static final String ENDPOINT_USER   = BASE_URL + "user/";
