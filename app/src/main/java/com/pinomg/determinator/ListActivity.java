@@ -2,7 +2,9 @@ package com.pinomg.determinator;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,8 @@ import java.util.List;
 
 public class ListActivity extends Activity {
 
+    private static String LOG_TAG = "ListActivity";
+
     private int CREATE_POLL_REQUEST = 0;
 
     private DataApi api;
@@ -29,6 +33,8 @@ public class ListActivity extends Activity {
 
     public List<Poll> pollList; // Creates a list to store polls
     private CustomAdapter adapter; // The custom adapter, grouping polls.
+
+    private SwipeRefreshLayout mySwipeRefreshLayout;
 
     // SessionManagement class
     SessionManagement session;
@@ -51,6 +57,7 @@ public class ListActivity extends Activity {
         this.apiHandler = new ApiHandler(getBaseContext());
 
         final ListView pollView = (ListView) findViewById(R.id.pollView);
+
         pollView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -80,22 +87,38 @@ public class ListActivity extends Activity {
         pollList = new LinkedList<>();
         adapter = new CustomAdapter(this, pollList);
         pollView.setAdapter(adapter);
+
+
+        mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mySwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
+                        updatePollListView();
+                    }
+                }
+        );
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mySwipeRefreshLayout.setRefreshing(true);
+        updatePollListView();
+    }
+
+    private void updatePollListView() {
 
         pollList.clear();
-
         if(session.isLoggedIn()) {
             List<Poll> allPolls = apiHandler.getPolls(session.getLoggedInUsername());
             for (Poll p : allPolls) {
                 pollList.add(p);
             }
-
             adapter.notifyDataSetChanged();
         }
+        mySwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -123,9 +146,6 @@ public class ListActivity extends Activity {
         }
     }
 
-    private void createExampleList() {
-
-    }
 
     public void goToCreatePollActivity(View view) {
         Intent intent = new Intent(this, CreatePollActivity.class);
