@@ -9,21 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 
-import com.pinomg.determinator.api.ApiConnector;
 import com.pinomg.determinator.api.ApiErrorException;
 import com.pinomg.determinator.api.ApiHandler;
 import com.pinomg.determinator.database.DataApi;
 
-import org.json.JSONException;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 
 public class ListActivity extends Activity {
@@ -33,8 +27,8 @@ public class ListActivity extends Activity {
     private DataApi api;
     private ApiHandler apiHandler;
 
-    public List<Poll> questionList; // Creates a list to store questions
-    private CustomAdapter adapter;
+    public List<Poll> pollList; // Creates a list to store polls
+    private CustomAdapter adapter; // The custom adapter, grouping polls.
 
     // SessionManagement class
     SessionManagement session;
@@ -56,11 +50,11 @@ public class ListActivity extends Activity {
         this.api = new DataApi(getBaseContext());
         this.apiHandler = new ApiHandler(getBaseContext());
 
-        final ListView questionView = (ListView) findViewById(R.id.questionView);
-        questionView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        final ListView pollView = (ListView) findViewById(R.id.pollView);
+        pollView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if(parent.getAdapter().getItemViewType(position) == CustomAdapter.TYPE_POLL) {
+                if (parent.getAdapter().getItemViewType(position) == CustomAdapter.TYPE_POLL) {
                     Poll poll = (Poll) parent.getAdapter().getItem(position);
 
                     if (poll.getStatus() == poll.STATUS_FINISHED) {
@@ -70,7 +64,7 @@ public class ListActivity extends Activity {
                         overridePendingTransition(0, 0);
                         return false;
                     } else if (poll.getStatus() == poll.STATUS_PENDING) {
-                        Intent intent = new Intent(getBaseContext(), AnswerQuestionActivity.class);
+                        Intent intent = new Intent(getBaseContext(), AnswerPollActivity.class);
                         intent.putExtra("POLL", poll);
                         startActivity(intent);
                         overridePendingTransition(0, 0);
@@ -83,25 +77,21 @@ public class ListActivity extends Activity {
             }
         });
 
-        questionList = new LinkedList<>();
-        adapter = new CustomAdapter(this, questionList);
-        questionView.setAdapter(adapter);
+        pollList = new LinkedList<>();
+        adapter = new CustomAdapter(this, pollList);
+        pollView.setAdapter(adapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        questionList.clear();
+        pollList.clear();
 
         if(session.isLoggedIn()) {
-
-            String username = session.getLoggedInUsername();
-            Log.d("username", username);
-
-            List<Poll> allPolls = apiHandler.getPolls(username);
+            List<Poll> allPolls = apiHandler.getPolls(session.getLoggedInUsername());
             for (Poll p : allPolls) {
-                questionList.add(p);
+                pollList.add(p);
             }
 
             adapter.notifyDataSetChanged();
@@ -126,7 +116,7 @@ public class ListActivity extends Activity {
                 session.logoutUser();
                 return true;
             case R.id.refresh:
-
+                this.onResume();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -137,7 +127,7 @@ public class ListActivity extends Activity {
 
     }
 
-    public void goToCreateQuestionActivity(View view) {
+    public void goToCreatePollActivity(View view) {
         Intent intent = new Intent(this, CreatePollActivity.class);
         startActivityForResult(intent, CREATE_POLL_REQUEST);
     }

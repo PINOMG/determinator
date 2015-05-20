@@ -22,8 +22,11 @@ import java.util.concurrent.ExecutionException;
  * Created by patrik on 2015-05-11.
  */
 public class ApiHandler {
-    
+
+    // The BASE_URL to the server, according to the determinator_server guidelines.
     private static final String BASE_URL = "http://192.168.0.11/pinomg/";
+
+    // The different endpoints.
     private static final String ENDPOINT_FRIEND = "friend/";
     private static final String ENDPOINT_LOGIN = "login/";
     private static final String ENDPOINT_USER = "user/";
@@ -32,11 +35,11 @@ public class ApiHandler {
 
     private Context context;
 
-
     public ApiHandler(Context context){
         this.context = context;
     }
 
+    // Returns the users friends.
     public List<Friend> getFriends(String user) {
         //Initiating and building urls.
         Log.e("Initiating", "Get friends");
@@ -46,6 +49,7 @@ public class ApiHandler {
         return (LinkedList<Friend>) apiListCall(urls, "friends");
     }
 
+    // Returns the polls asked to the user
     public List<Poll> getPolls(String user){
         Log.e("Initiating", "Get friends");
 
@@ -54,6 +58,7 @@ public class ApiHandler {
         return (LinkedList<Poll>) apiListCall(urls, "polls");
     }
 
+    // Attempt a login.
     public boolean login(String username, String password) throws ApiErrorException {
         //Initiating and building urls.
         Log.e("Initiating", "Login " + username + password);
@@ -63,6 +68,7 @@ public class ApiHandler {
         return apiCall(urls);
     }
 
+    // Send the answer of poll.
     public boolean postAnswer(int poll_id, String username, int answer) throws ApiErrorException {
         //Init
         Log.e("Initiating", "postAnswer");
@@ -72,6 +78,7 @@ public class ApiHandler {
         return apiCall(urls);
     }
 
+    // Create a new user
     public boolean createUser(String username, String password) throws ApiErrorException {
         //Initiating and building urls.
         Log.e("Initiating", "Creating user");
@@ -81,10 +88,14 @@ public class ApiHandler {
         return apiCall(urls);
     }
 
+    //Create a new poll
     public boolean createPoll(Poll poll, SessionManagement session) throws ApiErrorException {
         Log.e("Initiating", "Creating poll");
 
-        String receivers = "[" + '"' + session.getLoggedInUsername() + '"' + "," ;
+        // This should be implemented when friend function is working properly, not when username's are hard coded.
+        // String receivers = "[" + '"' + session.getLoggedInUsername() + '"' + "," ;
+
+        String receivers = "[";
         for (Iterator<Friend> i = poll.friends.iterator(); i.hasNext(); ) {
             Friend f = i.next();
             receivers += '"' + f.toString() + '"';
@@ -107,7 +118,7 @@ public class ApiHandler {
 
     }
 
-
+    // Used when returning a list from the server
     public List<?> apiListCall(String[] urls, String item){
         //Response array
         List<?> listItems = new LinkedList<>();
@@ -147,6 +158,7 @@ public class ApiHandler {
         return listItems;
     }
 
+    // Building a List of Friends from JSONArray
     private List<Friend> doFriends(JSONArray json_list) throws JSONException {
         List<Friend> listItems = new LinkedList<>();
 
@@ -158,6 +170,7 @@ public class ApiHandler {
         return listItems;
     }
 
+    // Building a List of Polls from JSONArray
     private List<Poll> doPolls(JSONArray json_list) throws JSONException {
         List<Poll> listItems = new LinkedList<>();
 
@@ -170,6 +183,7 @@ public class ApiHandler {
         return listItems;
     }
 
+    //Simple apiCall. Not expecting a list response from server, just an error or success.
     public boolean apiCall(String[] urls) throws ApiErrorException { //Used for all simple calls. Those who doesn't expect a response
         JSONObject response;
         String message = "";

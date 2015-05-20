@@ -26,8 +26,7 @@ public class Friend implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        // TODO: Not ideal implementation..
+    public int hashCode() { // Usernames are unique
         return (name).hashCode();
     }
     //This is required by the adapter for output in a list.

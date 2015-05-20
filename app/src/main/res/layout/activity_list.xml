@@ -13,7 +13,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/questionView"
+        android:id="@+id/pollView"
         android:layout_below="@+id/textView"
         android:layout_alignParentStart="true"
         android:choiceMode="none" />
@@ -27,6 +27,6 @@
         android:layout_marginBottom="48dp"
         android:contentDescription="@null"
         android:elevation="8dp"
-        android:onClick="goToCreateQuestionActivity" />
+        android:onClick="goToCreatePollActivity" />
 
 </RelativeLayout>

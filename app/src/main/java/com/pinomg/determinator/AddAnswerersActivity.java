@@ -14,21 +14,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pinomg.determinator.database.DataApi;
-
 import com.pinomg.determinator.api.ApiHandler;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Objects;
+import java.util.LinkedList;
 
 public class AddAnswerersActivity extends Activity {
 
-    public ArrayList<Friend> friendList = new ArrayList<Friend>(); //Creates a list to store friends.
+    private LinkedList<Friend> friendList = new LinkedList<>(); //Creates a list to store friends.
     private ArrayAdapter friendsAdapter;
-    private ArrayList<Friend> checkedFriends = new ArrayList<Friend>();
+    private LinkedList<Friend> checkedFriends = new LinkedList<>();
     private SparseBooleanArray checked;
-    public TextView receiversText;
+    private TextView receiversText;
     private Poll poll;
     private ListView friendView;
 
@@ -40,28 +37,39 @@ public class AddAnswerersActivity extends Activity {
         friendView = (ListView) findViewById(R.id.friendView);
         friendView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        createExampleFriendList();
+        //Load the friends from the API
+        loadFriends();
 
+        //Connect the friends to the view
         friendsAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, friendList);
         friendView.setAdapter(friendsAdapter);
 
+        //Get the id to the text field that should show an inline list of checked users.
         receiversText = (TextView) findViewById(R.id.receivers);
 
+        //Set the SparseBooleanArray so the checklist can work properly
         checked = friendView.getCheckedItemPositions();
 
+        //Get the poll from the previous activity
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             poll = (Poll) extras.getSerializable("POLL");
+
+            // If we checked friends, got back to the q-activity and then forward again, this will contain the users checked from the first time. Add them to checkedFriends
             if(poll.friends != null) {
                 checkedFriends = poll.friends;
             }
-        } else{
+        } else {
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
         }
 
+        // Check the friends from previous activity in the list
         checkFriends();
+
+        // Print their usernames as well in the inline list.
         showCheckedFriends();
 
+        // The click listener when checking / un-checking a friend.
         friendView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -71,12 +79,14 @@ public class AddAnswerersActivity extends Activity {
                 } else{ // Remove from checkedFriends
                     checkedFriends.remove(friendList.get(i));
                 }
+
+                // Always update the inline list afterwards.
                 showCheckedFriends();
             }
         });
     }
 
-    //Attaches the checked friends if back button is pressed.
+    //Attaches the checked friends if back button is pressed. This will return us to the q activity.
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
@@ -108,15 +118,15 @@ public class AddAnswerersActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Attach friends to the poll and upload it to the database.
+    //Attach friends to the poll and send it to the Q activity, which will send it via the API handler.
     public void sendPoll(View view) {
         if (!checkedFriends.isEmpty()) {
-            poll.addFriendlist(checkedFriends);
+            poll.friends = checkedFriends;
             Intent intent = new Intent();
             intent.putExtra("CREATED_POLL", poll);
             setResult(RESULT_OK, intent);
             finish();
-        } else {
+        } else { // Error handling if no users are checked.
             Toast.makeText(getBaseContext(), "Haven't you got any friends, or?", Toast.LENGTH_LONG).show();
         }
     }
@@ -149,7 +159,13 @@ public class AddAnswerersActivity extends Activity {
         }
     }
 
-    public void createExampleFriendList() {
+    public void loadFriends() {
+        /*ApiHandler apiHandler = new ApiHandler(getApplicationContext());
+        SessionManagement session = new SessionManagement(getApplicationContext());
+
+        friendList = (LinkedList<Friend>)apiHandler.getFriends(session.getLoggedInUsername());*/
+
+        // Load dummy users until the friend function works properly.
         friendList.add(new Friend("Martin"));
         friendList.add(new Friend("Patrik"));
         friendList.add(new Friend("Ebba"));

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * The question class. Holds all information about a question.
@@ -26,15 +27,15 @@ public class Poll implements Serializable {
             "Archived"
          };
 
-    public int id;
+    private int id;
     public String question;
     public String alternativeOne;
     public String alternativeTwo;
-    public ArrayList<Friend> friends;
+    public LinkedList<Friend> friends;
     public int result; //Poll result
     public int answer; //Users answer
 
-    public Poll (String question, String a1, String a2, ArrayList<Friend> friends) {
+    public Poll (String question, String a1, String a2, LinkedList<Friend> friends) {
         this.friends = friends;
         this.question = question;
         this.alternativeOne = a1;
@@ -42,17 +43,14 @@ public class Poll implements Serializable {
         this.result = 0;
     }
 
-    public Poll (int id, String question, String a1, String a2, ArrayList<Friend> friends) {
+    public Poll (int id, String question, String a1, String a2, LinkedList<Friend> friends, int result, int answer) {
         this.friends = friends;
         this.id = id;
         this.question = question;
         this.alternativeOne = a1;
         this.alternativeTwo = a2;
-        this.result = 0;
-    }
-
-    public void addFriendlist(ArrayList<Friend> list) {
-        this.friends = list;
+        this.result = result;
+        this.answer = answer;
     }
 
     // TODO: Implement!
@@ -82,13 +80,14 @@ public class Poll implements Serializable {
         int result = json.getInt("result");
         int answer = json.getInt("answer");
 
-        Poll p = new Poll(id, question, alternative_one, alternative_two, null);
-        p.result = result;
-        p.answer = answer;
+        Poll p = new Poll(id, question, alternative_one, alternative_two, null, result, answer);
 
         Log.d("Poll:", "Created poll " + id);
         return p;
+    }
 
+    public int getId(){
+        return this.id;
     }
 
     @Override
@@ -109,8 +108,7 @@ public class Poll implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO: Not ideal implementation..
-        return (question + alternativeOne + alternativeTwo).hashCode();
+        return (Integer.toString(id)).hashCode();
     }
 
 

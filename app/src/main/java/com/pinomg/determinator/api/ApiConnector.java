@@ -40,16 +40,13 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
     input urls:
     url[0] is method
     url[1] is url
-    url[2] is arguments
+    url[2] is arguments (optional)
      */
-
-
     @Override
     protected JSONObject doInBackground(String... params) {
         try {
-            Log.d("Network", "init");
+            // Check the network status of the device.
             networkStatus();
-            Log.d("Network", "fin");
 
             return request(params);
         } catch (IOException e) {
@@ -63,14 +60,15 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
             return null;
         }
     }
-    // onPostExecute displays the results of the AsyncTask.
+
+    // onPostExecute displays the results of the call
     @Override
     protected void onPostExecute(JSONObject result) {
         for(Exception e : errors){
             if(e instanceof NoConnectionException)
                 showToast(e.getMessage());
 
-            Log.d("Connect error:", e.getMessage());
+            Log.e("Connect error:", e.getMessage());
         }
 
         if( result != null) {
@@ -88,19 +86,13 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
         }
     }
 
-        /*
-    input urls:
-    url[0] is method
-    url[1] is url
-    url[2] is arguments
-     */
-
     private JSONObject request(String[] params) throws IOException, JSONException {
         InputStream is = null;
-        // Only display the first 500 characters of the retrieved
-        // web page content.
+
+        // Restriction of length of the api call.
         int len = 5000;
 
+        // Start the connection
         try {
             URL url = new URL(params[1]);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -110,10 +102,8 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
             conn.setDoInput(true);
             conn.setRequestProperty("charset", "utf-8");
 
-            if(params[0].equals( "POST" ))
+            if(params[0].equals( "POST" )) //Change content-type header if sending a POST request.
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            Log.e("BEfore q","as2d");
 
             if(params.length > 2){ //There is arguments
                 String urlParameters  = params[2];
@@ -126,18 +116,16 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
                 }
             }
 
-            Log.e("BEfore q","asd");
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
+
             Log.d("ApiConnector", "The response is: " + response);
             is = conn.getInputStream();
 
-
+            // Turn the response into a JSON object.
             JSONTokener token = new JSONTokener(readIt(is, len));
             JSONObject obj = new JSONObject(token);
-
-            Log.d("Method used in json:", obj.getString("method"));
 
             return obj;
 
@@ -158,6 +146,7 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
         return new String(buffer);
     }
 
+    // Error handling when no connection.
     private void showToast(String s){
         int duration = Toast.LENGTH_SHORT;
 

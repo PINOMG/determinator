@@ -49,7 +49,7 @@ public class DataApi {
         values.put(PollsTable.COLUMN_ALTERNATIVE_ONE, poll.alternativeOne);
         values.put(PollsTable.COLUMN_ALTERNATIVE_TWO, poll.alternativeTwo);
 
-        String where = PollsTable.COLUMN_POLL_ID + "=" + poll.id;
+        String where = PollsTable.COLUMN_POLL_ID + "=" + poll.getId();
         SQLiteDatabase db = dbh.getWritableDatabase();
         return db.update(PollsTable.TABLE_POLLS, values, where, null);
     }
@@ -81,7 +81,9 @@ public class DataApi {
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3),
-                    null);
+                    null,
+                    0,
+                    0);
 
             polls.add(p);
             cursor.moveToNext();

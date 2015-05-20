@@ -16,13 +16,13 @@ import com.pinomg.determinator.database.DatabaseHelper;
 import com.pinomg.determinator.database.PollsTable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class CreatePollActivity extends Activity {
 
     private EditText questionField, alternativeOne, alternativeTwo;
-    private Button createButton;
-    private ArrayList<Friend> friends;
+    private LinkedList<Friend> friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,6 @@ public class CreatePollActivity extends Activity {
         questionField = (EditText) findViewById(R.id.questionField);
         alternativeOne = (EditText) findViewById(R.id.alternativeOne);
         alternativeTwo = (EditText) findViewById(R.id.alternativeTwo);
-        createButton = (Button) findViewById(R.id.createButton);
     }
 
 
@@ -65,12 +64,12 @@ public class CreatePollActivity extends Activity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
+        if(resultCode == RESULT_OK) { // If AddAnswerersActivity was finished, finished this and send result to ListActivity
             setResult(RESULT_OK, data);
             finish();
         } else {
             Bundle extras = data.getExtras();
-            friends = (ArrayList<Friend>) extras.getSerializable("POLLEN");
+            friends = (LinkedList<Friend>) extras.getSerializable("POLLEN");
         }
     }
 

@@ -21,6 +21,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CreateQuestion"
-        android:onClick="goToCreateQuestionActivity"/>
+        android:onClick="goToCreatePollActivity"/>
 
 </LinearLayout>

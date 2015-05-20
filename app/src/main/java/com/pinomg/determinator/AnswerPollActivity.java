@@ -14,16 +14,19 @@ import com.pinomg.determinator.api.ApiErrorException;
 import com.pinomg.determinator.api.ApiHandler;
 
 
-public class AnswerQuestionActivity extends Activity {
+public class AnswerPollActivity extends Activity {
 
     private Poll poll;
     private TextView questionText;
     private Button btnAltOne, btnAltTwo;
+    private SessionManagement session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer_question);
+
+        session = new SessionManagement(getApplicationContext());
 
         questionText = (TextView) findViewById(R.id.question_text);
         btnAltOne = (Button) findViewById(R.id.btn_alt_one);
@@ -41,12 +44,12 @@ public class AnswerQuestionActivity extends Activity {
         }
     }
 
-    // TODO: Handle answer
+
     public void answerQuestion(int answer) {
         ApiHandler apiHandler = new ApiHandler(getBaseContext());
 
         try {
-            apiHandler.postAnswer(poll.id, "Martin", answer);
+            apiHandler.postAnswer(poll.getId(), session.getLoggedInUsername(), answer);
         } catch (ApiErrorException e) {
             e.printStackTrace();
         }
