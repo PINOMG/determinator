@@ -28,6 +28,7 @@ public class ResultActivity extends Activity{
             poll = (Poll) extras.getSerializable("POLL");
             questionText.setText(poll.getQuestion());
             answerText.setText(poll.getResultText());
+
         }
     }
 
