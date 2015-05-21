@@ -20,11 +20,12 @@ import java.util.concurrent.ExecutionException;
  * Created by patrik on 2015-05-11.
  */
 public class ApiHandler {
-    private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
+    // private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
+    private static final String BASE_URL = "http://192.168.43.8/pinomg/";
     private static final String ENDPOINT_FRIEND = BASE_URL + "friend/";
     private static final String ENDPOINT_LOGIN  = BASE_URL + "login/";
     private static final String ENDPOINT_USER   = BASE_URL + "user/";
-    private static final String ENDPOINT_POLL   = BASE_URL + "poll/";
+    public static final String ENDPOINT_POLL   = BASE_URL + "poll/";
     private static final String ENDPOINT_ANSWER = BASE_URL + "answer/";
 
     private Context context;

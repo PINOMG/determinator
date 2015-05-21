@@ -125,7 +125,7 @@ public class ListActivity extends Activity {
         if(session.isLoggedIn()) {
             JsonObjectRequest jsObjRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    "http://95.80.41.105:8004/determinator_server/poll/" + session.getLoggedInUsername(),
+                    ApiHandler.ENDPOINT_POLL + session.getLoggedInUsername(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
