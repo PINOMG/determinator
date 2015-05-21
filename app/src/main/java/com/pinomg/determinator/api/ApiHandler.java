@@ -166,7 +166,7 @@ public class ApiHandler {
     }
 
     // Building a List of Polls from JSONArray
-    private List<Poll> doPolls(JSONArray json_list) throws JSONException {
+    public List<Poll> doPolls(JSONArray json_list) throws JSONException {
         List<Poll> listItems = new LinkedList<>();
 
         for ( int i = 0; i < json_list.length(); i++ ){

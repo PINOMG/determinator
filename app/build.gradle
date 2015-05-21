@@ -28,4 +28,5 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.mcxiaoke.volley:library:1.0.16'
 }

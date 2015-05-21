@@ -14,9 +14,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.pinomg.determinator.api.ApiErrorException;
 import com.pinomg.determinator.api.ApiHandler;
 import com.pinomg.determinator.database.DataApi;
+
+import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +44,8 @@ public class ListActivity extends Activity {
 
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
+    private RequestQueue queue;
+
     // SessionManagement class
     SessionManagement session;
 
@@ -43,6 +53,8 @@ public class ListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        queue = Volley.newRequestQueue(this);
 
         session = new SessionManagement(getApplicationContext());
 
@@ -110,15 +122,44 @@ public class ListActivity extends Activity {
 
     private void updatePollListView() {
 
-        pollList.clear();
         if(session.isLoggedIn()) {
-            List<Poll> allPolls = apiHandler.getPolls(session.getLoggedInUsername());
-            for (Poll p : allPolls) {
-                pollList.add(p);
-            }
-            adapter.notifyDataSetChanged();
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    "http://95.80.41.105:8004/determinator_server/poll/" + session.getLoggedInUsername(),
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            Log.d(LOG_TAG, "Response: " + response.toString());
+                            if (response.has("data")) {
+
+                                try {
+                                    pollList.clear();
+                                    List<Poll> allPolls = apiHandler.doPolls(response.getJSONObject("data").getJSONArray("items"));
+                                    for (Poll p : allPolls) {
+                                        pollList.add(p);
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, e.getMessage());
+                                } finally {
+                                    mySwipeRefreshLayout.setRefreshing(false);
+                                }
+                            }
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e(LOG_TAG, "Error: " + error.toString());
+                            mySwipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+            queue.add(jsObjRequest);
+        } else {
+            mySwipeRefreshLayout.setRefreshing(false);
         }
-        mySwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
