@@ -2,7 +2,9 @@ package com.pinomg.determinator;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,15 +14,25 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.pinomg.determinator.api.ApiErrorException;
 import com.pinomg.determinator.api.ApiHandler;
 import com.pinomg.determinator.database.DataApi;
+
+import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
 
 
 public class ListActivity extends Activity {
+
+    private static String LOG_TAG = "ListActivity";
 
     private int CREATE_POLL_REQUEST = 0;
 
@@ -30,6 +42,10 @@ public class ListActivity extends Activity {
     public List<Poll> pollList; // Creates a list to store polls
     private CustomAdapter adapter; // The custom adapter, grouping polls.
 
+    private SwipeRefreshLayout mySwipeRefreshLayout;
+
+    private RequestQueue queue;
+
     // SessionManagement class
     SessionManagement session;
 
@@ -37,6 +53,8 @@ public class ListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        queue = Volley.newRequestQueue(this);
 
         session = new SessionManagement(getApplicationContext());
 
@@ -51,6 +69,7 @@ public class ListActivity extends Activity {
         this.apiHandler = new ApiHandler(getBaseContext());
 
         final ListView pollView = (ListView) findViewById(R.id.pollView);
+
         pollView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -80,21 +99,66 @@ public class ListActivity extends Activity {
         pollList = new LinkedList<>();
         adapter = new CustomAdapter(this, pollList);
         pollView.setAdapter(adapter);
+
+
+        mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mySwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
+                        updatePollListView();
+                    }
+                }
+        );
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mySwipeRefreshLayout.setRefreshing(true);
+        updatePollListView();
+    }
 
-        pollList.clear();
+    private void updatePollListView() {
 
         if(session.isLoggedIn()) {
-            List<Poll> allPolls = apiHandler.getPolls(session.getLoggedInUsername());
-            for (Poll p : allPolls) {
-                pollList.add(p);
-            }
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    ApiHandler.ENDPOINT_POLL + session.getLoggedInUsername(),
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
 
-            adapter.notifyDataSetChanged();
+                            Log.d(LOG_TAG, "Response: " + response.toString());
+                            if (response.has("data")) {
+
+                                try {
+                                    pollList.clear();
+                                    List<Poll> allPolls = apiHandler.doPolls(response.getJSONObject("data").getJSONArray("items"));
+                                    for (Poll p : allPolls) {
+                                        pollList.add(p);
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                } catch (Exception e) {
+                                    Log.e(LOG_TAG, e.getMessage());
+                                } finally {
+                                    mySwipeRefreshLayout.setRefreshing(false);
+                                }
+                            }
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e(LOG_TAG, "Error: " + error.toString());
+                            mySwipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+            queue.add(jsObjRequest);
+        } else {
+            mySwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -123,9 +187,6 @@ public class ListActivity extends Activity {
         }
     }
 
-    private void createExampleList() {
-
-    }
 
     public void goToCreatePollActivity(View view) {
         Intent intent = new Intent(this, CreatePollActivity.class);
