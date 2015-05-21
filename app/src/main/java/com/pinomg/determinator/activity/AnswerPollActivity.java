@@ -1,4 +1,4 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pinomg.determinator.model.Poll;
+import com.pinomg.determinator.R;
+import com.pinomg.determinator.SessionManagement;
 import com.pinomg.determinator.api.ApiErrorException;
 import com.pinomg.determinator.api.ApiHandler;
 

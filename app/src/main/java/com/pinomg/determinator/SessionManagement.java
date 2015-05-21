@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.pinomg.determinator.activity.LoginActivity;
+
 /**
  * Created by Philip on 2015-05-03.
  */

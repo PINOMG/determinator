@@ -3,8 +3,8 @@ package com.pinomg.determinator.api;
 import android.content.Context;
 import android.util.Log;
 
-import com.pinomg.determinator.User;
-import com.pinomg.determinator.Poll;
+import com.pinomg.determinator.model.User;
+import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.SessionManagement;
 
 import org.json.JSONArray;

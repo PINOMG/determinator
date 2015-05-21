@@ -1,4 +1,4 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.model;
 
 import java.io.Serializable;
 

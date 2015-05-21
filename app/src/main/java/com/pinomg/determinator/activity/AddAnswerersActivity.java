@@ -1,4 +1,4 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,7 +14,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pinomg.determinator.api.ApiHandler;
+import com.pinomg.determinator.model.Poll;
+import com.pinomg.determinator.R;
+import com.pinomg.determinator.model.User;
 
 import java.util.Iterator;
 import java.util.LinkedList;

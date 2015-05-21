@@ -1,4 +1,4 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.activity;
 
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.pinomg.determinator.R;
+import com.pinomg.determinator.model.Poll;
+
 /**
  * Created by ebbamannheimer on 2015-05-11.
  */
@@ -21,7 +24,7 @@ import android.widget.TextView;
  * An adapter used in listactivity. Lists Polls under separate headers,
  * depending on their statuses.
  */
-public class CustomAdapter extends BaseAdapter {
+public class PollListViewAdapter extends BaseAdapter {
 
     public static final int TYPE_POLL = 0;
     public static final int TYPE_HEADER = 1;
@@ -30,7 +33,7 @@ public class CustomAdapter extends BaseAdapter {
     private List<Poll> polls; // The list of all polls, unsorted
     private LayoutInflater mInflater;
 
-    public CustomAdapter(Context context, List<Poll> polls) {
+    public PollListViewAdapter(Context context, List<Poll> polls) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         items = new HashMap<>();
@@ -70,7 +73,7 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return Math.max(1,items.size());
+        return Math.max(1, items.size());
     }
 
     @Override
