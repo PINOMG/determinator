@@ -1,13 +1,9 @@
 package com.pinomg.determinator.api;
 
 /**
- * Created by patrik on 2015-05-11.
+ * Exception cast when device does not have a connection.
  */
 public class NoConnectionException extends Exception{
-    public NoConnectionException(){
-        super();
-    }
-
     public NoConnectionException(String msg){
         super(msg);
     }

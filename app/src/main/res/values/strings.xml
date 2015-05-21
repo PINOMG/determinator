@@ -10,7 +10,6 @@
     <string name="log_out">Logout</string>
     <string name="subtitle_activity_add_answerers">Add answerers from your list of friends</string>
     <string name="title_activity_answer_question">AnswerQuestionActivity</string>
-
-    <string name="content_value">[content]</string>
+    <string name="title_activity_result">ResultActivity</string>
 
 </resources>

@@ -4,23 +4,28 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pinomg.determinator.api.ApiErrorException;
+import com.pinomg.determinator.api.ApiHandler;
 
-public class AnswerQuestionActivity extends Activity {
+
+public class AnswerPollActivity extends Activity {
 
     private Poll poll;
     private TextView questionText;
     private Button btnAltOne, btnAltTwo;
+    private SessionManagement session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer_question);
+
+        session = new SessionManagement(getApplicationContext());
 
         questionText = (TextView) findViewById(R.id.question_text);
         btnAltOne = (Button) findViewById(R.id.btn_alt_one);
@@ -29,18 +34,34 @@ public class AnswerQuestionActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             poll = (Poll) extras.getSerializable("POLL");
-            questionText.setText(poll.question);
-            btnAltOne.setText(poll.alternativeOne);
-            btnAltTwo.setText(poll.alternativeTwo);
+            questionText.setText(poll.getQuestion());
+            btnAltOne.setText(poll.getAlternativeOne());
+            btnAltTwo.setText(poll.getAlternativeTwo());
 
         } else {
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
         }
     }
 
-    // TODO: Handle answer
-    public void answerQuestion(View view) {
+
+    public void answerQuestion(int answer) {
+        ApiHandler apiHandler = new ApiHandler(getBaseContext());
+
+        try {
+            apiHandler.postAnswer(poll.getId(), session.getLoggedInUsername(), answer);
+        } catch (ApiErrorException e) {
+            e.printStackTrace();
+        }
+
         finish();
+    }
+
+    public void answerOne(View view){
+        answerQuestion(1);
+    }
+
+    public void answerTwo(View view){
+        answerQuestion(2);
     }
 
     @Override

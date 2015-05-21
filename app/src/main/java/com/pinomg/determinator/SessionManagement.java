@@ -105,6 +105,9 @@ public class SessionManagement {
         // Staring Login Activity
         _context.startActivity(i);
     }
+    public String getLoggedInUsername() {
+        return pref.getString(KEY_EMAIL, null);
+    }
 
     /**
      * Quick check for login
