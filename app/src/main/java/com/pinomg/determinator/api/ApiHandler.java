@@ -1,8 +1,13 @@
 package com.pinomg.determinator.api;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.pinomg.determinator.model.User;
 import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.SessionManagement;
@@ -20,8 +25,11 @@ import java.util.concurrent.ExecutionException;
  * Created by patrik on 2015-05-11.
  */
 public class ApiHandler {
-    // private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
-    private static final String BASE_URL = "http://192.168.43.8/pinomg/";
+
+    private static final String LOG_TAG = "ApiHandler";
+
+    private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
+    // private static final String BASE_URL = "http://192.168.43.8/pinomg/";
     private static final String ENDPOINT_FRIEND = BASE_URL + "friend/";
     private static final String ENDPOINT_LOGIN  = BASE_URL + "login/";
     private static final String ENDPOINT_USER   = BASE_URL + "user/";
@@ -32,6 +40,37 @@ public class ApiHandler {
 
     public ApiHandler(Context context){
         this.context = context;
+    }
+
+    /**
+     * Gets all polls for logged in user from the server
+     * @param username
+     * @param respListener
+     * @param errListener
+     */
+    public void getPolls(String username, final Response.Listener<List<Poll>> respListener, final Response.ErrorListener errListener) {
+
+        // Creates a basic json request via volley and parse the result before
+        // calling the callbacks.
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                ENDPOINT_POLL + username,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response.has("data")) {
+                            try {
+                                respListener.onResponse(
+                                    doPolls(response.getJSONObject("data").getJSONArray("items"))
+                                );
+                            } catch (Exception e) {
+                                Log.e(LOG_TAG, e.getMessage());
+                            }
+                        }
+
+                    }
+                }, errListener);
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(jsObjRequest);
     }
 
 
