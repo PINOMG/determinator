@@ -232,7 +232,8 @@ public class Poll implements Serializable {
 
     @Override
     public int hashCode() {
-        return (Integer.toString(id)).hashCode();
+        // TODO: Better implementation with respect to server id, answerers etc.
+        return (question + alternativeOne + alternativeTwo).hashCode();
     }
 
 

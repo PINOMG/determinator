@@ -93,4 +93,32 @@ public class PollTest extends TestCase {
             assertEquals(poll.getResult(), 1);
         }
     }
+
+    /**
+     * Test of equals implementation
+     */
+    public void testEquals() {
+
+        Poll compare = null;
+        assertFalse(poll.equals(compare));
+
+        compare = new Poll("other", "alt1", "alt2");
+        assertFalse(poll.equals(compare));
+
+        compare = new PollSubClass(DEFAULT_QUESTION, DEFAULT_ALT_1, DEFAULT_ALT_2);
+        assertFalse(poll.equals(compare));
+
+        compare = new Poll(DEFAULT_QUESTION, DEFAULT_ALT_1, DEFAULT_ALT_2);
+        assertTrue(poll.equals(compare) && compare.equals(poll));
+        assertTrue(poll.hashCode() == compare.hashCode());
+    }
+
+    /**
+     * Sub class for test of equals implementation
+     */
+    private class PollSubClass extends Poll {
+        public PollSubClass(String question, String alt1, String alt2) {
+            super(question, alt1, alt2);
+        }
+    }
 }
