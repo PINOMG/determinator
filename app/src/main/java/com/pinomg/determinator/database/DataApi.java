@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.pinomg.determinator.Poll;
+import com.pinomg.determinator.model.Poll;
 
 import java.util.LinkedList;
 import java.util.List;

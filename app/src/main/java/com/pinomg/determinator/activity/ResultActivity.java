@@ -1,26 +1,42 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
+
+import com.pinomg.determinator.model.Poll;
+import com.pinomg.determinator.R;
 
 
-public class MainActivity extends Activity {
+public class ResultActivity extends Activity{
+
+    private TextView questionText, answerText;
+    private Poll poll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
+        setContentView(R.layout.activity_result);
 
+        //Connecting layout with logic
+        questionText = (TextView) findViewById(R.id.question);
+        answerText = (TextView) findViewById(R.id.answer);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            poll = (Poll) extras.getSerializable("POLL");
+            questionText.setText(poll.getQuestion());
+            answerText.setText(poll.getResultText());
+
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_result, menu);
         return true;
     }
 
@@ -35,19 +51,6 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    // An onClick-function, sends user to ListActivity
-    public void goToListActivity(View view) {
-        Intent intent = new Intent(this, ListActivity.class);
-        startActivity(intent);
-    }
-
-    // An onClick-function, sends user to CreateQuestionActivity
-    public void goToCreateQuestionActivity(View view) {
-        Intent intent = new Intent(this, CreatePollActivity.class);
-        startActivity(intent);
     }
 }

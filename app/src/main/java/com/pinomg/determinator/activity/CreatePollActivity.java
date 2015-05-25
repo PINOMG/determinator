@@ -1,4 +1,4 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+
+import com.pinomg.determinator.model.Poll;
+import com.pinomg.determinator.R;
 
 
 public class CreatePollActivity extends Activity {

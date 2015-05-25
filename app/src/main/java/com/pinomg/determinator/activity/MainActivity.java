@@ -1,8 +1,7 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -12,38 +11,44 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.pinomg.determinator.api.RequestQueueSingleton;
+import com.pinomg.determinator.model.Poll;
+import com.pinomg.determinator.R;
+import com.pinomg.determinator.SessionManagement;
 import com.pinomg.determinator.api.ApiErrorException;
 import com.pinomg.determinator.api.ApiHandler;
-import com.pinomg.determinator.database.DataApi;
-
 import org.json.JSONObject;
-
 import java.util.LinkedList;
 import java.util.List;
 
 
-public class ListActivity extends Activity {
+public class MainActivity extends Activity {
 
-    private static String LOG_TAG = "ListActivity";
+    private static String LOG_TAG = "Determinator";
 
     private int CREATE_POLL_REQUEST = 0;
 
-    private DataApi api;
     private ApiHandler apiHandler;
 
-    public List<Poll> pollList; // Creates a list to store polls
-    private CustomAdapter adapter; // The custom adapter, grouping polls.
+    // Creates a list to store polls
+    private List<Poll> pollList;
 
+    // ListView for polls
+    private ListView pollListView;
+
+    // Adapter for ListView of polls
+    private PollListViewAdapter adapter;
+
+    // Swipe to refresh widget
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
+    // Volley request queue for network requests
     private RequestQueue queue;
 
     // SessionManagement class
@@ -54,7 +59,7 @@ public class ListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        queue = Volley.newRequestQueue(this);
+        queue = RequestQueueSingleton.getInstance(this).getRequestQueue();
 
         session = new SessionManagement(getApplicationContext());
 
@@ -65,15 +70,14 @@ public class ListActivity extends Activity {
          * */
         session.checkLogin();
 
-        this.api = new DataApi(getBaseContext());
         this.apiHandler = new ApiHandler(getBaseContext());
 
-        final ListView pollView = (ListView) findViewById(R.id.pollView);
+        pollListView = (ListView) findViewById(R.id.pollView);
 
-        pollView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        pollListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getAdapter().getItemViewType(position) == CustomAdapter.TYPE_POLL) {
+                if (parent.getAdapter().getItemViewType(position) == PollListViewAdapter.TYPE_POLL) {
                     Poll poll = (Poll) parent.getAdapter().getItem(position);
 
                     if (poll.getStatus() == poll.STATUS_FINISHED) {
@@ -97,8 +101,8 @@ public class ListActivity extends Activity {
         });
 
         pollList = new LinkedList<>();
-        adapter = new CustomAdapter(this, pollList);
-        pollView.setAdapter(adapter);
+        adapter = new PollListViewAdapter(this, pollList);
+        pollListView.setAdapter(adapter);
 
 
         mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
@@ -123,30 +127,18 @@ public class ListActivity extends Activity {
     private void updatePollListView() {
 
         if(session.isLoggedIn()) {
-            JsonObjectRequest jsObjRequest = new JsonObjectRequest(
-                    Request.Method.GET,
-                    ApiHandler.ENDPOINT_POLL + session.getLoggedInUsername(),
-                    new Response.Listener<JSONObject>() {
+
+            apiHandler.getPolls(
+                    session.getLoggedInUsername(),
+                    new Response.Listener<List<Poll>>() {
                         @Override
-                        public void onResponse(JSONObject response) {
-
-                            Log.d(LOG_TAG, "Response: " + response.toString());
-                            if (response.has("data")) {
-
-                                try {
-                                    pollList.clear();
-                                    List<Poll> allPolls = apiHandler.doPolls(response.getJSONObject("data").getJSONArray("items"));
-                                    for (Poll p : allPolls) {
-                                        pollList.add(p);
-                                    }
-                                    adapter.notifyDataSetChanged();
-                                } catch (Exception e) {
-                                    Log.e(LOG_TAG, e.getMessage());
-                                } finally {
-                                    mySwipeRefreshLayout.setRefreshing(false);
-                                }
+                        public void onResponse(List<Poll> polls) {
+                            pollList.clear();
+                            for (Poll p : polls) {
+                                pollList.add(p);
                             }
-
+                            adapter.notifyDataSetChanged();
+                            mySwipeRefreshLayout.setRefreshing(false);
                         }
                     },
                     new Response.ErrorListener() {
@@ -155,8 +147,9 @@ public class ListActivity extends Activity {
                             Log.e(LOG_TAG, "Error: " + error.toString());
                             mySwipeRefreshLayout.setRefreshing(false);
                         }
-                    });
-            queue.add(jsObjRequest);
+                    }
+            );
+
         } else {
             mySwipeRefreshLayout.setRefreshing(false);
         }
