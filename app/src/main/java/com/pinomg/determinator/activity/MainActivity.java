@@ -11,19 +11,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.android.volley.Request;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.pinomg.determinator.api.RequestQueueSingleton;
 import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.R;
 import com.pinomg.determinator.SessionManagement;
 import com.pinomg.determinator.api.ApiErrorException;
 import com.pinomg.determinator.api.ApiHandler;
-import org.json.JSONObject;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,7 +55,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_main);
 
         queue = RequestQueueSingleton.getInstance(this).getRequestQueue();
 
