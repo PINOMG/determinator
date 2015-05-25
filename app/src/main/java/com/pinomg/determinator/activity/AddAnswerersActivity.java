@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pinomg.determinator.SessionManagement;
+import com.pinomg.determinator.api.ApiHandler;
 import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.R;
 import com.pinomg.determinator.model.User;
