@@ -1,4 +1,4 @@
-package com.pinomg.determinator.api;
+package com.pinomg.determinator.net;
 
 /**
  * Exception cast when device does not have a connection.

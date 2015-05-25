@@ -14,9 +14,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.pinomg.determinator.R;
-import com.pinomg.determinator.SessionManagement;
-import com.pinomg.determinator.api.ApiErrorException;
-import com.pinomg.determinator.api.ApiHandler;
+import com.pinomg.determinator.helpers.Session;
+import com.pinomg.determinator.net.ApiErrorException;
+import com.pinomg.determinator.net.ApiHandler;
 
 /**
  * A login screen that offers login via email/password.
@@ -36,7 +36,7 @@ public class LoginActivity extends Activity{
     protected ApiHandler apiHandler;
 
     // SessionManagement Class
-    SessionManagement session;
+    Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class LoginActivity extends Activity{
         setContentView(R.layout.activity_login);
 
         // SessionManagement
-        session = new SessionManagement(getApplicationContext());
+        session = new Session(getApplicationContext());
 
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.email);

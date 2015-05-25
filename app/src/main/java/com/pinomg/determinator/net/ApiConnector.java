@@ -1,4 +1,4 @@
-package com.pinomg.determinator.api;
+package com.pinomg.determinator.net;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 import org.json.JSONTokener;
 
 import java.io.DataOutputStream;

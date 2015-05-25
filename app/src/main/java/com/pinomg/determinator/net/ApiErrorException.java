@@ -1,4 +1,4 @@
-package com.pinomg.determinator.api;
+package com.pinomg.determinator.net;
 
 /**
  * Created by patrik on 2015-05-11.

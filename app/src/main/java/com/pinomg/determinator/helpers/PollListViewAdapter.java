@@ -1,4 +1,4 @@
-package com.pinomg.determinator.activity;
+package com.pinomg.determinator.helpers;
 
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;

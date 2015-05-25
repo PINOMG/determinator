@@ -14,8 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pinomg.determinator.SessionManagement;
-import com.pinomg.determinator.api.ApiHandler;
+import com.pinomg.determinator.helpers.Session;
+import com.pinomg.determinator.net.ApiHandler;
 import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.R;
 import com.pinomg.determinator.model.User;
@@ -172,7 +172,7 @@ public class AddAnswerersActivity extends Activity {
 
     public void loadFriends() {
         ApiHandler apiHandler = new ApiHandler(getApplicationContext());
-        SessionManagement session = new SessionManagement(getApplicationContext());
+        Session session = new Session(getApplicationContext());
 
         friendList = (LinkedList<User>)apiHandler.getUsers();
 

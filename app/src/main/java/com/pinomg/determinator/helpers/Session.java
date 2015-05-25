@@ -1,4 +1,4 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.helpers;
 
 import java.util.HashMap;
 import android.content.Context;
@@ -11,7 +11,7 @@ import com.pinomg.determinator.activity.LoginActivity;
 /**
  * Created by Philip on 2015-05-03.
  */
-public class SessionManagement {
+public class Session {
     // Shared Preferences
     SharedPreferences pref;
 
@@ -34,7 +34,7 @@ public class SessionManagement {
     public static final String KEY_EMAIL = "email";
 
     // Constructor
-    public SessionManagement(Context context){
+    public Session(Context context){
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
