@@ -28,8 +28,9 @@ public class ApiHandler {
 
     private static final String LOG_TAG = "ApiHandler";
 
-    private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
-    // private static final String BASE_URL = "http://192.168.43.8/pinomg/";
+    // private static final String BASE_URL = "http://95.80.41.105:8004/determinator_server/";
+    private static final String BASE_URL = "http://192.168.43.8/pinomg/";
+    // private static final String BASE_URL = "http://129.16.207.255/pinomg/";
     private static final String ENDPOINT_FRIEND = BASE_URL + "friend/";
     private static final String ENDPOINT_LOGIN  = BASE_URL + "login/";
     private static final String ENDPOINT_USER   = BASE_URL + "user/";
