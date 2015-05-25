@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.R;
-import com.pinomg.determinator.SessionManagement;
-import com.pinomg.determinator.api.ApiErrorException;
-import com.pinomg.determinator.api.ApiHandler;
+import com.pinomg.determinator.helpers.Session;
+import com.pinomg.determinator.net.ApiErrorException;
+import com.pinomg.determinator.net.ApiHandler;
 
 
 public class AnswerPollActivity extends Activity {
@@ -21,14 +21,14 @@ public class AnswerPollActivity extends Activity {
     private Poll poll;
     private TextView questionText;
     private Button btnAltOne, btnAltTwo;
-    private SessionManagement session;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer_question);
 
-        session = new SessionManagement(getApplicationContext());
+        session = new Session(getApplicationContext());
 
         questionText = (TextView) findViewById(R.id.question_text);
         btnAltOne = (Button) findViewById(R.id.btn_alt_one);

@@ -15,12 +15,13 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.pinomg.determinator.api.RequestQueueSingleton;
+import com.pinomg.determinator.net.RequestQueueSingleton;
+import com.pinomg.determinator.helpers.PollListViewAdapter;
 import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.R;
-import com.pinomg.determinator.SessionManagement;
-import com.pinomg.determinator.api.ApiErrorException;
-import com.pinomg.determinator.api.ApiHandler;
+import com.pinomg.determinator.helpers.Session;
+import com.pinomg.determinator.net.ApiErrorException;
+import com.pinomg.determinator.net.ApiHandler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class MainActivity extends Activity {
     private RequestQueue queue;
 
     // SessionManagement class
-    SessionManagement session;
+    Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class MainActivity extends Activity {
 
         queue = RequestQueueSingleton.getInstance(this).getRequestQueue();
 
-        session = new SessionManagement(getApplicationContext());
+        session = new Session(getApplicationContext());
 
         /**
          * Call this function whenever you want to check user login

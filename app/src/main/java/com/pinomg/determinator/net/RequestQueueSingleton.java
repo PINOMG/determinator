@@ -1,4 +1,4 @@
-package com.pinomg.determinator.api;
+package com.pinomg.determinator.net;
 
 import android.content.Context;
 

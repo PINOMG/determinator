@@ -1,16 +1,14 @@
-package com.pinomg.determinator.api;
+package com.pinomg.determinator.net;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.pinomg.determinator.model.User;
 import com.pinomg.determinator.model.Poll;
-import com.pinomg.determinator.SessionManagement;
+import com.pinomg.determinator.helpers.Session;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -130,7 +128,7 @@ public class ApiHandler {
     }
 
     //Create a new poll
-    public boolean createPoll(Poll poll, SessionManagement session) throws ApiErrorException {
+    public boolean createPoll(Poll poll, Session session) throws ApiErrorException {
         Log.e("Initiating", "Creating poll");
 
         // This should be implemented when friend function is working properly, not when username's are hard coded.
