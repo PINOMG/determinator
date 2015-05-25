@@ -83,6 +83,12 @@ public class ApiHandler {
         return (LinkedList<User>) apiListCall(urls, "friends");
     }
 
+    public List<User> getUsers(){
+        String urls[] = {"GET", ENDPOINT_USER};
+
+        return (LinkedList<User>) apiListCall(urls, "friends");
+    }
+
     // Returns the polls asked to the user
     public List<Poll> getPolls(String user){
         Log.e("Initiating", "Get friends");

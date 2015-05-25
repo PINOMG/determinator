@@ -169,18 +169,18 @@ public class AddAnswerersActivity extends Activity {
     }
 
     public void loadFriends() {
-        /*ApiHandler apiHandler = new ApiHandler(getApplicationContext());
+        ApiHandler apiHandler = new ApiHandler(getApplicationContext());
         SessionManagement session = new SessionManagement(getApplicationContext());
 
-        friendList = (LinkedList<Friend>)apiHandler.getFriends(session.getLoggedInUsername());*/
+        friendList = (LinkedList<User>)apiHandler.getUsers();
 
         // Load dummy users until the friend function works properly.
-        friendList.add(new User("Martin"));
+        /*friendList.add(new User("Martin"));
         friendList.add(new User("Patrik"));
         friendList.add(new User("Ebba"));
         friendList.add(new User("Björn"));
         friendList.add(new User("Olle"));
-        friendList.add(new User("Philip"));
+        friendList.add(new User("Philip"));*/
 
     }
 }
