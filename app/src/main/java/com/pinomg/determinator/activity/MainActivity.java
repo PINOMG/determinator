@@ -163,7 +163,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_list, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -176,9 +176,6 @@ public class MainActivity extends Activity {
         switch (id) {
             case R.id.log_out:
                 session.logoutUser();
-                return true;
-            case R.id.refresh:
-                this.onResume();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
