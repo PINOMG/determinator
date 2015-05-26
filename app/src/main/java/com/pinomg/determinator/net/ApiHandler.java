@@ -113,9 +113,6 @@ public class ApiHandler {
      * @throws ApiErrorException
      */
     public boolean postAnswer(int poll_id, String username, int answer) throws ApiErrorException {
-        //Init
-        Log.e("Initiating", "postAnswer");
-
         String urls[] = {"POST", ENDPOINT_ANSWER + poll_id, "username=" + username + "&answer=" + answer};
 
         return apiCall(urls);
