@@ -77,7 +77,7 @@ public class ApiHandler {
     public List<User> getFriends(String user) {
         String urls[] = {"GET", ENDPOINT_FRIEND + user};
 
-        return (LinkedList<User>) apiListCall(urls, "friends");
+        return (LinkedList<User>) apiListCall(urls, "users");
     }
 
     /**
@@ -88,7 +88,7 @@ public class ApiHandler {
     public List<User> getUsers(){
         String urls[] = {"GET", ENDPOINT_USER};
 
-        return (LinkedList<User>) apiListCall(urls, "friends");
+        return (LinkedList<User>) apiListCall(urls, "users");
     }
 
     /**
@@ -190,7 +190,7 @@ public class ApiHandler {
                         listItems = usersFromJson(json_list);
                         break;
                     default:
-                        Log.d("Create list", "Case not found");
+                        Log.e("Create list", "Case not found");
                         listItems = null;
                         break;
                 }
