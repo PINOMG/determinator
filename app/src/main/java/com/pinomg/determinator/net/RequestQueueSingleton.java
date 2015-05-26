@@ -7,7 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 /**
- * Created by olle on 21/05/15.
+ * The requestqueue used by Volley
  */
 public class RequestQueueSingleton {
 

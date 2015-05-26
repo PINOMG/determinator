@@ -11,6 +11,15 @@ import android.widget.EditText;
 import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.R;
 
+/**
+ * The activity to use when creating a new poll.
+ *
+ * This activity creates a new poll and when finished sends this poll to
+ * AddAnswerersActivity. It also waits for a response from that activity, and
+ * when that response is a response that the poll is ready to be sent, it sends
+ * the serialized poll back to MainActivity.
+ *
+ */
 
 public class CreatePollActivity extends Activity {
 

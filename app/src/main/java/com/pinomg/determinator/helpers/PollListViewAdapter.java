@@ -16,10 +16,6 @@ import android.widget.TextView;
 import com.pinomg.determinator.R;
 import com.pinomg.determinator.model.Poll;
 
-/**
- * Created by ebbamannheimer on 2015-05-11.
- */
-
 /*
  * An adapter used in listactivity. Lists Polls under separate headers,
  * depending on their statuses.

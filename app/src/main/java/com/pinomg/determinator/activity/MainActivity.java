@@ -26,20 +26,27 @@ import com.pinomg.determinator.net.ApiHandler;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The activity that the user first arrive at, if logged in. If not logged in,
+ * redirect to LoginActivity.
+ *
+ * This activity shows all polls that belong to the user, and allows the user
+ * to see the results of the poll or answer unanswered polls.
+ *
+ * If the user wants to create a new poll, this is also available. When creating
+ * a new poll, the activity sends the user to CreatePollActivity and waits for a
+ * result from that activity. When that result comes, MainActivity will send a request
+ * to the server, creating the poll.
+ */
 
 public class MainActivity extends Activity {
 
     private static String LOG_TAG = "Determinator";
-
     private int CREATE_POLL_REQUEST = 0;
-
     private ApiHandler apiHandler;
 
     // Creates a list to store polls
     private List<Poll> pollList;
-
-    // ListView for polls
-    private ListView pollListView;
 
     // Adapter for ListView of polls
     private PollListViewAdapter adapter;
@@ -47,7 +54,7 @@ public class MainActivity extends Activity {
     // Swipe to refresh widget
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
-    // Volley request queue for network requests
+    // RequestQueue for the Volley framework
     private RequestQueue queue;
 
     // SessionManagement class
@@ -71,38 +78,37 @@ public class MainActivity extends Activity {
 
         this.apiHandler = new ApiHandler(getBaseContext());
 
-        pollListView = (ListView) findViewById(R.id.pollView);
+        ListView pollListView = (ListView) findViewById(R.id.pollView);
 
         pollListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getAdapter().getItemViewType(position) == PollListViewAdapter.TYPE_POLL) {
-                    Poll poll = (Poll) parent.getAdapter().getItem(position);
+            if (parent.getAdapter().getItemViewType(position) == PollListViewAdapter.TYPE_POLL) {
+                Poll poll = (Poll) parent.getAdapter().getItem(position);
 
-                    if (poll.getStatus() == poll.STATUS_FINISHED) {
-                        Intent intent = new Intent(getBaseContext(), ResultActivity.class);
-                        intent.putExtra("POLL", poll);
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
-                        return false;
-                    } else if (poll.getStatus() == poll.STATUS_PENDING) {
-                        Intent intent = new Intent(getBaseContext(), AnswerPollActivity.class);
-                        intent.putExtra("POLL", poll);
-                        startActivity(intent);
-                        overridePendingTransition(0, 0);
-                        return false;
-                    }
+                if (poll.getStatus() == Poll.STATUS_FINISHED) {
+                    Intent intent = new Intent(getBaseContext(), ResultActivity.class);
+                    intent.putExtra("POLL", poll);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                     return false;
-                } else {
+                } else if (poll.getStatus() == Poll.STATUS_PENDING) {
+                    Intent intent = new Intent(getBaseContext(), AnswerPollActivity.class);
+                    intent.putExtra("POLL", poll);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                     return false;
                 }
+                return false;
+            } else {
+                return false;
+            }
             }
         });
 
         pollList = new LinkedList<>();
         adapter = new PollListViewAdapter(this, pollList);
         pollListView.setAdapter(adapter);
-
 
         mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         mySwipeRefreshLayout.setOnRefreshListener(
@@ -193,7 +199,7 @@ public class MainActivity extends Activity {
                 // Try to send poll to server
                 Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
                 try {
-                    apiHandler.createPoll(poll, session);
+                    apiHandler.createPoll(poll, session.getLoggedInUsername());
                 } catch (ApiErrorException e) {
                     Log.d(e.getMessage(), null);
                     Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
