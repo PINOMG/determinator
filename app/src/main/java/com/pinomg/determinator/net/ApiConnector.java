@@ -23,23 +23,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by patrik on 2015-05-11.
+ * The ApiConnector used by the ApiHandler.
  */
-
 public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
     private Context context;
-    private List<Exception> errors = new ArrayList<Exception>();
+
+    // List of errors received during the api call.
+    private List<Exception> errors = new ArrayList<>();
 
     public ApiConnector(Context context){
         this.context = context;
     }
 
-
      /*
-    input urls:
-    url[0] is method
-    url[1] is url
-    url[2] is arguments (optional)
+    input params:
+    params[0] is method
+    params[1] is url
+    params[2] is arguments (optional)
      */
     @Override
     protected JSONObject doInBackground(String... params) {
@@ -69,10 +69,6 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
 
             Log.e("Connect error:", e.getMessage());
         }
-
-        if( result != null) {
-            Log.d("Final:", result.toString());
-        }
     }
 
     private void networkStatus() throws NoConnectionException {
@@ -88,7 +84,7 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
     private JSONObject request(String[] params) throws IOException, JSONException {
         InputStream is = null;
 
-        // Restriction of length of the api call.
+        // Restriction of length of the api call. If the request get
         int len = 5000;
 
         // Start the connection
@@ -117,16 +113,13 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
 
             // Starts the query
             conn.connect();
-            int response = conn.getResponseCode();
 
-            Log.d("ApiConnector", "The response is: " + response);
-            is = conn.getInputStream();
 
             // Turn the response into a JSON object.
+            is = conn.getInputStream();
             JSONTokener token = new JSONTokener(readIt(is, len));
-            JSONObject obj = new JSONObject(token);
 
-            return obj;
+            return new JSONObject(token);
 
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
@@ -145,7 +138,7 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
         return new String(buffer);
     }
 
-    // Error handling when no connection.
+    // Error handling. Used when no connection.
     private void showToast(String s){
         int duration = Toast.LENGTH_SHORT;
 

@@ -11,8 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Api for data handling in determinator
- * @author Olle Lindeman
+ * Api for data handling in Determinator
  */
 public class DataApi {
 
@@ -59,7 +58,7 @@ public class DataApi {
      * @return all Polls from database
      */
     public List<Poll> getAllPolls() {
-        List<Poll> polls = new LinkedList<Poll>();
+        List<Poll> polls = new LinkedList<>();
         SQLiteDatabase db = dbh.getReadableDatabase();
 
         String[] projection = {

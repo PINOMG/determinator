@@ -1,6 +1,5 @@
 package com.pinomg.determinator.helpers;
 
-import java.util.HashMap;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +8,7 @@ import android.content.SharedPreferences.Editor;
 import com.pinomg.determinator.activity.LoginActivity;
 
 /**
- * Created by Philip on 2015-05-03.
+ * The class used to store/check if a user is logged in or not.
  */
 public class Session {
     // Shared Preferences
@@ -24,7 +23,7 @@ public class Session {
     // Shared pref mode
     int PRIVATE_MODE = 0;
 
-    // Sharedpref file name
+    // SharedPreferences file name
     private static final String PREF_NAME = "PinomgPref";
 
     // All Shared Preferences Keys
@@ -42,7 +41,7 @@ public class Session {
 
     /**
      * Create login session
-     * */
+     **/
     public void createLoginSession(String email){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
@@ -52,19 +51,6 @@ public class Session {
 
         // commit changes
         editor.commit();
-    }
-
-    /**
-     * Get stored session data
-     * */
-    public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> user = new HashMap<String, String>();
-
-        // user email id
-        user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-
-        // return user
-        return user;
     }
 
     /**
@@ -104,16 +90,14 @@ public class Session {
         // Add new Flag to start new Activity
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        // Staring Login Activity
+        // Starting Login Activity
         _context.startActivity(i);
     }
+
     public String getLoggedInUsername() {
         return pref.getString(KEY_EMAIL, null);
     }
 
-    /**
-     * Quick check for login
-     * **/
     // Get Login State
     public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);

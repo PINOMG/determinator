@@ -3,10 +3,7 @@ package com.pinomg.determinator.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,19 +11,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pinomg.determinator.helpers.Session;
 import com.pinomg.determinator.net.ApiHandler;
 import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.R;
 import com.pinomg.determinator.model.User;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
+/**
+ * Activity used when selecting which users to send a poll to.
+ *
+ * The activity gets a serialized poll from CreatePollActivity,
+ * modifies it and upon finish sends it back to CreatePollActivity.
+ *
+ */
 public class AddAnswerersActivity extends Activity {
 
     private LinkedList<User> friendList = new LinkedList<>(); //Creates a list to store friends.
-    private ArrayAdapter friendsAdapter;
     private LinkedList<User> checkedFriends = new LinkedList<>();
 
     private SparseBooleanArray checked;
@@ -46,7 +47,7 @@ public class AddAnswerersActivity extends Activity {
         loadFriends();
 
         //Connect the friends to the view
-        friendsAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, friendList);
+        ArrayAdapter friendsAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, friendList);
         friendView.setAdapter(friendsAdapter);
 
         //Get the id to the text field that should show an inline list of checked users.
@@ -58,13 +59,9 @@ public class AddAnswerersActivity extends Activity {
         //Get the poll from the previous activity
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            Log.d("serializing", "s");
             this.poll = (Poll) extras.getSerializable("POLL");
-            Log.d("serializing", "sd");
 
             if(this.poll != null) {
-                Log.d("Poll", "!=null");
-
                 if( poll.getAnswerers() != null)
                     checkedFriends = (LinkedList<User>)poll.getAnswerers();
                 else
@@ -107,28 +104,6 @@ public class AddAnswerersActivity extends Activity {
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_answerers, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     //Attach friends to the poll and send it to the Q activity, which will send it via the API handler.
     public void sendPoll(View view) {
         if (!checkedFriends.isEmpty()) {
@@ -145,10 +120,10 @@ public class AddAnswerersActivity extends Activity {
     //Populate string showed in the TextView receivers from checkedFriends here
     public void showCheckedFriends () {
         String receivers = "";
-        for(Iterator<User> j = checkedFriends.iterator(); j.hasNext(); ) {
-            User f = j.next();
-            receivers += f.toString() + " ";
+        for( User u: checkedFriends){
+            receivers += u + " ";
         }
+
         receiversText.setText(receivers);
     }
 
@@ -156,15 +131,12 @@ public class AddAnswerersActivity extends Activity {
     //poll with the corresponding friends in the ListView
     //and check the boxes for the identified matches.
     public void checkFriends() {
-        for(Iterator<User> i = checkedFriends.iterator(); i.hasNext();) {
+        for( User i : checkedFriends ){
             int index = 0;
-            User friend1 = i.next();
-            for(Iterator<User> j = friendList.iterator(); j.hasNext();) {
-                User friend2 = j.next();
-                if(friend1.equals(friend2)) {
-                    Log.e("Equals", "Equals!");
+            for ( User j : checkedFriends ){
+                if( i.equals(j) )
                     friendView.setItemChecked(index, true);
-                }
+
                 index++;
             }
         }
@@ -172,17 +144,7 @@ public class AddAnswerersActivity extends Activity {
 
     public void loadFriends() {
         ApiHandler apiHandler = new ApiHandler(getApplicationContext());
-        Session session = new Session(getApplicationContext());
 
         friendList = (LinkedList<User>)apiHandler.getUsers();
-
-        // Load dummy users until the friend function works properly.
-        /*friendList.add(new User("Martin"));
-        friendList.add(new User("Patrik"));
-        friendList.add(new User("Ebba"));
-        friendList.add(new User("Björn"));
-        friendList.add(new User("Olle"));
-        friendList.add(new User("Philip"));*/
-
     }
 }

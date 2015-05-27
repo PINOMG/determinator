@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,15 +18,12 @@ import com.pinomg.determinator.net.ApiErrorException;
 import com.pinomg.determinator.net.ApiHandler;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via username/password.
+ *
+ * When finished sends the user to MainActivity.
  */
 public class LoginActivity extends Activity{
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-
-    // UI references.
     private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
@@ -35,7 +31,6 @@ public class LoginActivity extends Activity{
 
     protected ApiHandler apiHandler;
 
-    // SessionManagement Class
     Session session;
 
     @Override
@@ -76,7 +71,7 @@ public class LoginActivity extends Activity{
 
     /**
      * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
+     * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
@@ -109,11 +104,11 @@ public class LoginActivity extends Activity{
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            Log.d("cancel", "cancel");
             focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // perform the user login attempt. Will need login call to be run on
+            // other thread than main to spin properly.
             showProgress(true);
 
             apiHandler = new ApiHandler(getBaseContext());
@@ -139,8 +134,6 @@ public class LoginActivity extends Activity{
      * Shows the progress UI and hides the login form.
      */
     public void showProgress(final boolean show) {
-        // The ViewPropertyAnimator APIs are not available, so simply show
-        // and hide the relevant UI components.
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
