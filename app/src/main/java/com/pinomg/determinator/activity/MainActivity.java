@@ -214,10 +214,10 @@ public class MainActivity extends Activity {
                             Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                         }
 
-                        manualUpdateListView();
-
                         return null;
                     }
+
+
                 }.execute();
             }
         }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
@@ -130,14 +131,14 @@ public class AddAnswerersActivity extends Activity {
     //poll with the corresponding friends in the ListView
     //and check the boxes for the identified matches.
     public void checkFriends() {
-        for( User i : checkedFriends ){
-            int index = 0;
+        int index = 0;
+        for( User i : friendList ){
             for ( User j : checkedFriends ){
                 if( i.equals(j) )
                     friendView.setItemChecked(index, true);
 
-                index++;
             }
+            index++;
         }
     }
 
@@ -151,7 +152,10 @@ public class AddAnswerersActivity extends Activity {
 
             @Override
             protected void onPostExecute(List<User> userList){
-                friendList = (LinkedList<User>) userList;
+                friendList.clear();
+                for(User u: userList){
+                    friendList.add(u);
+                }
 
                 friendsAdapter.notifyDataSetChanged();
 
