@@ -217,6 +217,11 @@ public class MainActivity extends Activity {
                         return null;
                     }
 
+                    @Override
+                    protected void onPostExecute(Void params){
+                        manualUpdateListView();
+                    }
+
 
                 }.execute();
             }
