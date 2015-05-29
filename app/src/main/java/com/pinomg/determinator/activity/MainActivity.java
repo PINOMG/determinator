@@ -13,10 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.pinomg.determinator.net.RequestQueueSingleton;
 import com.pinomg.determinator.helpers.PollListViewAdapter;
 import com.pinomg.determinator.model.Poll;
 import com.pinomg.determinator.R;
@@ -195,9 +193,9 @@ public class MainActivity extends Activity {
 
     /**
      * Handle responses from started child activities
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode The specified code for the request sen
+     * @param resultCode The specified code from the result
+     * @param data The result
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
