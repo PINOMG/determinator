@@ -1,6 +1,7 @@
 package com.pinomg.determinator.activity;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -48,16 +49,33 @@ public class AnswerPollActivity extends Activity {
     }
 
 
-    public void answerQuestion(int answer) {
-        ApiHandler apiHandler = new ApiHandler(getBaseContext());
+    public void answerQuestion(final int answer) {
 
-        try {
-            apiHandler.postAnswer(poll.getId(), session.getLoggedInUsername(), answer);
-        } catch (ApiErrorException e) {
-            e.printStackTrace();
-        }
+        // Kick off AsyncTask to answer question
+        new AsyncTask<Void, Void, Boolean>() {
 
-        finish();
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                boolean success = false;
+                try {
+                    ApiHandler apiHandler = new ApiHandler(getBaseContext());
+                    success = apiHandler.postAnswer(poll.getId(), session.getLoggedInUsername(), answer);
+                } catch (ApiErrorException e) {
+                    e.printStackTrace();
+                }
+                return success;
+            }
+
+            protected void onPostExecute(Boolean success) {
+                if(success) {
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Couldn't send answer to server!", Toast.LENGTH_LONG).show();
+                }
+            }
+
+        }.execute();
+
     }
 
     public void answerOne(View view){
@@ -67,4 +85,6 @@ public class AnswerPollActivity extends Activity {
     public void answerTwo(View view){
         answerQuestion(2);
     }
+
+
 }
