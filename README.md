@@ -20,7 +20,9 @@ In order to get started, some prerequisites are required. These are amongst othe
 - Android SDK, version 22
 - A (virtual) Android phone
 - Android studio
+
 And if you want to use your own server:
+
 - PHP and MySQL server for the APIand the instructions to install this is found in separate repository, see API further down.
 
 ##Building and release
