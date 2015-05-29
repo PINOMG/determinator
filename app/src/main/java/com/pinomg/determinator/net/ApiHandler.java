@@ -124,6 +124,7 @@ public class ApiHandler {
      * @throws ApiErrorException
      */
     public boolean createUser(String username, String password) throws ApiErrorException {
+        Log.d(LOG_TAG, "Create user");
         String urls[] = {"POST", ENDPOINT_USER, "username=" + username + "&password=" + password};
 
         return apiCall(urls);
@@ -168,7 +169,7 @@ public class ApiHandler {
         //Do the call
         JSONObject response;
         try {
-            response = new ApiConnector(context).execute(urls).get();
+            response = new ApiConnector(context).doRequest(urls);
 
             // Parse the response
             if( response != null){
@@ -247,26 +248,33 @@ public class ApiHandler {
         JSONObject response;
         String message;
 
-        try {
-            response = new ApiConnector(context).execute(urls).get();
+        Log.d(LOG_TAG, "apiCall");
 
+        try {
+            response = new ApiConnector(context).doRequest(urls);
+            Log.d(LOG_TAG, "apiCall 1111");
             if (response != null) {
+                Log.d(LOG_TAG, "apiCall2222");
                 if (response.has("error")){ // If there is an error.
                     JSONObject error = response.getJSONObject("error");
-
+                    Log.d(LOG_TAG, "apiCal3l3333");
                     message = error.getString("message");
                     int code = error.getInt("code");
                     throw new ApiErrorException(message, code);
                 } else {
+                    Log.d(LOG_TAG, "apiCall4444");
                     JSONObject data = response.getJSONObject("data");
                     return data != null; // This will always return true.
                 }
             } else { // This cannot happen happened.
+                Log.d(LOG_TAG, "apiCall66666");
                 return false;
             }
         } catch (JSONException e) { // Parse errors. Probably because of server errors.
+            Log.d(LOG_TAG, "apiCall77777");
             return false;
         } catch (Exception e){ // Not managable errors.
+            Log.d(LOG_TAG, "apiCall88888");
             e.printStackTrace();
             return false;
         }

@@ -1,9 +1,10 @@
 package com.pinomg.determinator.activity;
 
 import android.app.Activity;
-
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pinomg.determinator.R;
 import com.pinomg.determinator.helpers.Session;
@@ -40,6 +42,7 @@ public class LoginActivity extends Activity{
 
         // SessionManagement
         session = new Session(getApplicationContext());
+        apiHandler = new ApiHandler(getBaseContext());
 
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.email);
@@ -64,6 +67,14 @@ public class LoginActivity extends Activity{
             }
         });
 
+        Button mCreateAccountButton = (Button) findViewById(R.id.create_account_button);
+        mCreateAccountButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAccount();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -75,43 +86,18 @@ public class LoginActivity extends Activity{
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
-        // Reset errors.
-        mUsernameView.setError(null);
-        mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        if (fieldsValid()) {
 
-        boolean cancel = false;
-        View focusView = null;
+            // Store values at the time of the login attempt.
+            String username = mUsernameView.getText().toString();
+            String password = mPasswordView.getText().toString();
 
-
-        // Check for a valid password, if the user entered one.
-        if ( TextUtils.isEmpty(password) ) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt. Will need login call to be run on
             // other thread than main to spin properly.
             showProgress(true);
 
-            apiHandler = new ApiHandler(getBaseContext());
             boolean success = false;
             try {
                 success = apiHandler.login(username, password);
@@ -128,6 +114,95 @@ public class LoginActivity extends Activity{
                 mPasswordView.requestFocus();
             }
         }
+    }
+
+    public void createAccount() {
+        if(fieldsValid()) {
+            showProgress(true);
+
+            String[] params = {
+                    mUsernameView.getText().toString(),
+                    mPasswordView.getText().toString()
+                };
+            new createAccountTask().execute(params);
+        }
+    }
+
+    private class createAccountTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... params) {
+
+            Log.d("CREATE", "Start asynctask");
+
+            String username = params[0];
+            String password = params[1];
+
+            boolean success = false;
+            try {
+                success = apiHandler.createUser(username, password);
+                Log.d("CREATE", "Success! " + success);
+            } catch(ApiErrorException e) {
+                Log.d("CREATE", "FAIL: " + e.getMessage());
+                success = false;
+            } finally {
+                Log.d("CREATE", "finally");
+            }
+
+            if(success) {
+                return username;
+            } else {
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String username) {
+            showProgress(false);
+
+            if(username != null) {
+                session.createLoginSession(username);
+                finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Account creation failed! Please try again!",
+                    Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    /**
+     * Checks if input fields are valid
+     */
+    private boolean fieldsValid() {
+
+        boolean valid = true;
+        View focusView = null;
+
+        // Reset errors.
+        mUsernameView.setError(null);
+        mPasswordView.setError(null);
+
+        // Store values at the time of the login attempt.
+        String username = mUsernameView.getText().toString();
+        String password = mPasswordView.getText().toString();
+
+        // Check for a valid password, if the user entered one.
+        if ( TextUtils.isEmpty(password) ) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            valid = false;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(username)) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
+            valid = false;
+        }
+
+        // If not valid, sets focus
+        if(!valid) {
+            focusView.requestFocus();
+        }
+
+        return valid;
     }
 
     /**
