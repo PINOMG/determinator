@@ -7,5 +7,6 @@
     <string name="subtitle_activity_add_answerers">Add answerers from your list of friends</string>
     <string name="title_activity_answer_question">Answer Poll</string>
     <string name="title_activity_result">Result of poll</string>
+    <string name="action_create_account_button">Create account</string>
 
 </resources>

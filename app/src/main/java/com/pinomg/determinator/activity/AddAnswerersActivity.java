@@ -2,7 +2,9 @@ package com.pinomg.determinator.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +19,8 @@ import com.pinomg.determinator.R;
 import com.pinomg.determinator.model.User;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Activity used when selecting which users to send a poll to.
@@ -35,6 +39,8 @@ public class AddAnswerersActivity extends Activity {
     private Poll poll;
     private ListView friendView;
 
+    private ArrayAdapter friendsAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +49,8 @@ public class AddAnswerersActivity extends Activity {
         friendView = (ListView) findViewById(R.id.friendView);
         friendView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        //Load the friends from the API
-        loadFriends();
-
         //Connect the friends to the view
-        ArrayAdapter friendsAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, friendList);
+        friendsAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, friendList);
         friendView.setAdapter(friendsAdapter);
 
         //Get the id to the text field that should show an inline list of checked users.
@@ -71,25 +74,22 @@ public class AddAnswerersActivity extends Activity {
             Toast.makeText(getBaseContext(), "Error in loading question!", Toast.LENGTH_LONG).show();
         }
 
-        // Check the friends from previous activity in the list
-        checkFriends();
-
-        // Print their usernames as well in the inline list.
-        showCheckedFriends();
+        //Load the friends from the API
+        loadFriends();
 
         // The click listener when checking / un-checking a friend.
         friendView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(checked.get(i)) { //Add to checkedFriends
-                    checkedFriends.add(friendList.get(i));
+            if(checked.get(i)) { //Add to checkedFriends
+                checkedFriends.add(friendList.get(i));
 
-                } else{ // Remove from checkedFriends
-                    checkedFriends.remove(friendList.get(i));
-                }
+            } else{ // Remove from checkedFriends
+                checkedFriends.remove(friendList.get(i));
+            }
 
-                // Always update the inline list afterwards.
-                showCheckedFriends();
+            // Always update the inline list afterwards.
+            showCheckedFriends();
             }
         });
     }
@@ -131,20 +131,41 @@ public class AddAnswerersActivity extends Activity {
     //poll with the corresponding friends in the ListView
     //and check the boxes for the identified matches.
     public void checkFriends() {
-        for( User i : checkedFriends ){
-            int index = 0;
+        int index = 0;
+        for( User i : friendList ){
             for ( User j : checkedFriends ){
                 if( i.equals(j) )
                     friendView.setItemChecked(index, true);
 
-                index++;
             }
+            index++;
         }
     }
 
     public void loadFriends() {
-        ApiHandler apiHandler = new ApiHandler(getApplicationContext());
+        new AsyncTask<String, Void, List<User>>(){
+            @Override
+            protected List<User> doInBackground(String... strings) {
+                ApiHandler apiHandler = new ApiHandler(getApplicationContext());
+                return apiHandler.getUsers();
+            }
 
-        friendList = (LinkedList<User>)apiHandler.getUsers();
+            @Override
+            protected void onPostExecute(List<User> userList){
+                friendList.clear();
+                for(User u: userList){
+                    friendList.add(u);
+                }
+
+                friendsAdapter.notifyDataSetChanged();
+
+                // Check the friends from previous activity in the list
+                checkFriends();
+
+                // Print their usernames as well in the inline list.
+                showCheckedFriends();
+
+            }
+        }.execute();
     }
 }

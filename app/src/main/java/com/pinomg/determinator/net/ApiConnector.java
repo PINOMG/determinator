@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * The ApiConnector used by the ApiHandler.
  */
-public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
+public class ApiConnector {
     private Context context;
 
     // List of errors received during the api call.
@@ -41,28 +41,29 @@ public class ApiConnector extends AsyncTask<String, Boolean, JSONObject> {
     params[1] is url
     params[2] is arguments (optional)
      */
-    @Override
-    protected JSONObject doInBackground(String... params) {
+    protected JSONObject doRequest(String... params) {
+
+        JSONObject response = null;
         try {
             // Check the network status of the device.
             networkStatus();
 
-            return request(params);
+            response = request(params);
         } catch (IOException e) {
             errors.add(e);
-            return null;
         } catch (NoConnectionException e){
             errors.add(e);
-            return null;
         } catch (JSONException e) {
             errors.add(e);
-            return null;
         }
+
+        handleResponse();
+
+        return response;
     }
 
     // onPostExecute displays the results of the call
-    @Override
-    protected void onPostExecute(JSONObject result) {
+    protected void handleResponse() {
         for(Exception e : errors){
             if(e instanceof NoConnectionException)
                 showToast(e.getMessage());
