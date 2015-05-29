@@ -3,7 +3,7 @@ An Android app to take fast decisions!
 
 Link to Trello where User Stories exists: https://trello.com/b/ldcY3Bwb/pinomg
 
-The full developer documenation is found in docs/DeveloperDocumentation.pdf
+The full developer documenation is found in *doc/DeveloperDocumentation.pdf*
 
 ##Getting Started
 To get the code for the project, use git:
@@ -12,7 +12,7 @@ To get the code for the project, use git:
 $ git clone https://github.com/PINOMG/determinator.git
 ```
 
-After the code is copied to the local filesystem, simply open the project in Android Studio and you are good to go. If you use your own server, remember to switch the BASE_URL variable in ApiHandler.java to match your server's URL. Right now the application uses the PINOMG organization’s server at http://79.99.3.112/pinomg/.
+After the code is copied to the local filesystem, simply open the project in Android Studio and you are good to go. If you use your own server, remember to switch the **BASE_URL** variable in *ApiHandler.java* to match your server's URL. Right now the application uses the PINOMG organization’s server at http://79.99.3.112/pinomg/.
 
 ##Dependencies
 In order to get started, some prerequisites are required. These are amongst others:
@@ -37,15 +37,15 @@ $ ./gradlew assemble
 ```
 
 ##Tests
-The text based tests available are found in docs/tests.pdf.
+The text based tests available are found in *doc/tests.pdf*.
 
-The automated unit tests are located in app/src/test directory. To run the unit tests just run the test task (in the root directory of the app):
+The automated unit tests are located in *app/src/*test directory. To run the unit tests just run the test task (in the root directory of the app):
 
 ```
 $ ./gradlew test --continue
 ```
 
-For more info on how the unit tests are set up, see: *http://tools.android.com/tech-docs/unit-testing-support*
+For more info on how the unit tests are set up, see: http://tools.android.com/tech-docs/unit-testing-support
 
 ##License
 The application is released under the MIT license and the full license is found in the LICENSE file.
