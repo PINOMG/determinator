@@ -2,6 +2,7 @@ package com.pinomg.determinator.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -54,9 +55,6 @@ public class MainActivity extends Activity {
     // Swipe to refresh widget
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
-    // RequestQueue for the Volley framework
-    private RequestQueue queue;
-
     // SessionManagement class
     Session session;
 
@@ -64,8 +62,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        queue = RequestQueueSingleton.getInstance(this).getRequestQueue();
 
         session = new Session(getApplicationContext());
 
@@ -120,13 +116,18 @@ public class MainActivity extends Activity {
                     }
                 }
         );
+        manualUpdateListView();
+    }
+
+    private void manualUpdateListView(){
+        mySwipeRefreshLayout.setRefreshing(true);
+        updatePollListView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mySwipeRefreshLayout.setRefreshing(true);
-        updatePollListView();
+        manualUpdateListView();
     }
 
     private void updatePollListView() {
@@ -194,13 +195,30 @@ public class MainActivity extends Activity {
         if(requestCode == CREATE_POLL_REQUEST) {
             if(resultCode == RESULT_OK) {
                 // Try to send poll to server
-                Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
-                try {
-                    apiHandler.createPoll(poll, session.getLoggedInUsername());
-                } catch (ApiErrorException e) {
-                    Log.d(e.getMessage(), null);
-                    Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                }
+                final Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
+
+
+                new AsyncTask<String, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(String... strings) {
+                        try {
+                            apiHandler.createPoll(poll, session.getLoggedInUsername());
+                        } catch (ApiErrorException e) {
+                            Log.d(e.getMessage(), null);
+                            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void params){
+                        manualUpdateListView();
+                    }
+
+
+                }.execute();
             }
         }
     }

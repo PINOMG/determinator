@@ -1,7 +1,7 @@
 package com.pinomg.determinator.activity;
 
 import android.app.Activity;
-
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pinomg.determinator.R;
 import com.pinomg.determinator.helpers.Session;
@@ -40,6 +41,7 @@ public class LoginActivity extends Activity{
 
         // SessionManagement
         session = new Session(getApplicationContext());
+        apiHandler = new ApiHandler(getBaseContext());
 
         // Set up the login form.
         mUsernameView = (EditText) findViewById(R.id.email);
@@ -64,6 +66,14 @@ public class LoginActivity extends Activity{
             }
         });
 
+        Button mCreateAccountButton = (Button) findViewById(R.id.create_account_button);
+        mCreateAccountButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createAccount();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -75,6 +85,92 @@ public class LoginActivity extends Activity{
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
+
+        // Check if fields are valid
+        if (fieldsValid()) {
+
+            // Store values at the time of the login attempt.
+            final String username = mUsernameView.getText().toString();
+            final String password = mPasswordView.getText().toString();
+
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt. Will need login call to be run on
+            // other thread than main to spin properly.
+            showProgress(true);
+
+            new AsyncTask<Void, Void, Boolean>() {
+                protected Boolean doInBackground(Void... params) {
+                    boolean success = false;
+                    try {
+                        success = apiHandler.login(username, password);
+                    } catch (ApiErrorException e) {
+                        e.printStackTrace();
+                    }
+
+                    return success;
+                }
+
+                protected void onPostExecute(Boolean success) {
+                    if (success) {
+                        session.createLoginSession(username);
+                        finish();
+                    } else {
+                        showProgress(false);
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        mPasswordView.requestFocus();
+                    }
+                }
+            }.execute();
+        }
+    }
+
+    public void createAccount() {
+
+        // Check if fields are valid
+        if(fieldsValid()) {
+
+            // Store values at the time of the login attempt.
+            final String username = mUsernameView.getText().toString();
+            final String password = mPasswordView.getText().toString();
+
+            // Show progress animation and starts off async task
+            showProgress(true);
+
+            new AsyncTask<Void, Void, Boolean>() {
+                protected Boolean doInBackground(Void... params) {
+
+                    boolean success = false;
+                    try {
+                        success = apiHandler.createUser(username, password);
+                    } catch(ApiErrorException e) {
+                        e.printStackTrace();
+                    }
+
+                    return success;
+                }
+
+                protected void onPostExecute(Boolean success) {
+                    if(success) {
+                        session.createLoginSession(username);
+                        finish();
+                    } else {
+                        showProgress(false);
+                        Toast.makeText(getApplicationContext(), "Account creation failed! Please try again!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            }.execute();
+        }
+    }
+
+    /**
+     * Checks if input fields are valid
+     */
+    private boolean fieldsValid() {
+
+        boolean valid = true;
+        View focusView = null;
+
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
@@ -83,51 +179,26 @@ public class LoginActivity extends Activity{
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
-
         // Check for a valid password, if the user entered one.
         if ( TextUtils.isEmpty(password) ) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
+            valid = false;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(username)) {
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
-            cancel = true;
+            valid = false;
         }
 
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+        // If not valid, sets focus
+        if(!valid) {
             focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt. Will need login call to be run on
-            // other thread than main to spin properly.
-            showProgress(true);
-
-            apiHandler = new ApiHandler(getBaseContext());
-            boolean success = false;
-            try {
-                success = apiHandler.login(username, password);
-            } catch (ApiErrorException e) {
-                e.printStackTrace();
-            }
-            showProgress(false);
-
-            if (success) {
-                session.createLoginSession(username);
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
         }
+
+        return valid;
     }
 
     /**

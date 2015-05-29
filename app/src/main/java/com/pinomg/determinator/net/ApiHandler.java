@@ -124,6 +124,7 @@ public class ApiHandler {
      * @throws ApiErrorException
      */
     public boolean createUser(String username, String password) throws ApiErrorException {
+        Log.d(LOG_TAG, "Create user");
         String urls[] = {"POST", ENDPOINT_USER, "username=" + username + "&password=" + password};
 
         return apiCall(urls);
@@ -168,7 +169,7 @@ public class ApiHandler {
         //Do the call
         JSONObject response;
         try {
-            response = new ApiConnector(context).execute(urls).get();
+            response = new ApiConnector(context).doRequest(urls);
 
             // Parse the response
             if( response != null){
@@ -247,13 +248,13 @@ public class ApiHandler {
         JSONObject response;
         String message;
 
-        try {
-            response = new ApiConnector(context).execute(urls).get();
+        Log.d(LOG_TAG, "apiCall");
 
+        try {
+            response = new ApiConnector(context).doRequest(urls);
             if (response != null) {
                 if (response.has("error")){ // If there is an error.
                     JSONObject error = response.getJSONObject("error");
-
                     message = error.getString("message");
                     int code = error.getInt("code");
                     throw new ApiErrorException(message, code);
