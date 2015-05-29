@@ -16,12 +16,12 @@ After the code is copied to the local filesystem, simply open the project in And
 
 ##Dependencies
 In order to get started, some prerequisites are required. These are amongst others:
--Java SE Development Kit 7
--Android SDK, version 22
--A (virtual) Android phone
--Android studio
+- Java SE Development Kit 7
+- Android SDK, version 22
+- A (virtual) Android phone
+- Android studio
 And if you want to use your own server:
--PHP and MySQL server for the APIand the instructions to install this is found in separate repository, see API further down.
+- PHP and MySQL server for the APIand the instructions to install this is found in separate repository, see API further down.
 
 ##Building and release
 This project uses Gradle to build the application. We recommend that you use Android Studio and the built in Gradle functionality. Building can be done by running (in the root directory of the app): 
@@ -45,11 +45,11 @@ For more info on how the unit tests are set up, see: *http://tools.android.com/t
 The application is released under the MIT license and the full license is found in the LICENSE file.
 
 ##Team
--Björn Agaton
--Ebba Mannheimer
--Martin Lindehammar
--Olle Lindeman
--Patrik Olsson
--Philip Xu Cederhill
+- Björn Agaton
+- Ebba Mannheimer
+- Martin Lindehammar
+- Olle Lindeman
+- Patrik Olsson
+- Philip Xu Cederhill
 
 Built at Chalmers, 2015.
