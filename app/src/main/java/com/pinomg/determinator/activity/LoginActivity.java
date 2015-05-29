@@ -87,83 +87,80 @@ public class LoginActivity extends Activity{
      */
     public void attemptLogin() {
 
+        // Check if fields are valid
         if (fieldsValid()) {
 
             // Store values at the time of the login attempt.
-            String username = mUsernameView.getText().toString();
-            String password = mPasswordView.getText().toString();
+            final String username = mUsernameView.getText().toString();
+            final String password = mPasswordView.getText().toString();
 
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt. Will need login call to be run on
             // other thread than main to spin properly.
             showProgress(true);
 
-            boolean success = false;
-            try {
-                success = apiHandler.login(username, password);
-            } catch (ApiErrorException e) {
-                e.printStackTrace();
-            }
-            showProgress(false);
+            new AsyncTask<Void, Void, Boolean>() {
+                protected Boolean doInBackground(Void... params) {
+                    boolean success = false;
+                    try {
+                        success = apiHandler.login(username, password);
+                    } catch (ApiErrorException e) {
+                        e.printStackTrace();
+                    }
 
-            if (success) {
-                session.createLoginSession(username);
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
+                    return success;
+                }
+
+                protected void onPostExecute(Boolean success) {
+                    if (success) {
+                        session.createLoginSession(username);
+                        finish();
+                    } else {
+                        showProgress(false);
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        mPasswordView.requestFocus();
+                    }
+                }
+            }.execute();
         }
     }
 
     public void createAccount() {
+
+        // Check if fields are valid
         if(fieldsValid()) {
+
+            // Store values at the time of the login attempt.
+            final String username = mUsernameView.getText().toString();
+            final String password = mPasswordView.getText().toString();
+
+            // Show progress animation and starts off async task
             showProgress(true);
 
-            String[] params = {
-                    mUsernameView.getText().toString(),
-                    mPasswordView.getText().toString()
-                };
-            new createAccountTask().execute(params);
-        }
-    }
+            new AsyncTask<Void, Void, Boolean>() {
+                protected Boolean doInBackground(Void... params) {
 
-    private class createAccountTask extends AsyncTask<String, Void, String> {
-        protected String doInBackground(String... params) {
+                    boolean success = false;
+                    try {
+                        success = apiHandler.createUser(username, password);
+                    } catch(ApiErrorException e) {
+                        e.printStackTrace();
+                    }
 
-            Log.d("CREATE", "Start asynctask");
+                    return success;
+                }
 
-            String username = params[0];
-            String password = params[1];
-
-            boolean success = false;
-            try {
-                success = apiHandler.createUser(username, password);
-                Log.d("CREATE", "Success! " + success);
-            } catch(ApiErrorException e) {
-                Log.d("CREATE", "FAIL: " + e.getMessage());
-                success = false;
-            } finally {
-                Log.d("CREATE", "finally");
-            }
-
-            if(success) {
-                return username;
-            } else {
-                return null;
-            }
-        }
-
-        protected void onPostExecute(String username) {
-            showProgress(false);
-
-            if(username != null) {
-                session.createLoginSession(username);
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), "Account creation failed! Please try again!",
-                    Toast.LENGTH_LONG).show();
-            }
+                protected void onPostExecute(Boolean success) {
+                    if(success) {
+                        session.createLoginSession(username);
+                        finish();
+                    } else {
+                        showProgress(false);
+                        Toast.makeText(getApplicationContext(), "Account creation failed! Please try again!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            }.execute();
         }
     }
 
