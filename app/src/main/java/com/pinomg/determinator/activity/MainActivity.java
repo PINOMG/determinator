@@ -179,6 +179,8 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
         switch (id) {
             case R.id.log_out:
+                pollList.clear();
+                adapter.notifyDataSetChanged();
                 session.logoutUser();
                 return true;
             default:

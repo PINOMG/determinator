@@ -136,27 +136,25 @@ public class LoginActivity extends Activity{
             // Show progress animation and starts off async task
             showProgress(true);
 
-            new AsyncTask<Void, Void, Boolean>() {
-                protected Boolean doInBackground(Void... params) {
+            new AsyncTask<Void, Void, Exception>() {
+                protected Exception doInBackground(Void... params) {
 
-                    boolean success = false;
                     try {
-                        success = apiHandler.createUser(username, password);
+                        apiHandler.createUser(username, password);
+                        return null;
                     } catch(ApiErrorException e) {
-                        e.printStackTrace();
+                        return e;
                     }
 
-                    return success;
                 }
 
-                protected void onPostExecute(Boolean success) {
-                    if(success) {
+                protected void onPostExecute(Exception e) {
+                    if(e == null) {
                         session.createLoginSession(username);
                         finish();
                     } else {
                         showProgress(false);
-                        Toast.makeText(getApplicationContext(), "Account creation failed! Please try again!",
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute();

@@ -247,9 +247,6 @@ public class ApiHandler {
     public boolean apiCall(String[] urls) throws ApiErrorException { //Used for all simple calls. Those who doesn't expect a response
         JSONObject response;
         String message;
-
-        Log.d(LOG_TAG, "apiCall");
-
         try {
             response = new ApiConnector(context).doRequest(urls);
             if (response != null) {
@@ -266,9 +263,6 @@ public class ApiHandler {
                 return false;
             }
         } catch (JSONException e) { // Parse errors. Probably because of server errors.
-            return false;
-        } catch (Exception e){ // Not managable errors.
-            e.printStackTrace();
             return false;
         }
     }
