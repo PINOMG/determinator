@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.pinomg.determinator.CreatePollActivity"
+    tools:context="com.pinomg.determinator.activity.CreatePollActivity"
     android:orientation="vertical" >
 
     <TextView

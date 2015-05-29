@@ -3,7 +3,7 @@ package com.pinomg.determinator.database;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Created by olle on 03/05/15.
+ * The table structure for the Poll object.
  */
 public class PollsTable {
     public static final String TABLE_POLLS = "polls";

@@ -5,7 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by Olle on 26/04/15.
+ * The helper class for the database. This class can be used to
+ * cache data from the API.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 

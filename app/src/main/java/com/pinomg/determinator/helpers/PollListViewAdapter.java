@@ -1,4 +1,4 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.helpers;
 
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
@@ -13,15 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-/**
- * Created by ebbamannheimer on 2015-05-11.
- */
+import com.pinomg.determinator.R;
+import com.pinomg.determinator.model.Poll;
 
 /*
  * An adapter used in listactivity. Lists Polls under separate headers,
  * depending on their statuses.
  */
-public class CustomAdapter extends BaseAdapter {
+public class PollListViewAdapter extends BaseAdapter {
 
     public static final int TYPE_POLL = 0;
     public static final int TYPE_HEADER = 1;
@@ -30,7 +29,7 @@ public class CustomAdapter extends BaseAdapter {
     private List<Poll> polls; // The list of all polls, unsorted
     private LayoutInflater mInflater;
 
-    public CustomAdapter(Context context, List<Poll> polls) {
+    public PollListViewAdapter(Context context, List<Poll> polls) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         items = new HashMap<>();
@@ -45,6 +44,7 @@ public class CustomAdapter extends BaseAdapter {
         populateList();
     }
 
+    // Populate datastructure with polls, sorted by status
     private void populateList() {
         items.clear();
         for(Poll poll : polls) {
@@ -58,6 +58,7 @@ public class CustomAdapter extends BaseAdapter {
         }
     }
 
+    // Returns type of list item, poll or header
     @Override
     public int getItemViewType(int position) {
         try {
@@ -68,11 +69,13 @@ public class CustomAdapter extends BaseAdapter {
         }
     }
 
+    // Returns number of view types in list
     @Override
     public int getViewTypeCount() {
-        return Math.max(1,items.size());
+        return Math.max(1, items.size());
     }
 
+    // Returns size of list, which is number of polls + headers
     @Override
     public int getCount() {
         int count = 0;
@@ -84,9 +87,11 @@ public class CustomAdapter extends BaseAdapter {
         return count + items.size();
     }
 
+    // Returns item in given position
     @Override
     public Object getItem(int position) {
 
+        // Order in which the polls are sorted
         int[] order = {
                 Poll.STATUS_FINISHED,
                 Poll.STATUS_PENDING,
@@ -97,6 +102,7 @@ public class CustomAdapter extends BaseAdapter {
         int i = 0;
         List<Poll> list = items.get(order[i]);
 
+        // Loops over the specified order, and inserts headers where needed
         while((list == null && getCount() > 0) || position >= list.size() + 1) {
 
             if(list != null)
@@ -117,16 +123,19 @@ public class CustomAdapter extends BaseAdapter {
         return position;
     }
 
+    // Method that says that not all items are enabled (headers should not be clickable)
     @Override
     public boolean areAllItemsEnabled() {
         return false;
     }
 
+    // Specifies that only items of type poll will be clickable
     @Override
     public boolean isEnabled(int position) {
         return (getItemViewType(position) == TYPE_POLL);
     }
 
+    // Connects item type with correct layout
     public View getView(int position, View convertView, ViewGroup parent) {
 
         TextView textView;

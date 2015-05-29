@@ -1,4 +1,4 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.model;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -34,21 +34,31 @@ public class Poll implements Serializable {
     private String question;
     private String alternativeOne;
     private String alternativeTwo;
-    private LinkedList<User> answerers; // TODO: Maybe implement with set instead of LinkedList?
+    private LinkedList<User> answerers;
     private int result = 0; //Poll result
     private int answer; //Users answer
 
     /**
      * Simple constructor
-     * @param question
-     * @param alternativeOne
-     * @param alternativeTwo
+     * @param question The question the poll asks.
+     * @param alternativeOne The first alternative.
+     * @param alternativeTwo The second alternative.
      */
     public Poll(String question, String alternativeOne, String alternativeTwo) {
         this.question = question;
         this.alternativeOne = alternativeOne;
         this.alternativeTwo = alternativeTwo;
     }
+
+    /**
+     * Deeper constructor, used by the api when fetching polls
+     * @param id The id of the poll, used by the api
+     * @param question The question the poll asks.
+     * @param a1 The first alternative.
+     * @param a2 The second alternative.
+     * @param result The result of the poll, if finished: 1 or 2. If not finished: 0.
+     * @param answer The users answer to the poll, if answered: 1 or 2. If not: 0.
+     */
 
     public Poll (int id, String question, String a1, String a2, int result, int answer) {
         this.id = id;
@@ -59,6 +69,16 @@ public class Poll implements Serializable {
         this.answer = answer;
     }
 
+    /**
+     * Even deeper constructor, allowing to add the answerers in the poll object.
+     * @param id The id of the poll, used by the api
+     * @param question The question the poll asks.
+     * @param a1 The first alternative.
+     * @param a2 The second alternative.
+     * @param answerers A list of users the poll is sent to.
+     * @param result The result of the poll, if finished: 1 or 2. If not finished: 0.
+     * @param answer The users answer to the poll, if answered: 1 or 2. If not: 0.
+     */
     public Poll (int id, String question, String a1, String a2, LinkedList<User> answerers, int result, int answer) {
         this.answerers = answerers;
         this.id = id;
@@ -78,7 +98,7 @@ public class Poll implements Serializable {
 
     /**
      * Setter for question
-     * @param question
+     * @param question The question the poll asks.
      */
     public void setQuestion(String question) {
         this.question = question;
@@ -94,7 +114,7 @@ public class Poll implements Serializable {
 
     /**
      * Setter for alternative one.
-     * @param text
+     * @param text The alternative one string
      */
     public void setAlternativeOne(String text) {
         this.alternativeOne = text;
@@ -102,7 +122,7 @@ public class Poll implements Serializable {
 
     /**
      * Getter for alternative one
-     * @return Polls alternative one
+     * @return The Poll's alternative one
      */
     public String getAlternativeOne() {
         return alternativeOne;
@@ -110,7 +130,7 @@ public class Poll implements Serializable {
 
     /**
      * Setter for alternative two.
-     * @param text
+     * @param text The alternative two string
      */
     public void setAlternativeTwo(String text) {
         this.alternativeTwo = text;
@@ -118,7 +138,7 @@ public class Poll implements Serializable {
 
     /**
      * Getter for alternative two
-     * @return Polls alternative two
+     * @return The Poll's alternative two
      */
     public String getAlternativeTwo() {
         return alternativeTwo;
@@ -126,7 +146,7 @@ public class Poll implements Serializable {
 
     /**
      * Sets what the logged in user answered
-     * @param answer
+     * @param answer 1 or 2, depending which alternative chosen.
      */
     public void setAnswer(int answer) {
         if(result == 1 || result == 2) {
@@ -137,7 +157,7 @@ public class Poll implements Serializable {
     }
 
     /**
-     * @return Users answer to polls question
+     * @return Users answer to polls question. 1 or 2.
      */
     public int getAnswer() {
         return answer;
@@ -179,7 +199,7 @@ public class Poll implements Serializable {
 
     /**
      * Sets list of answerers
-     * @param answerers
+     * @param answerers list of users the poll is sent to.
      */
     public void setAnswerers(LinkedList<User> answerers) {
         if(answerers == null) {
@@ -199,7 +219,6 @@ public class Poll implements Serializable {
             return new LinkedList<>();
     }
 
-    // TODO: Implement!
     public Integer getStatus() {
         if (this.result == 0 && this.answer == 0) {
             return STATUS_PENDING;
@@ -232,7 +251,8 @@ public class Poll implements Serializable {
 
     @Override
     public int hashCode() {
-        return (Integer.toString(id)).hashCode();
+        // TODO: Better implementation with respect to server id, answerers etc.
+        return (question + alternativeOne + alternativeTwo).hashCode();
     }
 
 

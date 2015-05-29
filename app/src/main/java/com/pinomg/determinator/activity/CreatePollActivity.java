@@ -1,13 +1,23 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.pinomg.determinator.model.Poll;
+import com.pinomg.determinator.R;
+
+/**
+ * The activity to use when creating a new poll.
+ *
+ * This activity creates a new poll and when finished sends this poll to
+ * AddAnswerersActivity. It also waits for a response from that activity, and
+ * when that response is a response that the poll is ready to be sent, it sends
+ * the serialized poll back to MainActivity.
+ *
+ */
 
 public class CreatePollActivity extends Activity {
 
@@ -71,27 +81,4 @@ public class CreatePollActivity extends Activity {
             poll = (Poll) extras.getSerializable("POLL");
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_create_poll, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if(id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
 }

@@ -1,4 +1,4 @@
-package com.pinomg.determinator;
+package com.pinomg.determinator.model;
 
 import java.io.Serializable;
 
@@ -33,7 +33,6 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        // TODO: Not ideal implementation..
         return (username).hashCode();
     }
     //This is required by the adapter for output in a list.
