@@ -55,9 +55,6 @@ public class MainActivity extends Activity {
     // Swipe to refresh widget
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
-    // RequestQueue for the Volley framework
-    private RequestQueue queue;
-
     // SessionManagement class
     Session session;
 
@@ -65,8 +62,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        queue = RequestQueueSingleton.getInstance(this).getRequestQueue();
 
         session = new Session(getApplicationContext());
 
