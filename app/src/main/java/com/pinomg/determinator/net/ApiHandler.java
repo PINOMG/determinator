@@ -23,7 +23,7 @@ public class ApiHandler {
 
     private static final String LOG_TAG = "ApiHandler";
 
-    private static final String BASE_URL = "http://79.99.3.112/pinomg/";
+    private static final String BASE_URL = "http://79.99.3.112/pinomg/"; // You can change this to match your own server.
     private static final String ENDPOINT_FRIEND = BASE_URL + "friend/";
     private static final String ENDPOINT_LOGIN  = BASE_URL + "login/";
     private static final String ENDPOINT_USER   = BASE_URL + "user/";

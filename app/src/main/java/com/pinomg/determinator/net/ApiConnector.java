@@ -3,7 +3,6 @@ package com.pinomg.determinator.net;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -49,11 +48,7 @@ public class ApiConnector {
             networkStatus();
 
             response = request(params);
-        } catch (IOException e) {
-            errors.add(e);
-        } catch (NoConnectionException e){
-            errors.add(e);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             errors.add(e);
         }
 
@@ -141,9 +136,6 @@ public class ApiConnector {
 
     // Error handling. Used when no connection.
     private void showToast(String s){
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(this.context, s, duration);
-        toast.show();
+        Toast.makeText(this.context, s, Toast.LENGTH_SHORT).show();
     }
 }
