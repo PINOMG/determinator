@@ -74,8 +74,12 @@ public class MainActivity extends Activity {
 
         this.apiHandler = new ApiHandler(getBaseContext());
 
-        ListView pollListView = (ListView) findViewById(R.id.pollView);
 
+        /**
+         * Init ListView with Polls, and adds an listener for long-click with
+         * routing logic.
+         */
+        ListView pollListView = (ListView) findViewById(R.id.pollView);
         pollListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -102,36 +106,35 @@ public class MainActivity extends Activity {
             }
         });
 
+        // Initiate pollList and sends it to the adapter
         pollList = new LinkedList<>();
         adapter = new PollListViewAdapter(this, pollList);
         pollListView.setAdapter(adapter);
 
+
+        // Swipe-to-refresh functionallity
         mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         mySwipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
                         updatePollListView();
                     }
                 }
         );
-        manualUpdateListView();
-    }
-
-    private void manualUpdateListView(){
-        mySwipeRefreshLayout.setRefreshing(true);
         updatePollListView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        manualUpdateListView();
+        updatePollListView();
     }
 
+    // Updates PollListView with data from server
     private void updatePollListView() {
 
+        mySwipeRefreshLayout.setRefreshing(true);
         if(session.isLoggedIn()) {
 
             apiHandler.getPolls(
@@ -184,20 +187,28 @@ public class MainActivity extends Activity {
     }
 
 
+    // OnClick method for creating a new poll
     public void goToCreatePollActivity(View view) {
         Intent intent = new Intent(this, CreatePollActivity.class);
         startActivityForResult(intent, CREATE_POLL_REQUEST);
     }
 
+    /**
+     * Handle responses from started child activities
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        // Response from Create Poll
         if(requestCode == CREATE_POLL_REQUEST) {
             if(resultCode == RESULT_OK) {
                 // Try to send poll to server
                 final Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
 
-
+                // Fire up AsyncTask for network request
                 new AsyncTask<String, Void, Void>() {
 
                     @Override
@@ -214,7 +225,7 @@ public class MainActivity extends Activity {
 
                     @Override
                     protected void onPostExecute(Void params){
-                        manualUpdateListView();
+                        updatePollListView();
                     }
 
 

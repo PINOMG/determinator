@@ -49,6 +49,10 @@ public class AnswerPollActivity extends Activity {
     }
 
 
+    /**
+     * Sending users answer to the server
+     * @param answer identificator for chosen answer
+     */
     public void answerQuestion(final int answer) {
 
         // Kick off AsyncTask to answer question
@@ -78,10 +82,12 @@ public class AnswerPollActivity extends Activity {
 
     }
 
+    // OnClick metod for selecting answer one
     public void answerOne(View view){
         answerQuestion(1);
     }
 
+    // OnClick metod for selecting answer two
     public void answerTwo(View view){
         answerQuestion(2);
     }
