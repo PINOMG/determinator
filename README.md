@@ -25,7 +25,7 @@ And if you want to use your own server:
 
 - PHP and MySQL server for the APIand the instructions to install this is found in separate repository, see API further down.
 
-###SDK
+####SDK
 - Target SDK: **22**
 - Minimum SDK: **21**
 
