@@ -25,6 +25,10 @@ And if you want to use your own server:
 
 - PHP and MySQL server for the APIand the instructions to install this is found in separate repository, see API further down.
 
+###SDK
+- Target SDK: **22**
+- Minimum SDK: **21**
+
 ##Building and release
 This project uses Gradle to build the application. We recommend that you use Android Studio and the built in Gradle functionality. Building can be done by running (in the root directory of the app): 
 
