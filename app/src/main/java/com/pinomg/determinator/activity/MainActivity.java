@@ -2,6 +2,7 @@ package com.pinomg.determinator.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -120,13 +121,18 @@ public class MainActivity extends Activity {
                     }
                 }
         );
+        manualUpdateListView();
+    }
+
+    private void manualUpdateListView(){
+        mySwipeRefreshLayout.setRefreshing(true);
+        updatePollListView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mySwipeRefreshLayout.setRefreshing(true);
-        updatePollListView();
+        manualUpdateListView();
     }
 
     private void updatePollListView() {
@@ -194,13 +200,25 @@ public class MainActivity extends Activity {
         if(requestCode == CREATE_POLL_REQUEST) {
             if(resultCode == RESULT_OK) {
                 // Try to send poll to server
-                Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
-                try {
-                    apiHandler.createPoll(poll, session.getLoggedInUsername());
-                } catch (ApiErrorException e) {
-                    Log.d(e.getMessage(), null);
-                    Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                }
+                final Poll poll = (Poll) data.getSerializableExtra("CREATED_POLL");
+
+
+                new AsyncTask<String, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(String... strings) {
+                        try {
+                            apiHandler.createPoll(poll, session.getLoggedInUsername());
+                        } catch (ApiErrorException e) {
+                            Log.d(e.getMessage(), null);
+                            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                        manualUpdateListView();
+
+                        return null;
+                    }
+                }.execute();
             }
         }
     }
