@@ -114,6 +114,7 @@ public class LoginActivity extends Activity{
                     if (success) {
                         session.createLoginSession(username);
                         finish();
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     } else {
                         showProgress(false);
                         mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -152,6 +153,8 @@ public class LoginActivity extends Activity{
                     if(e == null) {
                         session.createLoginSession(username);
                         finish();
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
                     } else {
                         showProgress(false);
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();

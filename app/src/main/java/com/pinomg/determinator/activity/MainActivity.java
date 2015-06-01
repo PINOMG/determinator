@@ -180,6 +180,7 @@ public class MainActivity extends Activity {
                 pollList.clear();
                 adapter.notifyDataSetChanged();
                 session.logoutUser();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
