@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,16 +37,21 @@ public class AddAnswerersActivity extends Activity {
     private TextView receiversText;
     private Poll poll;
     private ListView userView;
+    private ProgressBar loader;
 
     private ArrayAdapter<User> usersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
         setContentView(R.layout.activity_add_answerers);
 
         userView = (ListView) findViewById(R.id.userView);
         userView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        loader = (ProgressBar) findViewById(R.id.progressBar);
 
         //Connect the users to the view
         usersAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, userList);
@@ -99,7 +105,9 @@ public class AddAnswerersActivity extends Activity {
         this.poll.setAnswerers(checkedUsers);
         intent.putExtra("POLL", poll);
         setResult(RESULT_CANCELED, intent);
-        finish();
+
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     //Attach users to the poll and send it to the Q activity, which will send it via the API handler.
@@ -140,6 +148,11 @@ public class AddAnswerersActivity extends Activity {
         }
     }
 
+    private void showLoader(boolean show){
+        userView.setVisibility(show ? View.GONE : View.VISIBLE);
+        loader.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
     // Loads users from the server
     public void loadUsers() {
 
@@ -147,6 +160,8 @@ public class AddAnswerersActivity extends Activity {
         new AsyncTask<String, Void, List<User>>(){
             @Override
             protected List<User> doInBackground(String... strings) {
+                showLoader(true);
+
                 ApiHandler apiHandler = new ApiHandler(getApplicationContext());
                 return apiHandler.getUsers();
             }
@@ -165,6 +180,9 @@ public class AddAnswerersActivity extends Activity {
 
                 // Print their usernames as well in the inline list.
                 showCheckedUsers();
+
+                showLoader(false);
+
 
             }
         }.execute();
