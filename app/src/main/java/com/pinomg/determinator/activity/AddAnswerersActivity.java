@@ -155,12 +155,13 @@ public class AddAnswerersActivity extends Activity {
 
     // Loads users from the server
     public void loadUsers() {
+        showLoader(true);
 
         // Kicks off an AsyncTask that loads alla users from server
         new AsyncTask<String, Void, List<User>>(){
             @Override
             protected List<User> doInBackground(String... strings) {
-                showLoader(true);
+
 
                 ApiHandler apiHandler = new ApiHandler(getApplicationContext());
                 return apiHandler.getUsers();
